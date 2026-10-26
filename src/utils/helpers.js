@@ -1,5 +1,5 @@
 /**
- * General helper utilities
+ * Helper Utilities - Common utility functions
  */
 
 /**
@@ -13,124 +13,210 @@ export function randomInt(min, max) {
 }
 
 /**
- * Pick a random element from an array
- * @param {Array} arr
- * @returns {*}
+ * Generate a random string of specified length
+ * @param {number} length
+ * @param {string} charset
+ * @returns {string}
  */
-export function randomChoice(arr) {
-  if (!arr || arr.length === 0) return undefined;
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-/**
- * Shuffle an array in place (Fisher-Yates)
- * @param {Array} arr
- * @returns {Array} The same array, shuffled
- */
-export function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-/**
- * Chunk an array into smaller arrays of specified size
- * @param {Array} arr
- * @param {number} size
- * @returns {Array<Array>}
- */
-export function chunk(arr, size) {
-  const result = [];
-  for (let i = 0; i < arr.length; i += size) {
-    result.push(arr.slice(i, i + size));
+export function randomString(length = 32, charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') {
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += charset.charAt(Math.floor(Math.random() * charset.length));
   }
   return result;
 }
 
 /**
+ * Generate a UUID v4
+ * @returns {string}
+ */
+export function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+/**
  * Deep clone an object
- * @param {*} obj
- * @returns {*}
+ * @param {Object} obj
+ * @returns {Object}
  */
 export function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
 /**
- * Check if an object is empty
- * @param {Object} obj
+ * Merge two objects deeply
+ * @param {Object} target
+ * @param {Object} source
+ * @returns {Object}
+ */
+export function deepMerge(target, source) {
+  const output = { ...target };
+  if (isObject(target) && isObject(source)) {
+    Object.keys(source).forEach(key => {
+      if (isObject(source[key])) {
+        if (!(key in target)) {
+          output[key] = source[key];
+        } else {
+          output[key] = deepMerge(target[key], source[key]);
+        }
+      } else {
+        output[key] = source[key];
+      }
+    });
+  }
+  return output;
+}
+
+/**
+ * Check if value is a plain object
+ * @param {*} item
  * @returns {boolean}
  */
-export function isEmpty(obj) {
-  if (obj === null || obj === undefined) return true;
-  if (Array.isArray(obj)) return obj.length === 0;
-  if (typeof obj === 'object') return Object.keys(obj).length === 0;
-  return false;
+export function isObject(item) {
+  return item && typeof item === 'object' && !Array.isArray(item);
 }
 
 /**
- * Omit keys from an object
- * @param {Object} obj
- * @param {string[]} keys
- * @returns {Object}
+ * Chunk an array into smaller arrays
+ * @param {Array} array
+ * @param {number} size
+ * @returns {Array<Array>}
  */
-export function omit(obj, keys) {
-  const result = { ...obj };
-  for (const key of keys) {
-    delete result[key];
+export function chunkArray(array, size) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
   }
-  return result;
+  return chunks;
 }
 
 /**
- * Pick keys from an object
- * @param {Object} obj
- * @param {string[]} keys
- * @returns {Object}
+ * Shuffle an array (Fisher-Yates)
+ * @param {Array} array
+ * @returns {Array}
  */
-export function pick(obj, keys) {
-  const result = {};
-  for (const key of keys) {
-    if (key in obj) result[key] = obj[key];
+export function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return result;
+  return shuffled;
 }
 
 /**
- * Capitalize first letter of a string
+ * Pick random elements from array
+ * @param {Array} array
+ * @param {number} count
+ * @returns {Array}
+ */
+export function pickRandom(array, count) {
+  if (count >= array.length) return [...array];
+  const shuffled = shuffleArray(array);
+  return shuffled.slice(0, count);
+}
+
+/**
+ * Capitalize first letter of string
  * @param {string} str
  * @returns {string}
  */
 export function capitalize(str) {
-  if (!str) return '';
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 /**
- * Convert string to title case
+ * Convert string to kebab-case
  * @param {string} str
  * @returns {string}
  */
-export function titleCase(str) {
-  if (!str) return '';
+export function kebabCase(str) {
   return str
-    .toLowerCase()
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/\s+/g, '-')
+    .toLowerCase();
 }
 
 /**
- * Truncate string with ellipsis
+ * Convert string to PascalCase
  * @param {string} str
+ * @returns {string}
+ */
+export function pascalCase(str) {
+  return str
+    .replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '')
+    .replace(/^(.)/, c => c.toUpperCase());
+}
+
+/**
+ * Convert string to camelCase
+ * @param {string} str
+ * @returns {string}
+ */
+export function camelCase(str) {
+  const pascal = pascalCase(str);
+  return pascal.charAt(0).toLowerCase() + pascal.slice(1);
+}
+
+/**
+ * Truncate string to max length
+ * @param {string} str
+ * @param {number} maxLength
+ * @param {string} suffix
+ * @returns {string}
+ */
+export function truncate(str, maxLength = 100, suffix = '...') {
+  if (str.length <= maxLength) return str;
+  return str.slice(0, maxLength - suffix.length) + suffix;
+}
+
+/**
+ * Escape markdown special characters
+ * @param {string} text
+ * @returns {string}
+ */
+export function escapeMarkdown(text) {
+  return text
+    .replace(/\\/g, '\\\\')
+    .replace(/\*/g, '\\*')
+    .replace(/_/g, '\\_')
+    .replace(/~/g, '\\~')
+    .replace(/`/g, '\\`')
+    .replace(/>/g, '\\>')
+    .replace(/#/g, '\\#')
+    .replace(/\|/g, '\\|');
+}
+
+/**
+ * Escape mentions in text
+ * @param {string} text
+ * @returns {string}
+ */
+export function escapeMentions(text) {
+  return text
+    .replace(/@everyone/g, '@​everyone')
+    .replace(/@here/g, '@​here')
+    .replace(/<@!?(\d+)>/g, '<@​$1>')
+    .replace(/<@&(\d+)>/g, '<@&​$1>')
+    .replace(/<#(\d+)>/g, '<#​$1>');
+}
+
+/**
+ * Clean text for safe embedding
+ * @param {string} text
  * @param {number} maxLength
  * @returns {string}
  */
-export function truncate(str, maxLength) {
-  if (!str || str.length <= maxLength) return str;
-  return str.slice(0, maxLength - 3) + '...';
+export function cleanForEmbed(text, maxLength = 4096) {
+  let cleaned = escapeMentions(text);
+  if (cleaned.length > maxLength) {
+    cleaned = truncate(cleaned, maxLength);
+  }
+  return cleaned;
 }
 
 /**
@@ -139,19 +225,22 @@ export function truncate(str, maxLength) {
  * @returns {string}
  */
 export function formatNumber(num) {
-  return num.toLocaleString();
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 /**
- * Format number as compact (1K, 1M, etc.)
- * @param {number} num
+ * Format bytes to human readable
+ * @param {number} bytes
+ * @param {number} decimals
  * @returns {string}
  */
-export function formatCompactNumber(num) {
-  if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
-  if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
-  if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
-  return num.toString();
+export function formatBytes(bytes, decimals = 2) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
 /**
@@ -165,27 +254,19 @@ export function sleep(ms) {
 
 /**
  * Retry a function with exponential backoff
- * @param {Function} fn - Async function to retry
- * @param {Object} options
- * @returns {Promise<*>}
+ * @param {Function} fn
+ * @param {number} retries
+ * @param {number} delay
+ * @returns {Promise<any>}
  */
-export async function retry(fn, options = {}) {
-  const { retries = 3, baseDelay = 1000, maxDelay = 30000, factor = 2, shouldRetry = () => true } = options;
-
-  let lastError;
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      return await fn();
-    } catch (error) {
-      lastError = error;
-      if (attempt === retries || !shouldRetry(error)) break;
-
-      const delay = Math.min(baseDelay * Math.pow(factor, attempt), maxDelay);
-      await sleep(delay);
-    }
+export async function retry(fn, retries = 3, delay = 1000) {
+  try {
+    return await fn();
+  } catch (error) {
+    if (retries <= 0) throw error;
+    await sleep(delay);
+    return retry(fn, retries - 1, delay * 2);
   }
-
-  throw lastError;
 }
 
 /**
@@ -196,9 +277,9 @@ export async function retry(fn, options = {}) {
  */
 export function debounce(fn, delay) {
   let timeoutId;
-  return function (...args) {
+  return (...args) => {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => fn.apply(this, args), delay);
+    timeoutId = setTimeout(() => fn(...args), delay);
   };
 }
 
@@ -210,178 +291,103 @@ export function debounce(fn, delay) {
  */
 export function throttle(fn, limit) {
   let inThrottle;
-  return function (...args) {
+  return (...args) => {
     if (!inThrottle) {
-      fn.apply(this, args);
+      fn(...args);
       inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
+      setTimeout(() => inThrottle = false, limit);
     }
   };
 }
 
 /**
- * Generate a unique ID
+ * Generate a secure random token
+ * @param {number} length
  * @returns {string}
  */
-export function generateId() {
-  return `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 9)}`;
-}
-
-/**
- * Sanitize string for safe use in Discord embeds/messages
- * @param {string} str
- * @param {number} maxLength
- * @returns {string}
- */
-export function sanitize(str, maxLength = 2000) {
-  if (!str) return '';
-  // Remove mentions, markdown, and control characters
-  let sanitized = str
-    .replace(/@(everyone|here)/g, '@​$1')
-    .replace(/@&?\d+/g, '@​$&')
-    .replace(/[_*~`|]/g, '\\$&')
-    .replace(/[\u0000-\u001F\u007F-\u009F]/g, '');
-
-  if (sanitized.length > maxLength) {
-    sanitized = sanitized.slice(0, maxLength - 3) + '...';
+export function generateToken(length = 32) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
-  return sanitized;
+  return result;
 }
 
 /**
- * Escape regex special characters
+ * Validate Discord snowflake
+ * @param {string} snowflake
+ * @returns {boolean}
+ */
+export function isValidSnowflake(snowflake) {
+  return /^\d{17,19}$/.test(snowflake);
+}
+
+/**
+ * Extract Discord snowflake from mention
+ * @param {string} mention
+ * @returns {string|null}
+ */
+export function extractSnowflake(mention) {
+  const match = mention.match(/<@!?(\d+)>|<@&(\d+)>|<#(\d+)>/);
+  return match ? (match[1] || match[2] || match[3]) : null;
+}
+
+/**
+ * Get color from string (deterministic)
  * @param {string} str
- * @returns {string}
+ * @returns {number}
  */
-export function escapeRegex(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-/**
- * Parse boolean from string
- * @param {string} str
- * @returns {boolean|null}
- */
-export function parseBool(str) {
-  if (str === 'true' || str === '1' || str === 'yes' || str === 'on') return true;
-  if (str === 'false' || str === '0' || str === 'no' || str === 'off') return false;
-  return null;
-}
-
-/**
- * Get nested property from object using dot notation
- * @param {Object} obj
- * @param {string} path
- * @param {*} defaultValue
- * @returns {*}
- */
-export function get(obj, path, defaultValue = undefined) {
-  if (!obj || !path) return defaultValue;
-  const keys = path.split('.');
-  let current = obj;
-  for (const key of keys) {
-    if (current === null || current === undefined) return defaultValue;
-    current = current[key];
+export function stringToColor(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
-  return current !== undefined ? current : defaultValue;
+  const hue = Math.abs(hash % 360);
+  return hue;
 }
 
 /**
- * Set nested property on object using dot notation
- * @param {Object} obj
- * @param {string} path
- * @param {*} value
- * @returns {Object}
+ * Generate gradient colors
+ * @param {number} count
+ * @returns {string[]}
  */
-export function set(obj, path, value) {
-  if (!obj || !path) return obj;
-  const keys = path.split('.');
-  let current = obj;
-  for (let i = 0; i < keys.length - 1; i++) {
-    const key = keys[i];
-    if (!(key in current) || typeof current[key] !== 'object') {
-      current[key] = {};
-    }
-    current = current[key];
+export function generateGradientColors(count) {
+  const colors = [];
+  for (let i = 0; i < count; i++) {
+    const hue = (i * 360 / count) % 360;
+    colors.push(`hsl(${hue}, 70%, 50%)`);
   }
-  current[keys[keys.length - 1]] = value;
-  return obj;
+  return colors;
 }
 
-/**
- * Compare two values for sorting (handles null/undefined)
- * @param {*} a
- * @param {*} b
- * @returns {number}
- */
-export function compare(a, b) {
-  if (a === b) return 0;
-  if (a === null || a === undefined) return 1;
-  if (b === null || b === undefined) return -1;
-  if (a < b) return -1;
-  if (a > b) return 1;
-  return 0;
-}
-
-/**
- * Sort array of objects by property
- * @param {Array} arr
- * @param {string} prop
- * @param {boolean} desc
- * @returns {Array}
- */
-export function sortBy(arr, prop, desc = false) {
-  return [...arr].sort((a, b) => {
-    const result = compare(get(a, prop), get(b, prop));
-    return desc ? -result : result;
-  });
-}
-
-/**
- * Group array by property
- * @param {Array} arr
- * @param {string} prop
- * @returns {Object}
- */
-export function groupBy(arr, prop) {
-  return arr.reduce((groups, item) => {
-    const key = get(item, prop);
-    if (!groups[key]) groups[key] = [];
-    groups[key].push(item);
-    return groups;
-  }, {});
-}
-
-/**
- * Calculate percentage
- * @param {number} value
- * @param {number} total
- * @param {number} decimals
- * @returns {number}
- */
-export function percentage(value, total, decimals = 2) {
-  if (total === 0) return 0;
-  return Number(((value / total) * 100).toFixed(decimals));
-}
-
-/**
- * Clamp a number between min and max
- * @param {number} value
- * @param {number} min
- * @param {number} max
- * @returns {number}
- */
-export function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
-}
-
-/**
- * Linear interpolation
- * @param {number} a
- * @param {number} b
- * @param {number} t
- * @returns {number}
- */
-export function lerp(a, b, t) {
-  return a + (b - a) * t;
-}
+export default {
+  randomInt,
+  randomString,
+  uuidv4,
+  deepClone,
+  deepMerge,
+  isObject,
+  chunkArray,
+  shuffleArray,
+  pickRandom,
+  capitalize,
+  kebabCase,
+  pascalCase,
+  camelCase,
+  truncate,
+  escapeMarkdown,
+  escapeMentions,
+  cleanForEmbed,
+  formatNumber,
+  formatBytes,
+  sleep,
+  retry,
+  debounce,
+  throttle,
+  generateToken,
+  isValidSnowflake,
+  extractSnowflake,
+  stringToColor,
+  generateGradientColors,
+};

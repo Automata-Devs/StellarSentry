@@ -1,0 +1,71 @@
+# Docker Compose for Local Development
+# Run with: docker-compose -f docker-compose.dev.yml up -d
+# This provides MongoDB and Lavalink for local development
+# The bot itself runs on the host (npm run dev)
+
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: stellarsentry-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: stellarsentry
+    volumes:
+      - mongodb_data:/data/db
+      - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  lavalink:
+    image: fredboat/lavalink:4.0.0
+    container_name: stellarsentry-lavalink
+    restart: unless-stopped
+    ports:
+      - "2333:2333"
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      LAVALINK_SERVER_PASSWORD: "youshallnotpass"
+      LAVALINK_SERVER_SOURCES: "youtube,soundcloud,bandcamp,vimeo,twitch,http,local"
+    volumes:
+      - lavalink_data:/data
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:2333/version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # Optional: Redis for session storage (if using connect-redis instead of connect-mongo)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: stellarsentry-redis
+  #   restart: unless-stopped
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 3
+
+volumes:
+  mongodb_data:
+    driver: local
+  lavalink_data:
+    driver: local
+  # redis_data:
+  #   driver: local
+
+networks:
+  default:
+    name: stellarsentry-network

@@ -5,15 +5,7 @@ node_modules/
 .env
 .env.local
 .env.*.local
-
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+.env.example
 
 # Build outputs
 dist/
@@ -31,7 +23,16 @@ build/
 .DS_Store
 Thumbs.db
 
-# Coverage
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testing
 coverage/
 .nyc_output/
 
@@ -40,8 +41,36 @@ tmp/
 temp/
 *.tmp
 
-# Session data
-.claude/session-data/
+# Editor
+*.vscode/
+*.idea/
 
 # Docker
-docker-compose.dev.yml
+docker-compose.override.yml
+
+# Secrets
+*.pem
+*.key
+*.cert
+
+# Build artifacts
+*.tsbuildinfo
+.eslintcache
+.prettierrc
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional: Local environment
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug logs
+debug.log
+
+# Compiled CSS (should be committed for Bot-Hosting.net)
+# src/dashboard/public/css/output.css
+
+# Optional: TypeScript generated files
+# *.d.ts

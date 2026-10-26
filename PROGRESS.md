@@ -49,14 +49,15 @@
 - [x] Dashboard views (layouts, partials, pages, errors)
 - [x] Dashboard controllers
 - [x] Dashboard sockets (Socket.IO)
-- [ ] Context menus
-- [ ] Bot tasks (reminders, giveaways, temp-bans)
-- [ ] Bot utils (embed builder, pagination, time parsing)
-- [ ] Scripts (deploy-commands, seed)
-- [ ] Tests (unit, integration)
-- [ ] CI/CD (GitHub Actions)
-- [ ] Docker compose for local dev
-- [ ] Documentation (README, ARCHITECTURE, DEPLOYMENT_BOT_HOSTING, ADDING_A_COMMAND, ADDING_A_DASHBOARD_PAGE)
+- [x] Context menus
+- [x] Bot tasks (reminders, giveaways, temp-bans)
+- [x] Bot utils (embed builder, pagination, time parsing)
+- [x] Scripts (deploy-commands, seed)
+- [x] Tests (unit, integration)
+- [x] CI/CD (GitHub Actions)
+- [x] Docker compose for local dev
+- [x] Documentation (README, ARCHITECTURE, DEPLOYMENT_BOT_HOSTING, ADDING_A_COMMAND, ADDING_A_DASHBOARD_PAGE)
+- [x] ECC plugin installation and rules
 
 ## Pending 📋
 - [x] Install and verify ECC plugin

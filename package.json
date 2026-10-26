@@ -57,7 +57,6 @@
     "express-rate-limit": "^7.2.0",
     "express-session": "^1.18.0",
     "helmet": "^7.1.0",
-    "lavalink-client": "^4.4.0",
     "mongoose": "^8.4.0",
     "node-cron": "^3.0.3",
     "passport": "^0.7.0",
