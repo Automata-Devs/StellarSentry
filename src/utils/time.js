@@ -1,103 +1,143 @@
 /**
- * Time parsing and formatting utilities
+ * Time Utility - Parse and format time strings
+ * Supports formats like: 1s, 30s, 5m, 1h, 2d, 1w, 1y, 1h30m, 1d2h30m
  */
 
 /**
- * Parse a time string (e.g., "1h30m", "2d", "30s") to milliseconds
- * @param {string} timeStr - Time string to parse
- * @returns {number} Milliseconds
+ * Parse time string to milliseconds
+ * @param {string} timeStr - Time string (e.g., '1h30m', '5m', '2d')
+ * @returns {number|null} Milliseconds or null if invalid
  */
 export function parseTime(timeStr) {
-  if (!timeStr || typeof timeStr !== 'string') return 0;
+  if (!timeStr || typeof timeStr !== 'string') return null;
 
-  const regex = /(\d+)([dhms])/g;
-  let match;
-  let total = 0;
+  const str = timeStr.trim().toLowerCase();
+  if (!str) return null;
 
-  while ((match = regex.exec(timeStr)) !== null) {
-    const value = parseInt(match[1], 10);
-    const unit = match[2];
+  // Handle "off" or "0"
+  if (str === 'off' || str === '0' || str === 'none') return 0;
 
-    switch (unit) {
-      case 'd': total += value * 24 * 60 * 60 * 1000; break;
-      case 'h': total += value * 60 * 60 * 1000; break;
-      case 'm': total += value * 60 * 1000; break;
-      case 's': total += value * 1000; break;
-    }
+  // Try parsing as ISO date first
+  const date = new Date(timeStr);
+  if (!isNaN(date.getTime())) {
+    const diff = date.getTime() - Date.now();
+    return diff > 0 ? diff : null;
   }
 
-  return total;
+  // Parse relative time formats
+  const regex = /(?:(\d+)y)?(?:(\d+)w)?(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/i;
+  const match = str.match(regex);
+
+  if (!match) return null;
+
+  const [, years, weeks, days, hours, minutes, seconds] = match;
+
+  let totalMs = 0;
+  if (years) totalMs += parseInt(years) * 365 * 24 * 60 * 60 * 1000;
+  if (weeks) totalMs += parseInt(weeks) * 7 * 24 * 60 * 60 * 1000;
+  if (days) totalMs += parseInt(days) * 24 * 60 * 60 * 1000;
+  if (hours) totalMs += parseInt(hours) * 60 * 60 * 1000;
+  if (minutes) totalMs += parseInt(minutes) * 60 * 1000;
+  if (seconds) totalMs += parseInt(seconds) * 1000;
+
+  return totalMs > 0 ? totalMs : null;
 }
 
 /**
  * Format milliseconds to human readable string
  * @param {number} ms - Milliseconds
- * @param {Object} options - Formatting options
+ * @param {Object} options
  * @returns {string}
  */
 export function formatTime(ms, options = {}) {
-  const { short = false, maxUnits = 2 } = options;
+  const {
+    short = false,
+    maxUnits = 2,
+    compact = false,
+  } = options;
 
-  if (ms <= 0) return short ? '0s' : '0 seconds';
+  if (!ms || ms <= 0) return '0s';
 
-  const units = [
-    { name: short ? 'd' : 'day', ms: 24 * 60 * 60 * 1000 },
-    { name: short ? 'h' : 'hour', ms: 60 * 60 * 1000 },
-    { name: short ? 'm' : 'minute', ms: 60 * 1000 },
-    { name: short ? 's' : 'second', ms: 1000 },
-  ];
+  const seconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const weeks = Math.floor(days / 7);
+  const years = Math.floor(days / 365);
 
   const parts = [];
-  let remaining = ms;
 
-  for (const unit of units) {
-    if (parts.length >= maxUnits) break;
+  if (years > 0) parts.push({ value: years, unit: 'y', short: 'y', long: 'year' });
+  if (weeks > 0) parts.push({ value: weeks, unit: 'w', short: 'w', long: 'week' });
+  if (days > 0) parts.push({ value: days, unit: 'd', short: 'd', long: 'day' });
+  if (hours > 0) parts.push({ value: hours, unit: 'h', short: 'h', long: 'hour' });
+  if (minutes > 0) parts.push({ value: minutes, unit: 'm', short: 'm', long: 'minute' });
+  if (seconds > 0 && parts.length < maxUnits) parts.push({ value: seconds, unit: 's', short: 's', long: 'second' });
 
-    const value = Math.floor(remaining / unit.ms);
-    if (value > 0) {
-      parts.push(`${value}${short ? '' : ' '}${unit.name}${short ? '' : value !== 1 ? 's' : ''}`);
-      remaining -= value * unit.ms;
-    }
+  if (parts.length === 0) return '0s';
+
+  // Limit to maxUnits
+  const limitedParts = parts.slice(0, maxUnits);
+
+  if (compact) {
+    return limitedParts.map(p => `${p.value}${p.short}`).join(' ');
   }
 
-  return parts.join(short ? ' ' : ', ') || (short ? '0s' : '0 seconds');
+  if (short) {
+    return limitedParts.map(p => `${p.value}${p.short}`).join(' ');
+  }
+
+  return limitedParts.map(p =>
+    `${p.value} ${p.long}${p.value !== 1 ? 's' : ''}`
+  ).join(', ');
 }
 
 /**
- * Format a Date to Discord timestamp format
- * @param {Date|number} date - Date or timestamp
- * @param {string} style - Discord timestamp style (t, T, d, D, f, F, R)
+ * Format time for Discord timestamp
+ * @param {Date|number} date
+ * @param {string} style - 't', 'T', 'd', 'D', 'f', 'F', 'R'
  * @returns {string}
  */
-export function discordTimestamp(date, style = 'F') {
+export function discordTimestamp(date, style = 'f') {
   const timestamp = date instanceof Date ? Math.floor(date.getTime() / 1000) : Math.floor(date / 1000);
   return `<t:${timestamp}:${style}>`;
 }
 
 /**
  * Get relative time string (e.g., "2 hours ago")
- * @param {Date|number} date - Date or timestamp
+ * @param {Date|number} date
  * @returns {string}
  */
 export function relativeTime(date) {
-  const timestamp = date instanceof Date ? date.getTime() : date;
-  const diff = Date.now() - timestamp;
+  const diff = Date.now() - (date instanceof Date ? date.getTime() : date);
 
-  if (diff < 60000) return 'just now';
-  if (diff < 3600000) return `${Math.floor(diff / 60000)} minutes ago`;
-  if (diff < 86400000) return `${Math.floor(diff / 3600000)} hours ago`;
-  if (diff < 604800000) return `${Math.floor(diff / 86400000)} days ago`;
-  if (diff < 2592000000) return `${Math.floor(diff / 604800000)} weeks ago`;
+  if (diff < 0) return 'in the future';
 
-  return `${Math.floor(diff / 31536000000)} years ago`;
+  const seconds = Math.floor(diff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const weeks = Math.floor(days / 7);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(days / 365);
+
+  if (seconds < 60) return `${seconds} second${seconds !== 1 ? 's' : ''} ago`;
+  if (minutes < 60) return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
+  if (hours < 24) return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+  if (days < 7) return `${days} day${days !== 1 ? 's' : ''} ago`;
+  if (weeks < 4) return `${weeks} week${weeks !== 1 ? 's' : ''} ago`;
+  if (months < 12) return `${months} month${months !== 1 ? 's' : ''} ago`;
+  return `${years} year${years !== 1 ? 's' : ''} ago`;
 }
 
 /**
- * Format milliseconds to MM:SS or HH:MM:SS
+ * Format duration for display (hh:mm:ss or mm:ss)
  * @param {number} ms - Milliseconds
  * @returns {string}
  */
 export function formatDuration(ms) {
+  if (!ms || ms <= 0) return '0:00';
+
   const totalSeconds = Math.floor(ms / 1000);
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -110,51 +150,80 @@ export function formatDuration(ms) {
 }
 
 /**
- * Get start of day timestamp
- * @param {Date} date - Date (defaults to now)
- * @returns {number}
- */
-export function startOfDay(date = new Date()) {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  return d.getTime();
-}
-
-/**
- * Get end of day timestamp
- * @param {Date} date - Date (defaults to now)
- * @returns {number}
- */
-export function endOfDay(date = new Date()) {
-  const d = new Date(date);
-  d.setHours(23, 59, 59, 999);
-  return d.getTime();
-}
-
-/**
- * Add time to a date
- * @param {Date} date - Base date
- * @param {number} ms - Milliseconds to add
+ * Parse Discord snowflake to date
+ * @param {string} snowflake
  * @returns {Date}
  */
-export function addTime(date, ms) {
-  return new Date(date.getTime() + ms);
+export function snowflakeToDate(snowflake) {
+  const timestamp = (BigInt(snowflake) >> 22n) + 1420070400000n;
+  return new Date(Number(timestamp));
 }
 
 /**
- * Check if a date is in the past
- * @param {Date} date - Date to check
- * @returns {boolean}
+ * Get time remaining until a date
+ * @param {Date|number} targetDate
+ * @returns {Object} { days, hours, minutes, seconds, totalMs }
  */
-export function isPast(date) {
-  return date.getTime() < Date.now();
+export function getTimeRemaining(targetDate) {
+  const totalMs = (targetDate instanceof Date ? targetDate.getTime() : targetDate) - Date.now();
+
+  if (totalMs <= 0) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0, totalMs: 0, expired: true };
+  }
+
+  const days = Math.floor(totalMs / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((totalMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((totalMs % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((totalMs % (1000 * 60)) / 1000);
+
+  return { days, hours, minutes, seconds, totalMs, expired: false };
 }
 
 /**
- * Check if a date is in the future
- * @param {Date} date - Date to check
+ * Check if a time string is valid
+ * @param {string} timeStr
  * @returns {boolean}
  */
-export function isFuture(date) {
-  return date.getTime() > Date.now();
+export function isValidTime(timeStr) {
+  return parseTime(timeStr) !== null;
 }
+
+/**
+ * Convert milliseconds to human readable with locale
+ * @param {number} ms
+ * @param {string} locale
+ * @returns {string}
+ */
+export function formatTimeLocale(ms, locale = 'en-US') {
+  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+
+  const seconds = Math.floor(ms / 1000);
+  if (seconds < 60) return formatter.format(-seconds, 'second');
+
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return formatter.format(-minutes, 'minute');
+
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return formatter.format(-hours, 'hour');
+
+  const days = Math.floor(hours / 24);
+  if (days < 30) return formatter.format(-days, 'day');
+
+  const months = Math.floor(days / 30);
+  if (months < 12) return formatter.format(-months, 'month');
+
+  const years = Math.floor(days / 365);
+  return formatter.format(-years, 'year');
+}
+
+export default {
+  parseTime,
+  formatTime,
+  discordTimestamp,
+  relativeTime,
+  formatDuration,
+  snowflakeToDate,
+  getTimeRemaining,
+  isValidTime,
+  formatTimeLocale,
+};

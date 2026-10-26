@@ -1,0 +1,87 @@
+<!-- Sidebar navigation for guild pages -->
+<aside class="w-64 bg-discord-dark border-r border-discord-border h-full flex flex-col">
+  <div class="p-4 border-b border-discord-border">
+    <h3 class="font-semibold text-white"><%= guild.name %></h3>
+    <p class="text-sm text-gray-400 mt-1"><%= guild.memberCount %> members</p>
+  </div>
+
+  <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+    <a href="/overview/<%= guild.id %>" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-card transition-colors <%= currentPage === 'overview' ? 'bg-discord-card text-white' : '' %>">
+      <i class="fas fa-home w-5 h-5"></i>
+      <span>Overview</span>
+    </a>
+
+    <a href="/settings/<%= guild.id %>" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-card transition-colors <%= currentPage === 'settings' ? 'bg-discord-card text-white' : '' %>">
+      <i class="fas fa-cog w-5 h-5"></i>
+      <span>Settings</span>
+    </a>
+
+    <hr class="border-discord-border my-2">
+
+    <a href="/moderation/<%= guild.id %>" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-card transition-colors <%= currentPage === 'moderation' ? 'bg-discord-card text-white' : '' %>">
+      <i class="fas fa-shield-alt w-5 h-5"></i>
+      <span>Moderation</span>
+    </a>
+
+    <a href="/welcome/<%= guild.id %>" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-card transition-colors <%= currentPage === 'welcome' ? 'bg-discord-card text-white' : '' %>">
+      <i class="fas fa-user-plus w-5 h-5"></i>
+      <span>Welcome</span>
+    </a>
+
+    <a href="/leveling/<%= guild.id %>" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-card transition-colors <%= currentPage === 'leveling' ? 'bg-discord-card text-white' : '' %>">
+      <i class="fas fa-chart-line w-5 h-5"></i>
+      <span>Leveling</span>
+    </a>
+
+    <a href="/economy/<%= guild.id %>" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-card transition-colors <%= currentPage === 'economy' ? 'bg-discord-card text-white' : '' %>">
+      <i class="fas fa-coins w-5 h-5"></i>
+      <span>Economy</span>
+    </a>
+
+    <a href="/tickets/<%= guild.id %>" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-card transition-colors <%= currentPage === 'tickets' ? 'bg-discord-card text-white' : '' %>">
+      <i class="fas fa-ticket-alt w-5 h-5"></i>
+      <span>Tickets</span>
+    </a>
+
+    <a href="/giveaways/<%= guild.id %>" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-card transition-colors <%= currentPage === 'giveaways' ? 'bg-discord-card text-white' : '' %>">
+      <i class="fas fa-gift w-5 h-5"></i>
+      <span>Giveaways</span>
+    </a>
+
+    <a href="/suggestions/<%= guild.id %>" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-card transition-colors <%= currentPage === 'suggestions' ? 'bg-discord-card text-white' : '' %>">
+      <i class="fas fa-lightbulb w-5 h-5"></i>
+      <span>Suggestions</span>
+    </a>
+
+    <a href="/starboard/<%= guild.id %>" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-card transition-colors <%= currentPage === 'starboard' ? 'bg-discord-card text-white' : '' %>">
+      <i class="fas fa-star w-5 h-5"></i>
+      <span>Starboard</span>
+    </a>
+
+    <a href="/music/<%= guild.id %>" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-card transition-colors <%= currentPage === 'music' ? 'bg-discord-card text-white' : '' %>">
+      <i class="fas fa-music w-5 h-5"></i>
+      <span>Music</span>
+    </a>
+
+    <a href="/reaction-roles/<%= guild.id %>" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-card transition-colors <%= currentPage === 'reactionRoles' ? 'bg-discord-card text-white' : '' %>">
+      <i class="fas fa-tags w-5 h-5"></i>
+      <span>Reaction Roles</span>
+    </a>
+
+    <a href="/commands/<%= guild.id %>" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-card transition-colors <%= currentPage === 'commands' ? 'bg-discord-card text-white' : '' %>">
+      <i class="fas fa-terminal w-5 h-5"></i>
+      <span>Commands</span>
+    </a>
+
+    <a href="/logging/<%= guild.id %>" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-card transition-colors <%= currentPage === 'logging' ? 'bg-discord-card text-white' : '' %>">
+      <i class="fas fa-file-alt w-5 h-5"></i>
+      <span>Logging</span>
+    </a>
+  </nav>
+
+  <div class="p-4 border-t border-discord-border">
+    <a href="/guilds" class="block w-full text-center px-4 py-2 text-gray-400 hover:text-white hover:bg-discord-card rounded-lg transition-colors text-sm">
+      <i class="fas fa-arrow-left mr-2"></i> Back to Servers
+    </a>
+  </div>
+</aside>

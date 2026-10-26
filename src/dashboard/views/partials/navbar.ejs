@@ -1,0 +1,23 @@
+<!-- Navbar partial included in main layout -->
+<nav class="bg-discord-dark border-b border-discord-border">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center">
+        <a href="/" class="flex items-center space-2">
+          <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+            <i class="fas fa-star text-white text-lg"></i>
+          </div>
+          <span class="font-bold text-xl text-white">StellarSentry</span>
+        </a>
+      </div>
+      <div class="flex items-center space-4">
+        <% if (user) { %>
+          <a href="/guilds" class="text-gray-400 hover:text-white transition-colors">Dashboard</a>
+          <a href="/auth/logout" class="text-gray-400 hover:text-white transition-colors">Logout</a>
+        <% } else { %>
+          <a href="/auth/login" class="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg transition-colors">Login with Discord</a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</nav>

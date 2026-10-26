@@ -2,11 +2,29 @@
   "name": "stellarsentry",
   "version": "1.0.0",
   "description": "StellarSentry — A production-ready multi-purpose Discord bot with web dashboard",
-  "type": "module",
-  "engines": {
-    "node": ">=20.0.0"
+  "keywords": [
+    "discord",
+    "bot",
+    "dashboard",
+    "stellarsentry",
+    "discord.js"
+  ],
+  "homepage": "https://github.com/D3veloperHac/StellarSentry#readme",
+  "bugs": {
+    "url": "https://github.com/D3veloperHac/StellarSentry/issues"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/D3veloperHac/StellarSentry.git"
+  },
+  "license": "MIT",
+  "author": "Automata Devs",
+  "type": "module",
   "main": "src/index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
@@ -23,15 +41,6 @@
     "prepare": "husky install",
     "seed": "node scripts/seed.js"
   },
-  "keywords": [
-    "discord",
-    "bot",
-    "dashboard",
-    "stellarsentry",
-    "discord.js"
-  ],
-  "author": "Automata Devs",
-  "license": "MIT",
   "dependencies": {
     "@discordjs/builders": "^1.8.2",
     "@discordjs/collection": "^2.1.1",
@@ -69,5 +78,8 @@
     "tailwindcss": "^3.4.3",
     "vitest": "^1.6.0",
     "@vitest/coverage-v8": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }

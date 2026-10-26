@@ -1,0 +1,20 @@
+<%- include('../layouts/main', { title: 'Unauthorized', body: `
+<div class="min-h-[60vh] flex items-center justify-center">
+  <div class="text-center">
+    <div class="w-24 h-24 mx-auto mb-6 bg-blue-500/20 rounded-full flex items-center justify-center">
+      <i class="fas fa-user-shield text-4xl text-blue-500"></i>
+    </div>
+    <h1 class="text-4xl font-bold text-white mb-4">401</h1>
+    <p class="text-xl text-gray-400 mb-8">Unauthorized</p>
+    <p class="text-gray-500 mb-8 max-w-md mx-auto">You need to log in to access this page.</p>
+    <div class="flex items-center justify-center space-4">
+      <a href="/auth/login" class="px-6 py-3 bg-primary hover:bg-primary-hover text-white font-medium rounded-lg transition-colors">
+        <i class="fab fa-discord mr-2"></i> Login with Discord
+      </a>
+      <a href="/" class="px-6 py-3 border border-discord-border hover:bg-discord-card text-white font-medium rounded-lg transition-colors">
+        <i class="fas fa-home mr-2"></i> Home
+      </a>
+    </div>
+  </div>
+</div>
+` }) %>

@@ -1,0 +1,236 @@
+<%- include('../layouts/main', { title: guild.name + ' - Overview - StellarSentry', body: `
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Server Header -->
+  <div class="flex items-center justify-between mb-8">
+    <div class="flex items-center space-4">
+      <img src="<%= guild.icon ? 'https://cdn.discordapp.com/icons/' + guild.id + '/' + guild.icon + '.png?size=128' : 'https://cdn.discordapp.com/embed/avatars/0.png' %>" alt="" class="w-16 h-16 rounded-lg bg-discord-darker object-cover">
+      <div>
+        <h1 class="text-3xl font-bold text-white"><%= guild.name %></h1>
+        <p class="text-gray-400"><%= guild.memberCount.toLocaleString() %> members • <%= guild.channels.cache.size %> channels</p>
+      </div>
+    </div>
+    <div class="flex items-center space-4">
+      <a href="/settings/<%= guild.id %>" class="px-4 py-2 border border-discord-border hover:bg-discord-card text-white font-medium rounded-lg transition-colors">
+        <i class="fas fa-cog mr-2"></i> Settings
+      </a>
+      <a href="https://discord.com/channels/<%= guild.id %>" target="_blank" class="px-4 py-2 bg-primary hover:bg-primary-hover text-white font-medium rounded-lg transition-colors">
+        <i class="fab fa-discord mr-2"></i> Open in Discord
+      </a>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
+    <div class="bg-discord-card border border-discord-border rounded-xl p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-400">Total Members</p>
+          <p class="text-3xl font-bold text-white mt-1"><%= stats.memberCount.toLocaleString() %></p>
+        </div>
+        <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+          <i class="fas fa-users text-blue-400 text-2xl"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bg-discord-card border border-discord-border rounded-xl p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-400">Online</p>
+          <p class="text-3xl font-bold text-green-400 mt-1"><%= stats.onlineCount.toLocaleString() %></p>
+        </div>
+        <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
+          <i class="fas fa-circle text-green-400 text-2xl"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bg-discord-card border border-discord-border rounded-xl p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-400">Bots</p>
+          <p class="text-3xl font-bold text-purple-400 mt-1"><%= stats.botCount.toLocaleString() %></p>
+        </div>
+        <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
+          <i class="fas fa-robot text-purple-400 text-2xl"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bg-discord-card border border-discord-border rounded-xl p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-400">Text Channels</p>
+          <p class="text-3xl font-bold text-blue-400 mt-1"><%= stats.textChannels %></p>
+        </div>
+        <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+          <i class="fas fa-hashtag text-blue-400 text-2xl"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bg-discord-card border border-discord-border rounded-xl p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-400">Voice Channels</p>
+          <p class="text-3xl font-bold text-green-400 mt-1"><%= stats.voiceChannels %></p>
+        </div>
+        <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
+          <i class="fas fa-volume-up text-green-400 text-2xl"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bg-discord-card border border-discord-border rounded-xl p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-400">Roles</p>
+          <p class="text-3xl font-bold text-yellow-400 mt-1"><%= stats.roles %></p>
+        </div>
+        <div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+          <i class="fas fa-tags text-yellow-400 text-2xl"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature Status & Recent Activity -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Feature Status -->
+    <div class="lg:col-span-2 space-y-6">
+      <div class="bg-discord-card border border-discord-border rounded-xl overflow-hidden">
+        <div class="px-5 py-4 border-b border-discord-border flex items-center justify-between">
+          <h2 class="text-lg font-semibold text-white">Feature Status</h2>
+          <a href="/settings/<%= guild.id %>" class="text-sm text-primary hover:underline">Manage</a>
+        </div>
+        <div class="p-5">
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <% if (settings && settings.features) { %>
+              <% Object.entries(settings.features).forEach(([key, enabled]) => { %>
+                <div class="flex items-center justify-between p-3 bg-discord-darker rounded-lg">
+                  <div class="flex items-center space-3">
+                    <div class="w-2 h-2 rounded-full <%= enabled ? 'bg-green-400' : 'bg-red-500' %>"></div>
+                    <span class="font-medium text-white capitalize"><%= key %></span>
+                  </div>
+                  <span class="text-sm <%= enabled ? 'text-green-400' : 'text-red-500' %>">
+                    <%= enabled ? 'Enabled' : 'Disabled' %>
+                  </span>
+                </div>
+              <% }) %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Audit Logs -->
+      <div class="bg-discord-card border border-discord-border rounded-xl overflow-hidden">
+        <div class="px-5 py-4 border-b border-discord-border flex items-center justify-between">
+          <h2 class="text-lg font-semibold text-white">Recent Activity</h2>
+          <a href="/logging/<%= guild.id %>" class="text-sm text-primary hover:underline">View All</a>
+        </div>
+        <div class="divide-y divide-discord-border">
+          <% if (recentLogs && recentLogs.length > 0) { %>
+            <% recentLogs.forEach(log => { %>
+              <div class="px-5 py-4 flex items-start space-4 hover:bg-discord-darker/50 transition-colors">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 <%= getLogColor(log.eventCategory) %>">
+                  <i class="<%= getLogIcon(log.eventType) %> text-white"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="font-medium text-white"><%= log.eventType.replace(/_/g, ' ') %></p>
+                  <p class="text-sm text-gray-400"><%= log.reason || 'No reason provided' %></p>
+                  <p class="text-xs text-gray-500 mt-1"><%= new Date(log.createdAt).toLocaleString() %></p>
+                </div>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div class="px-5 py-8 text-center text-gray-500">
+              <i class="fas fa-inbox text-2xl mb-2"></i>
+              <p>No recent activity</p>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Members / Quick Stats -->
+    <div class="space-y-6">
+      <!-- Top Leveling Members -->
+      <% if (topMembers && topMembers.length > 0) { %>
+        <div class="bg-discord-card border border-discord-border rounded-xl overflow-hidden">
+          <div class="px-5 py-4 border-b border-discord-border flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-white">Top Members</h2>
+            <a href="/leveling/<%= guild.id %>" class="text-sm text-primary hover:underline">View Leaderboard</a>
+          </div>
+          <div class="divide-y divide-discord-border">
+            <% topMembers.slice(0, 5).forEach((member, index) => { %>
+              <div class="px-5 py-3 flex items-center space-3">
+                <span class="w-6 text-center text-gray-400 font-medium">#<%= index + 1 %></span>
+                <img src="https://cdn.discordapp.com/avatars/<%= member.userId %>/<%= member.avatar %>.png?size=32" alt="" class="w-8 h-8 rounded-full" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+                <div class="flex-1 min-w-0">
+                  <p class="font-medium text-white truncate"><%= member.username || 'Unknown' %></p>
+                  <p class="text-sm text-gray-400">Level <%= member.leveling?.level || 0 %> • <%= (member.leveling?.xp || 0).toLocaleString() %> XP</p>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      <% } %>
+
+      <!-- Quick Stats -->
+      <div class="bg-discord-card border border-discord-border rounded-xl p-5">
+        <h3 class="text-lg font-semibold text-white mb-4">Quick Actions</h3>
+        <div class="grid grid-cols-2 gap-3">
+          <a href="/moderation/<%= guild.id %>" class="p-3 bg-discord-darker border border-discord-border rounded-lg hover:border-primary/50 transition-colors text-center">
+            <i class="fas fa-shield-alt text-primary text-xl mb-2 block"></i>
+            <span class="font-medium text-white">Moderation</span>
+          </a>
+          <a href="/leveling/<%= guild.id %>" class="p-3 bg-discord-darker border border-discord-border rounded-lg hover:border-primary/50 transition-colors text-center">
+            <i class="fas fa-chart-line text-green-400 text-xl mb-2 block"></i>
+            <span class="font-medium text-white">Leveling</span>
+          </a>
+          <a href="/economy/<%= guild.id %>" class="p-3 bg-discord-darker border border-discord-border rounded-lg hover:border-primary/50 transition-colors text-center">
+            <i class="fas fa-coins text-yellow-400 text-xl mb-2 block"></i>
+            <span class="font-medium text-white">Economy</span>
+          </a>
+          <a href="/tickets/<%= guild.id %>" class="p-3 bg-discord-darker border border-discord-border rounded-lg hover:border-primary/50 transition-colors text-center">
+            <i class="fas fa-ticket-alt text-red-400 text-xl mb-2 block"></i>
+            <span class="font-medium text-white">Tickets</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function getLogColor(category) {
+    const colors = {
+      moderation: 'bg-red-500/20',
+      message: 'bg-blue-500/20',
+      member: 'bg-green-500/20',
+      role: 'bg-purple-500/20',
+      channel: 'bg-yellow-500/20',
+      voice: 'bg-pink-500/20',
+      emoji: 'bg-orange-500/20',
+      invite: 'bg-teal-500/20',
+      starboard: 'bg-yellow-400/20',
+      suggestion: 'bg-orange-500/20',
+      giveaway: 'bg-pink-500/20',
+      ticket: 'bg-red-500/20',
+    };
+    return colors[category] || 'bg-gray-500/20';
+  }
+
+  function getLogIcon(type) {
+    const icons = {
+      messageDelete: 'fas fa-trash',
+      messageEdit: 'fas fa-edit',
+      memberJoin: 'fas fa-user-plus',
+      memberLeave: 'fas fa-user-minus',
+      memberBan: 'fas fa-ban',
+      memberUnban: 'fas fa-user-check',
+      roleCreate: 'fas fa-plus-circle',
+      roleDelete: 'fas fa-minus-circle',
+      channelCreate: 'fas fa-plus-square',
+      channelDelete: 'fas fa-minus-square',
+      default: 'fas fa-info-circle',
+    };
+    return icons[type] || icons.default;
+  }
+</script>
+` }) %>

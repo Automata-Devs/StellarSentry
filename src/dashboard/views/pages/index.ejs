@@ -1,0 +1,244 @@
+<%- include('../layouts/main', { title: 'StellarSentry - Discord Bot with Dashboard', body: `
+<!-- Hero Section -->
+<section class="relative overflow-hidden py-20 lg:py-32">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <div class="inline-flex items-center space-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-2 mb-6">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+        </span>
+        <span class="text-primary font-medium">Now with Music & Dashboard v1.0</span>
+      </div>
+
+      <h1 class="text-5xl lg:text-7xl font-bold text-white mb-6 animate-fade-in">
+        StellarSentry
+        <br>
+        <span class="text-primary">Complete Discord Bot</span>
+      </h1>
+      <p class="text-xl text-gray-400 max-w-3xl mx-auto mb-10 animate-fade-in" style="animation-delay: 100ms;">
+        A production-ready, multi-purpose Discord bot with a beautiful web dashboard.
+        Moderation, leveling, economy, music, tickets, giveaways, and more.
+      </p>
+
+      <div class="flex items-center justify-center space-4 animate-fade-in" style="animation-delay: 200ms;">
+        <a href="/auth/login" class="px-8 py-4 bg-primary hover:bg-primary-hover text-white font-semibold rounded-lg transition-colors glow-primary">
+          <i class="fab fa-discord mr-2"></i> Add to Discord
+        </a>
+        <a href="/features" class="px-8 py-4 border border-discord-border hover:bg-discord-card text-white font-semibold rounded-lg transition-colors">
+          View Features
+        </a>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 animate-fade-in" style="animation-delay: 300ms;">
+      <div class="bg-discord-card/50 border border-discord-border rounded-xl p-6">
+        <div class="text-3xl font-bold text-primary mb-1">500+</div>
+        <div class="text-gray-400">Servers</div>
+      </div>
+      <div class="bg-discord-card/50 border border-discord-border rounded-xl p-6">
+        <div class="text-3xl font-bold text-green-400 mb-1">50K+</div>
+        <div class="text-gray-400">Users</div>
+      </div>
+      <div class="bg-discord-card/50 border border-discord-border rounded-xl p-6">
+        <div class="text-3xl font-bold text-yellow-400 mb-1">99.9%</div>
+        <div class="text-gray-400">Uptime</div>
+      </div>
+      <div class="bg-discord-card/50 border border-discord-border rounded-xl p-6">
+        <div class="text-3xl font-bold text-purple-400 mb-1">20+</div>
+        <div class="text-gray-400">Features</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-20 lg:py-32 bg-discord-dark/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">Everything You Need</h2>
+      <p class="text-gray-400 text-lg max-w-2xl mx-auto">Powerful features to manage and engage your community</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Feature Cards -->
+      <article class="bg-discord-card border border-discord-border rounded-xl p-6 hover:border-primary/50 transition-colors">
+        <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+          <i class="fas fa-shield-alt text-primary text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Advanced Moderation</h3>
+        <p class="text-gray-400">Ban, kick, timeout, warn, purge, slowmode, automod with anti-spam, anti-links, and custom filters.</p>
+      </article>
+
+      <article class="bg-discord-card border border-discord-border rounded-xl p-6 hover:border-primary/50 transition-colors">
+        <div class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mb-4">
+          <i class="fas fa-chart-line text-green-400 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Leveling System</h3>
+        <p class="text-gray-400">XP per message, role rewards, custom rank cards, leaderboards, and XP multipliers.</p>
+      </article>
+
+      <article class="bg-discord-card border border-discord-border rounded-xl p-6 hover:border-primary/50 transition-colors">
+        <div class="w-12 h-12 bg-yellow-500/10 rounded-lg flex items-center justify-center mb-4">
+          <i class="fas fa-coins text-yellow-400 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Economy System</h3>
+        <p class="text-gray-400">Daily rewards, work, shop, transfers, leaderboards, and per-server custom shops.</p>
+      </article>
+
+      <article class="bg-discord-card border border-discord-border rounded-xl p-6 hover:border-primary/50 transition-colors">
+        <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4">
+          <i class="fas fa-music text-purple-400 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Music Player</h3>
+        <p class="text-gray-400">Lavalink-powered with queue, filters, lyrics, dashboard control, and auto-DJ.</p>
+      </article>
+
+      <article class="bg-discord-card border border-discord-border rounded-xl p-6 hover:border-primary/50 transition-colors">
+        <div class="w-12 h-12 bg-red-500/10 rounded-lg flex items-center justify-center mb-4">
+          <i class="fas fa-ticket-alt text-red-400 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Ticket System</h3>
+        <p class="text-gray-400">Support panels, transcripts, categories, claims, and role-based permissions.</p>
+      </article>
+
+      <article class="bg-discord-card border border-discord-border rounded-xl p-6 hover:border-primary/50 transition-colors">
+        <div class="w-12 h-12 bg-pink-500/10 rounded-lg flex items-center justify-center mb-4">
+          <i class="fas fa-gift text-pink-400 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Giveaways</h3>
+        <p class="text-gray-400">Create, manage, reroll with requirements, multi-winner, and dashboard management.</p>
+      </article>
+
+      <article class="bg-discord-card border border-discord-border rounded-xl p-6 hover:border-primary/50 transition-colors">
+        <div class="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-4">
+          <i class="fas fa-lightbulb text-orange-400 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Suggestions</h3>
+        <p class="text-gray-400">Community voting, staff approval, status tracking, and anonymous mode.</p>
+      </article>
+
+      <article class="bg-discord-card border border-discord-border rounded-xl p-6 hover:border-primary/50 transition-colors">
+        <div class="w-12 h-12 bg-yellow-400/10 rounded-lg flex items-center justify-center mb-4">
+          <i class="fas fa-star text-yellow-400 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Starboard</h3>
+        <p class="text-gray-400">Highlight popular messages, custom emoji, thresholds, NSFW handling.</p>
+      </article>
+
+      <article class="bg-discord-card border border-discord-border rounded-xl p-6 hover:border-primary/50 transition-colors">
+        <div class="w-12 h-12 bg-teal-500/10 rounded-lg flex items-center justify-center mb-4">
+          <i class="fas fa-comments text-teal-400 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">Audit Logging</h3>
+        <p class="text-gray-400">Message edits/deletes, member events, role/channel changes, voice logs, and more.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Dashboard Preview -->
+<section class="py-20 lg:py-32">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">Beautiful Web Dashboard</h2>
+      <p class="text-gray-400 text-lg max-w-2xl mx-auto">Manage everything from a modern, responsive web interface</p>
+    </div>
+    <div class="bg-discord-card border border-discord-border rounded-xl overflow-hidden shadow-2xl">
+      <div class="bg-discord-darker border-b border-discord-border px-4 py-3 flex items-center space-2">
+        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+        <div class="flex-1 text-center text-gray-500 text-sm font-mono">dashboard.stellarsentry.com</div>
+      </div>
+      <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-discord-darker border border-discord-border rounded-lg p-4">
+            <h4 class="font-semibold text-white mb-2 flex items-center">
+              <i class="fas fa-server text-primary mr-2"></i> Server Overview
+            </h4>
+            <p class="text-gray-400 text-sm">Members: 1,234 | Online: 456 | Channels: 28</p>
+          </div>
+          <div class="bg-discord-darker border border-discord-border rounded-lg p-4">
+            <h4 class="font-semibold text-white mb-2 flex items-center">
+              <i class="fas fa-chart-line text-green-400 mr-2"></i> Leveling
+            </h4>
+            <p class="text-gray-400 text-sm">Active: 89% | Top: @User#1234 (Lv. 45)</p>
+          </div>
+          <div class="bg-discord-darker border border-discord-border rounded-lg p-4">
+            <h4 class="font-semibold text-white mb-2 flex items-center">
+              <i class="fas fa-music text-purple-400 mr-2"></i> Now Playing
+            </h4>
+            <p class="text-gray-400 text-sm">Never Gonna Give You Up - Rick Astley</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-20 lg:py-32 bg-gradient-to-b from-discord-dark to-discord-darker">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">Ready to Get Started?</h2>
+    <p class="text-gray-400 text-lg mb-10 max-w-2xl mx-auto">Add StellarSentry to your server today and experience the best Discord management bot.</p>
+    <div class="flex items-center justify-center space-4">
+      <a href="/auth/login" class="px-10 py-4 bg-primary hover:bg-primary-hover text-white font-semibold rounded-lg transition-colors glow-primary text-lg">
+        <i class="fab fa-discord mr-3"></i> Add StellarSentry to Discord
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-discord-darker border-t border-discord-border py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <div class="flex items-center space-2 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+            <i class="fas fa-star text-white text-lg"></i>
+          </div>
+          <span class="font-bold text-xl text-white">StellarSentry</span>
+        </div>
+        <p class="text-gray-400">The all-in-one Discord bot with a beautiful web dashboard.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Product</h4>
+        <ul class="space-y-2 text-gray-400">
+          <li><a href="/features" class="hover:text-primary transition-colors">Features</a></li>
+          <li><a href="/docs" class="hover:text-primary transition-colors">Documentation</a></li>
+          <li><a href="/pricing" class="hover:text-primary transition-colors">Pricing</a></li>
+          <li><a href="/changelog" class="hover:text-primary transition-colors">Changelog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Community</h4>
+        <ul class="space-y-2 text-gray-400">
+          <li><a href="#" class="hover:text-primary transition-colors">Discord Server</a></li>
+          <li><a href="#" class="hover:text-primary transition-colors">GitHub</a></li>
+          <li><a href="#" class="hover:text-primary transition-colors">Twitter</a></li>
+          <li><a href="/support" class="hover:text-primary transition-colors">Support</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-white mb-4">Legal</h4>
+        <ul class="space-y-2 text-gray-400">
+          <li><a href="/privacy" class="hover:text-primary transition-colors">Privacy Policy</a></li>
+          <li><a href="/terms" class="hover:text-primary transition-colors">Terms of Service</a></li>
+          <li><a href="/cookie-policy" class="hover:text-primary transition-colors">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-discord-border pt-8 flex flex-col md:flex-row items-center justify-between">
+      <p class="text-gray-500">© 2024 StellarSentry. All rights reserved.</p>
+      <div class="flex space-6 mt-4 md:mt-0">
+        <a href="#" class="text-gray-400 hover:text-primary transition-colors"><i class="fab fa-discord text-xl"></i></a>
+        <a href="#" class="text-gray-400 hover:text-primary transition-colors"><i class="fab fa-github text-xl"></i></a>
+        <a href="#" class="text-gray-400 hover:text-primary transition-colors"><i class="fab fa-twitter text-xl"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+` }) %>

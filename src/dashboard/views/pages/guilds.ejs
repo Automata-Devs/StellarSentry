@@ -1,0 +1,86 @@
+<%- include('../layouts/main', { title: 'Your Servers - StellarSentry', body: `
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-white">Your Servers</h1>
+      <p class="text-gray-400 mt-1">Manage your servers and configure StellarSentry</p>
+    </div>
+    <a href="/invite" class="px-6 py-3 bg-primary hover:bg-primary-hover text-white font-medium rounded-lg transition-colors flex items-center space-2">
+      <i class="fas fa-plus"></i>
+      <span>Add Bot to Server</span>
+    </a>
+  </div>
+
+  <!-- Bot in Server -->
+  <% if (guilds && guilds.length > 0) { %>
+    <div class="mb-12">
+      <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
+        <i class="fas fa-check-circle text-green-400 mr-2"></i>
+        Bot is in these servers (<%= guilds.length %>)
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <% guilds.forEach(guild => { %>
+          <a href="/overview/<%= guild.id %>" class="group bg-discord-card border border-discord-border rounded-xl p-5 hover:border-primary/50 transition-colors">
+            <div class="flex items-center space-4">
+              <img src="<%= guild.icon %>" alt="" class="w-14 h-14 rounded-lg bg-discord-darker object-cover" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+              <div class="flex-1 min-w-0">
+                <h3 class="font-semibold text-white truncate group-hover:text-primary transition-colors"><%= guild.name %></h3>
+                <div class="flex items-center space-4 mt-2 text-sm text-gray-400">
+                  <span><%= guild.memberCount.toLocaleString() %> members</span>
+                  <span class="flex items-center space-1">
+                    <i class="fas fa-cog text-gray-500"></i>
+                    <span>Configure</span>
+                  </span>
+                </div>
+              </div>
+              <i class="fas fa-chevron-right text-gray-500 group-hover:text-primary transition-colors"></i>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- Bot not in Server -->
+  <% if (unaddedGuilds && unaddedGuilds.length > 0) { %>
+    <div>
+      <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
+        <i class="fas fa-plus-circle text-blue-400 mr-2"></i>
+        Add bot to these servers (<%= unaddedGuilds.length %>)
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <% unaddedGuilds.forEach(guild => { %>
+          <div class="bg-discord-card border border-discord-border/50 rounded-xl p-5 opacity-75">
+            <div class="flex items-center space-4">
+              <img src="<%= guild.icon %>" alt="" class="w-14 h-14 rounded-lg bg-discord-darker object-cover" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+              <div class="flex-1 min-w-0">
+                <h3 class="font-semibold text-white"><%= guild.name %></h3>
+                <p class="text-sm text-gray-400"><%= guild.memberCount.toLocaleString() %> members</p>
+              </div>
+              <a href="https://discord.com/oauth2/authorize?client_id=<%= process.env.DISCORD_CLIENT_ID %>&permissions=8&scope=bot%20applications.commands&guild_id=<%= guild.id %>" target="_blank" class="px-4 py-2 bg-primary hover:bg-primary-hover text-white text-sm font-medium rounded-lg transition-colors">
+                Add Bot
+              </a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- Empty state -->
+  <% if ((!guilds || guilds.length === 0) && (!unaddedGuilds || unaddedGuilds.length === 0)) { %>
+    <div class="text-center py-16">
+      <div class="w-20 h-20 mx-auto mb-6 bg-primary/10 rounded-full flex items-center justify-center">
+        <i class="fas fa-server text-3xl text-primary"></i>
+      </div>
+      <h2 class="text-2xl font-bold text-white mb-2">No Servers Found</h2>
+      <p class="text-gray-400 mb-6 max-w-md mx-auto">You don't have any servers where you can manage the bot, or the bot isn't in any of your servers yet.</p>
+      <a href="/invite" class="inline-flex items-center space-2 px-6 py-3 bg-primary hover:bg-primary-hover text-white font-medium rounded-lg transition-colors">
+        <i class="fas fa-plus"></i>
+        <span>Invite StellarSentry</span>
+      </a>
+    </div>
+  <% } %>
+</div>
+` }) %>

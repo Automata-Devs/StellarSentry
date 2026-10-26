@@ -1,0 +1,291 @@
+<%- include('../layouts/main', { title: guild.name + ' - Settings - StellarSentry', body: `
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex items-center justify-between mb-8">
+    <div class="flex items-center space-4">
+      <img src="<%= guild.icon ? 'https://cdn.discordapp.com/icons/' + guild.id + '/' + guild.icon + '.png?size=128' : 'https://cdn.discordapp.com/embed/avatars/0.png' %>" alt="" class="w-12 h-12 rounded-lg bg-discord-darker object-cover">
+      <div>
+        <h1 class="text-2xl font-bold text-white">Settings</h1>
+        <p class="text-gray-400">Configure StellarSentry for <%= guild.name %></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <!-- Sidebar -->
+    <aside class="lg:col-span-1 space-y-4">
+      <div class="bg-discord-card border border-discord-border rounded-xl overflow-hidden">
+        <nav class="p-2">
+          <a href="#general" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-darker transition-colors active">
+            <i class="fas fa-home w-5 h-5"></i>
+            <span>General</span>
+          </a>
+          <a href="#features" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-darker transition-colors">
+            <i class="fas fa-puzzle-piece w-5 h-5"></i>
+            <span>Features</span>
+          </a>
+          <a href="#moderation" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-darker transition-colors">
+            <i class="fas fa-shield-alt w-5 h-5"></i>
+            <span>Moderation</span>
+          </a>
+          <a href="#welcome" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-darker transition-colors">
+            <i class="fas fa-user-plus w-5 h-5"></i>
+            <span>Welcome</span>
+          </a>
+          <a href="#leveling" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-darker transition-colors">
+            <i class="fas fa-chart-line w-5 h-5"></i>
+            <span>Leveling</span>
+          </a>
+          <a href="#economy" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-darker transition-colors">
+            <i class="fas fa-coins w-5 h-5"></i>
+            <span>Economy</span>
+          </a>
+          <a href="#tickets" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-darker transition-colors">
+            <i class="fas fa-ticket-alt w-5 h-5"></i>
+            <span>Tickets</span>
+          </a>
+          <a href="#starboard" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-darker transition-colors">
+            <i class="fas fa-star w-5 h-5"></i>
+            <span>Starboard</span>
+          </a>
+          <a href="#logging" class="flex items-center space-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-discord-darker transition-colors">
+            <i class="fas fa-file-alt w-5 h-5"></i>
+            <span>Logging</span>
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <main class="lg:col-span-3 space-y-6">
+      <!-- General Settings -->
+      <section id="general" class="bg-discord-card border border-discord-border rounded-xl p-6">
+        <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
+          <i class="fas fa-home text-primary mr-2"></i>
+          General Settings
+        </h2>
+        <form id="general-form" class="space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Command Prefix</label>
+            <input type="text" name="prefix" value="<%= settings?.prefix || '!' %>" class="w-full max-w-xs px-4 py-2 bg-discord-darker border border-discord-border rounded-lg text-white placeholder-gray-500 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Language</label>
+            <select name="language" class="w-full max-w-xs px-4 py-2 bg-discord-darker border border-discord-border rounded-lg text-white focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20">
+              <option value="en" <%= settings?.language === 'en' ? 'selected' : '' %>>English</option>
+              <option value="es" <%= settings?.language === 'es' ? 'selected' : '' %>>Spanish</option>
+              <option value="fr" <%= settings?.language === 'fr' ? 'selected' : '' %>>French</option>
+              <option value="de" <%= settings?.language === 'de' ? 'selected' : '' %>>German</option>
+            </select>
+          </div>
+          <div class="pt-4 border-t border-discord-border">
+            <button type="submit" class="px-6 py-2 bg-primary hover:bg-primary-hover text-white font-medium rounded-lg transition-colors">
+              <i class="fas fa-save mr-2"></i> Save General Settings
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Feature Toggles -->
+      <section id="features" class="bg-discord-card border border-discord-border rounded-xl p-6">
+        <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
+          <i class="fas fa-puzzle-piece text-primary mr-2"></i>
+          Feature Toggles
+        </h2>
+        <p class="text-gray-400 mb-6">Enable or disable features for this server</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <% features.forEach(feature => { %>
+            <div class="bg-discord-darker border border-discord-border rounded-lg p-4">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-3">
+                  <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                    <i class="<%= getFeatureIcon(feature.key) %> text-primary"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-semibold text-white"><%= feature.name %></h3>
+                    <p class="text-sm text-gray-400"><%= feature.description %></p>
+                  </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" name="feature-<%= feature.key %>" value="<%= feature.key %>" <%= feature.enabled ? 'checked' : '' %> class="sr-only peer" data-feature="<%= feature.key %>">
+                  <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </section>
+
+      <!-- Moderation Settings -->
+      <section id="moderation" class="bg-discord-card border border-discord-border rounded-xl p-6">
+        <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
+          <i class="fas fa-shield-alt text-primary mr-2"></i>
+          Moderation Settings
+        </h2>
+        <form id="moderation-form" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Mod Log Channel</label>
+              <select name="logChannel" class="w-full px-4 py-2 bg-discord-darker border border-discord-border rounded-lg text-white focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20">
+                <option value="">None</option>
+                <% req.guild.channels.cache.filter(c => c.isTextBased()).forEach(c => { %>
+                  <option value="<%= c.id %>" <%= settings?.moderation?.logChannel === c.id ? 'selected' : '' %>><%= c.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Moderator Role</label>
+              <select name="modRole" class="w-full px-4 py-2 bg-discord-darker border border-discord-border rounded-lg text-white focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20">
+                <option value="">None</option>
+                <% req.guild.roles.cache.filter(r => r.id !== req.guild.id).forEach(r => { %>
+                  <option value="<%= r.id %>" <%= settings?.moderation?.modRole === r.id ? 'selected' : '' %>><%= r.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Mute Role</label>
+              <select name="muteRole" class="w-full px-4 py-2 bg-discord-darker border border-discord-border rounded-lg text-white focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20">
+                <option value="">None</option>
+                <% req.guild.roles.cache.filter(r => r.id !== req.guild.id).forEach(r => { %>
+                  <option value="<%= r.id %>" <%= settings?.moderation?.muteRole === r.id ? 'selected' : '' %>><%= r.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div>
+              <label class="flex items-center space-2">
+                <input type="checkbox" name="dmOnAction" <%= settings?.moderation?.dmOnAction ? 'checked' : '' %> class="w-4 h-4 text-primary border-discord-border rounded focus:ring-primary focus:ring-2">
+                <span class="text-sm text-gray-300">DM user on moderation action</span>
+              </label>
+            </div>
+          </div>
+          <button type="submit" class="px-6 py-2 bg-primary hover:bg-primary-hover text-white font-medium rounded-lg transition-colors">
+            <i class="fas fa-save mr-2"></i> Save Moderation Settings
+          </button>
+        </form>
+      </section>
+
+      <!-- More sections would go here... -->
+      <section id="welcome" class="bg-discord-card border border-discord-border rounded-xl p-6">
+        <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
+          <i class="fas fa-user-plus text-primary mr-2"></i>
+          Welcome & Leave Settings
+        </h2>
+        <p class="text-gray-400 mb-6">Configure welcome and leave messages for your server</p>
+        <div class="bg-discord-darker border border-discord-border rounded-lg p-4">
+          <p class="text-gray-400 text-center py-8">Welcome settings configuration coming soon...</p>
+        </div>
+      </section>
+
+      <section id="leveling" class="bg-discord-card border border-discord-border rounded-xl p-6">
+        <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
+          <i class="fas fa-chart-line text-primary mr-2"></i>
+          Leveling Settings
+        </h2>
+        <p class="text-gray-400 mb-6">Configure XP, levels, and role rewards</p>
+        <div class="bg-discord-darker border border-discord-border rounded-lg p-4">
+          <p class="text-gray-400 text-center py-8">Leveling settings configuration coming soon...</p>
+        </div>
+      </section>
+
+      <section id="economy" class="bg-discord-card border border-discord-border rounded-xl p-6">
+        <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
+          <i class="fas fa-coins text-primary mr-2"></i>
+          Economy Settings
+        </h2>
+        <p class="text-gray-400 mb-6">Configure currency, shop, and rewards</p>
+        <div class="bg-discord-darker border border-discord-border rounded-lg p-4">
+          <p class="text-gray-400 text-center py-8">Economy settings configuration coming soon...</p>
+        </div>
+      </section>
+
+      <section id="tickets" class="bg-discord-card border border-discord-border rounded-xl p-6">
+        <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
+          <i class="fas fa-ticket-alt text-primary mr-2"></i>
+          Ticket Settings
+        </h2>
+        <p class="text-gray-400 mb-6">Configure support ticket system</p>
+        <div class="bg-discord-darker border border-discord-border rounded-lg p-4">
+          <p class="text-gray-400 text-center py-8">Ticket settings configuration coming soon...</p>
+        </div>
+      </section>
+
+      <section id="starboard" class="bg-discord-card border border-discord-border rounded-xl p-6">
+        <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
+          <i class="fas fa-star text-primary mr-2"></i>
+          Starboard Settings
+        </h2>
+        <p class="text-gray-400 mb-6">Configure starboard for popular messages</p>
+        <div class="bg-discord-darker border border-discord-border rounded-lg p-4">
+          <p class="text-gray-400 text-center py-8">Starboard settings configuration coming soon...</p>
+        </div>
+      </section>
+
+      <section id="logging" class="bg-discord-card border border-discord-border rounded-xl p-6">
+        <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
+          <i class="fas fa-file-alt text-primary mr-2"></i>
+          Logging Settings
+        </h2>
+        <p class="text-gray-400 mb-6">Configure audit logging for server events</p>
+        <div class="bg-discord-darker border border-discord-border rounded-lg p-4">
+          <p class="text-gray-400 text-center py-8">Logging settings configuration coming soon...</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script>
+  // Feature toggle handling
+  document.querySelectorAll('input[name^="feature-"]').forEach(checkbox => {
+    checkbox.addEventListener('change', async (e) => {
+      const feature = e.target.dataset.feature;
+      const enabled = e.target.checked;
+      try {
+        const response = await fetch('/settings/<%= guild.id %>/features/' + feature, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ enabled })
+        });
+        const result = await response.json();
+        if (!result.success) {
+          e.target.checked = !enabled;
+          showToast('error', 'Failed to toggle feature');
+        } else {
+          showToast('success', 'Feature ' + (enabled ? 'enabled' : 'disabled'));
+        }
+      } catch (err) {
+        e.target.checked = !enabled;
+        showToast('error', 'Failed to toggle feature');
+      }
+    });
+  });
+
+  // Form submissions
+  document.getElementById('general-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+    try {
+      const response = await fetch('/settings/<%= guild.id %>', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      if (result.success) showToast('success', 'Settings saved');
+      else showToast('error', 'Failed to save settings');
+    } catch (err) {
+      showToast('error', 'Failed to save settings');
+    }
+  });
+
+  function showToast(type, message) {
+    // Simple toast implementation
+    const toast = document.createElement('div');
+    toast.className = 'fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 ' + (type === 'success' ? 'bg-green-900/90 border-green-500' : 'bg-red-900/90 border-red-500');
+    toast.style.border = '1px solid';
+    toast.innerHTML = '<p class="font-medium">' + (type === 'success' ? 'Success' : 'Error') + '</p><p class="text-sm text-gray-300">' + message + '</p>';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+</script>
+` }) %>
