@@ -1,0 +1,483 @@
+{
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Info",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "refresh": "Refresh",
+    "reset": "Reset",
+    "apply": "Apply",
+    "enable": "Enable",
+    "disable": "Disable",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "on": "On",
+    "off": "Off",
+    "true": "True",
+    "false": "False",
+    "none": "None",
+    "all": "All",
+    "select": "Select",
+    "optional": "Optional",
+    "required": "Required",
+    "default": "Default",
+    "custom": "Custom",
+    "description": "Description",
+    "name": "Name",
+    "value": "Value",
+    "actions": "Actions",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pending": "Pending",
+    "completed": "Completed",
+    "failed": "Failed"
+  },
+  "errors": {
+    "generic": "An unexpected error occurred",
+    "notFound": "Not found",
+    "unauthorized": "Unauthorized",
+    "forbidden": "Forbidden",
+    "validation": "Validation failed",
+    "rateLimited": "Too many requests",
+    "serverError": "Internal server error",
+    "databaseError": "Database error",
+    "discordError": "Discord API error",
+    "configError": "Configuration error",
+    "permissionDenied": "You don't have permission to do that",
+    "botMissingPermissions": "I don't have the required permissions",
+    "invalidInput": "Invalid input provided",
+    "alreadyExists": "Already exists",
+    "notConfigured": "Not configured",
+    "featureDisabled": "This feature is disabled"
+  },
+  "bot": {
+    "ready": "Bot is ready!",
+    "restarting": "Restarting...",
+    "shuttingDown": "Shutting down...",
+    "reconnecting": "Reconnecting...",
+    "guildJoined": "Joined a new server",
+    "guildLeft": "Left a server",
+    "commandRegistered": "Commands registered",
+    "commandError": "Command error",
+    "eventError": "Event handler error"
+  },
+  "commands": {
+    "ping": {
+      "name": "ping",
+      "description": "Check bot latency",
+      "response": "Pong! Latency: {{latency}}ms"
+    },
+    "help": {
+      "name": "help",
+      "description": "Show help information",
+      "title": "StellarSentry Help",
+      "description": "Here are all available commands grouped by category",
+      "category": "Category",
+      "noCommands": "No commands in this category",
+      "use": "Use </{{command}}:{{id}}> for more info"
+    },
+    "moderation": {
+      "ban": {
+        "name": "ban",
+        "description": "Ban a user from the server",
+        "user": "User to ban",
+        "reason": "Reason for ban",
+        "deleteDays": "Days of messages to delete",
+        "success": "Banned {{user}} ({{reason}})",
+        "dmSent": "DM sent to user",
+        "dmFailed": "Could not DM user"
+      },
+      "kick": {
+        "name": "kick",
+        "description": "Kick a user from the server",
+        "user": "User to kick",
+        "reason": "Reason for kick",
+        "success": "Kicked {{user}} ({{reason}})"
+      },
+      "timeout": {
+        "name": "timeout",
+        "description": "Timeout a user",
+        "user": "User to timeout",
+        "duration": "Duration",
+        "reason": "Reason for timeout",
+        "success": "Timed out {{user}} for {{duration}} ({{reason}})",
+        "removed": "Removed timeout from {{user}}"
+      },
+      "warn": {
+        "name": "warn",
+        "description": "Warn a user",
+        "user": "User to warn",
+        "reason": "Reason for warning",
+        "success": "Warned {{user}} ({{reason}})",
+        "caseNumber": "Case #{{number}}"
+      },
+      "warnings": {
+        "name": "warnings",
+        "description": "View user warnings",
+        "user": "User to check",
+        "title": "Warnings for {{user}}",
+        "none": "No warnings",
+        "case": "Case #{{number}}",
+        "moderator": "Moderator",
+        "reason": "Reason",
+        "date": "Date"
+      },
+      "purge": {
+        "name": "purge",
+        "description": "Delete multiple messages",
+        "amount": "Number of messages",
+        "user": "Filter by user",
+        "contains": "Filter by content",
+        "success": "Deleted {{count}} messages",
+        "error": "Can only delete messages up to 14 days old"
+      },
+      "slowmode": {
+        "name": "slowmode",
+        "description": "Set channel slowmode",
+        "duration": "Slowmode duration",
+        "success": "Set slowmode to {{duration}}",
+        "disabled": "Disabled slowmode"
+      },
+      "lock": {
+        "name": "lock",
+        "description": "Lock a channel",
+        "channel": "Channel to lock",
+        "reason": "Reason for lock",
+        "success": "Locked {{channel}}"
+      },
+      "unlock": {
+        "name": "unlock",
+        "description": "Unlock a channel",
+        "channel": "Channel to unlock",
+        "reason": "Reason for unlock",
+        "success": "Unlocked {{channel}}"
+      }
+    },
+    "economy": {
+      "balance": {
+        "name": "balance",
+        "description": "Check your or another user's balance",
+        "user": "User to check",
+        "title": "{{user}}'s Balance",
+        "wallet": "Wallet",
+        "bank": "Bank",
+        "total": "Total"
+      },
+      "daily": {
+        "name": "daily",
+        "description": "Claim your daily reward",
+        "success": "Claimed {{amount}}! Streak: {{streak}} days",
+        "alreadyClaimed": "Already claimed! Next in {{time}}",
+        "streakBonus": "Streak bonus: +{{bonus}}"
+      },
+      "work": {
+        "name": "work",
+        "description": "Work to earn money",
+        "success": "You worked as {{job}} and earned {{amount}}!",
+        "cooldown": "You're tired! Try again in {{time}}"
+      },
+      "pay": {
+        "name": "pay",
+        "description": "Pay another user",
+        "user": "User to pay",
+        "amount": "Amount to pay",
+        "success": "Paid {{amount}} to {{user}}",
+        "insufficient": "Insufficient funds",
+        "self": "You can't pay yourself"
+      },
+      "shop": {
+        "name": "shop",
+        "description": "View the server shop",
+        "title": "{{guild}} Shop",
+        "empty": "Shop is empty",
+        "item": "{{name}} - {{price}}",
+        "buy": "Buy"
+      },
+      "buy": {
+        "name": "buy",
+        "description": "Buy an item from the shop",
+        "item": "Item to buy",
+        "quantity": "Quantity",
+        "success": "Bought {{quantity}}x {{item}} for {{total}}",
+        "notFound": "Item not found",
+        "insufficient": "Insufficient funds",
+        "outOfStock": "Out of stock"
+      },
+      "inventory": {
+        "name": "inventory",
+        "description": "View your inventory",
+        "user": "User to check",
+        "title": "{{user}}'s Inventory",
+        "empty": "Inventory is empty",
+        "item": "{{name}} x{{quantity}}"
+      },
+      "leaderboard": {
+        "name": "leaderboard",
+        "description": "View the economy leaderboard",
+        "title": "Economy Leaderboard",
+        "rank": "Rank",
+        "user": "User",
+        "balance": "Balance"
+      }
+    },
+    "leveling": {
+      "rank": {
+        "name": "rank",
+        "description": "Check your or another user's rank",
+        "user": "User to check",
+        "title": "{{user}}'s Rank",
+        "level": "Level",
+        "xp": "XP",
+        "nextLevel": "Next Level",
+        "progress": "Progress"
+      },
+      "leaderboard": {
+        "name": "leaderboard",
+        "description": "View the leveling leaderboard",
+        "title": "Leveling Leaderboard",
+        "rank": "Rank",
+        "user": "User",
+        "level": "Level",
+        "xp": "XP"
+      },
+      "setxp": {
+        "name": "setxp",
+        "description": "Set a user's XP (admin only)",
+        "user": "User",
+        "xp": "XP amount",
+        "success": "Set {{user}}'s XP to {{xp}}"
+      }
+    },
+    "music": {
+      "play": {
+        "name": "play",
+        "description": "Play a song or add to queue",
+        "query": "Song name or URL",
+        "success": "Added to queue: {{title}}",
+        "playing": "Now playing: {{title}}",
+        "noResults": "No results found",
+        "noVoice": "You need to be in a voice channel"
+      },
+      "pause": {
+        "name": "pause",
+        "description": "Pause the current song",
+        "success": "Paused",
+        "alreadyPaused": "Already paused"
+      },
+      "resume": {
+        "name": "resume",
+        "description": "Resume the current song",
+        "success": "Resumed",
+        "notPaused": "Not paused"
+      },
+      "skip": {
+        "name": "skip",
+        "description": "Skip the current song",
+        "success": "Skipped",
+        "nothingPlaying": "Nothing playing"
+      },
+      "stop": {
+        "name": "stop",
+        "description": "Stop playback and clear queue",
+        "success": "Stopped and cleared queue",
+        "leftChannel": "Left voice channel"
+      },
+      "queue": {
+        "name": "queue",
+        "description": "Show the current queue",
+        "title": "Queue",
+        "empty": "Queue is empty",
+        "nowPlaying": "Now Playing",
+        "upNext": "Up Next",
+        "page": "Page {{current}}/{{total}}"
+      },
+      "nowplaying": {
+        "name": "nowplaying",
+        "description": "Show the currently playing song",
+        "title": "Now Playing",
+        "requestedBy": "Requested by",
+        "duration": "Duration",
+        "volume": "Volume"
+      },
+      "volume": {
+        "name": "volume",
+        "description": "Set the volume",
+        "level": "Volume level (0-200)",
+        "success": "Set volume to {{level}}%",
+        "current": "Current volume: {{level}}%"
+      },
+      "loop": {
+        "name": "loop",
+        "description": "Toggle loop mode",
+        "mode": "Loop mode",
+        "off": "Disabled loop",
+        "track": "Looping track",
+        "queue": "Looping queue"
+      },
+      "shuffle": {
+        "name": "shuffle",
+        "description": "Shuffle the queue",
+        "success": "Shuffled queue"
+      },
+      "seek": {
+        "name": "seek",
+        "description": "Seek to a position in the song",
+        "position": "Position (e.g., 1:30)",
+        "success": "Seeked to {{position}}"
+      },
+      "filters": {
+        "name": "filters",
+        "description": "Apply audio filters",
+        "filter": "Filter to apply",
+        "success": "Applied {{filter}} filter",
+        "cleared": "Cleared all filters",
+        "available": "Available: bassboost, nightcore, vaporwave, 8d, karaoke, tremolo, vibrato, rotation"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "StellarSentry Dashboard",
+    "tagline": "Manage your Discord server with ease",
+    "login": "Login with Discord",
+    "logout": "Logout",
+    "servers": "Servers",
+    "settings": "Settings",
+    "overview": "Overview",
+    "moderation": "Moderation",
+    "automod": "AutoMod",
+    "welcome": "Welcome",
+    "leveling": "Leveling",
+    "economy": "Economy",
+    "tickets": "Tickets",
+    "reactionRoles": "Reaction Roles",
+    "giveaways": "Giveaways",
+    "suggestions": "Suggestions",
+    "starboard": "Starboard",
+    "music": "Music",
+    "logging": "Logging",
+    "commands": "Commands",
+    "general": "General",
+    "saveChanges": "Save Changes",
+    "changesSaved": "Changes saved successfully",
+    "saveError": "Failed to save changes",
+    "confirmDelete": "Are you sure you want to delete this?",
+    "noServers": "You don't manage any servers with the bot",
+    "inviteBot": "Invite Bot",
+    "botOnline": "Bot Online",
+    "botOffline": "Bot Offline",
+    "memberCount": "Members",
+    "commandUsage": "Command Usage",
+    "recentActions": "Recent Actions",
+    "searchPlaceholder": "Search...",
+    "noData": "No data available",
+    "loading": "Loading...",
+    "error": "Error loading data",
+    "success": "Success",
+    "warning": "Warning"
+  },
+  "features": {
+    "automod": {
+      "title": "Auto Moderation",
+      "description": "Automatically moderate messages",
+      "spam": "Anti-Spam",
+      "links": "Anti-Links",
+      "words": "Blacklisted Words",
+      "mentions": "Mass Mention",
+      "caps": "Caps Lock",
+      "action": "Action",
+      "delete": "Delete",
+      "warn": "Warn",
+      "timeout": "Timeout",
+      "whitelist": "Whitelisted Roles/Channels"
+    },
+    "welcome": {
+      "title": "Welcome System",
+      "description": "Configure welcome and leave messages",
+      "enabled": "Enable Welcome",
+      "channel": "Welcome Channel",
+      "message": "Welcome Message",
+      "embed": "Use Embed",
+      "autoRole": "Auto Role",
+      "placeholders": "Placeholders: {user}, {server}, {memberCount}"
+    },
+    "leveling": {
+      "title": "Leveling System",
+      "description": "XP, levels, and role rewards",
+      "enabled": "Enable Leveling",
+      "xpPerMessage": "XP Per Message",
+      "xpCooldown": "XP Cooldown (seconds)",
+      "multiplier": "XP Multiplier",
+      "levelUpChannel": "Level Up Channel",
+      "levelUpMessage": "Level Up Message",
+      "roleRewards": "Role Rewards",
+      "level": "Level",
+      "role": "Role"
+    },
+    "economy": {
+      "title": "Economy System",
+      "description": "Balance, shop, and leaderboards",
+      "enabled": "Enable Economy",
+      "startingBalance": "Starting Balance",
+      "dailyMin": "Daily Min",
+      "dailyMax": "Daily Max",
+      "workMin": "Work Min",
+      "workMax": "Work Max",
+      "shop": "Shop Items",
+      "itemName": "Item Name",
+      "itemPrice": "Price",
+      "itemDescription": "Description",
+      "itemRole": "Role Reward (optional)",
+      "itemStock": "Stock (-1 for unlimited)"
+    },
+    "tickets": {
+      "title": "Ticket System",
+      "description": "Support tickets with transcripts",
+      "enabled": "Enable Tickets",
+      "category": "Ticket Category",
+      "supportRole": "Support Role",
+      "logChannel": "Log Channel",
+      "panelTitle": "Panel Title",
+      "panelDescription": "Panel Description",
+      "panelButton": "Button Label"
+    },
+    "giveaways": {
+      "title": "Giveaways",
+      "description": "Create and manage giveaways",
+      "enabled": "Enable Giveaways",
+      "defaultDuration": "Default Duration",
+      "defaultWinners": "Default Winners",
+      "requirements": "Requirements",
+      "requiredRole": "Required Role",
+      "requiredLevel": "Required Level"
+    },
+    "music": {
+      "title": "Music Player",
+      "description": "Lavalink-powered music",
+      "enabled": "Enable Music",
+      "djRole": "DJ Role",
+      "maxQueue": "Max Queue Size",
+      "defaultVolume": "Default Volume",
+      "autoLeave": "Auto Leave When Alone",
+      "idleTimeout": "Idle Timeout (minutes)"
+    }
+  }
+}

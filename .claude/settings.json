@@ -1,0 +1,7 @@
+{
+  "hooks": {
+    "Stop": [
+      { "hooks": [{ "type": "command", "command": "node .claude/hooks/keep-going.mjs" }] }
+    ]
+  }
+}
