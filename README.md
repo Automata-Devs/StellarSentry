@@ -128,7 +128,7 @@
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/stellarsentry.git
+git clone https://github.com/<your-username>/stellarsentry.git
 cd stellarsentry
 
 # Install dependencies
@@ -162,7 +162,7 @@ DISCORD_TOKEN=your_bot_token
 DISCORD_CLIENT_ID=your_client_id
 DISCORD_CLIENT_SECRET=your_client_secret
 DISCORD_DEV_GUILD_ID=your_test_guild_id  # Optional: for instant command deployment
-OWNER_IDS=111111111111111111,222222222222222222  # Comma-separated owner IDs
+OWNER_IDS=111111111111111111,222222222222222222  # Comma-separated owner Discord IDs
 
 # Database
 MONGODB_URI=mongodb://127.0.0.1:27017/stellarsentry
@@ -233,7 +233,7 @@ StellarSentry is designed for **Bot-Hosting.net Starter+ plan** (2GB RAM, 100% C
 
 4. **Configure Discord OAuth2**
    - Update **Redirect URI** in Developer Portal to your Bot-Hosting.net URL:
-     `https://stellarsentry.apps.bot-hosting.cloud/auth/callback`
+     `https://<your-app-name>.apps.bot-hosting.cloud/auth/callback`
    - Update `DASHBOARD_URL` in environment variables
 
 5. **Deploy**
@@ -245,7 +245,7 @@ StellarSentry is designed for **Bot-Hosting.net Starter+ plan** (2GB RAM, 100% C
 
 ```bash
 # On your server
-git clone https://github.com/yourusername/stellarsentry.git
+git clone https://github.com/<your-username>/stellarsentry.git
 cd stellarsentry
 npm ci --production
 npm run build:css
@@ -384,8 +384,8 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 ## 📞 Support
 
 - **Discord Server**: [Join for support](https://discord.gg/stellarsentry)
-- **Issues**: [GitHub Issues](https://github.com/yourusername/stellarsentry/issues)
-- **Documentation**: [Wiki](https://github.com/yourusername/stellarsentry/wiki)
+- **Issues**: [GitHub Issues](https://github.com/<your-username>/stellarsentry/issues)
+- **Documentation**: [Wiki](https://github.com/<your-username>/stellarsentry/wiki)
 
 ---
 
