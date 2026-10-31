@@ -4,7 +4,11 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { COLORS, EMOJIS } from '../../config/constants.js';
 import { musicService } from '../../services/music.service.js';
+<<<<<<< HEAD
 import { parseTime } from '../../utils/time.js';
+=======
+import { parseTime, formatDuration } from '../../utils/time.js';
+>>>>>>> f652c8f (Initial Commit - 2)
 
 export default {
   data: new SlashCommandBuilder()
@@ -74,6 +78,7 @@ export default {
 
     await interaction.reply({ embeds: [embed] });
   },
+<<<<<<< HEAD
 };
 
 function formatDuration(ms) {
@@ -85,3 +90,6 @@ function formatDuration(ms) {
   if (hours > 0) return `${hours}:${(minutes % 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
   return `${minutes}:${(seconds % 60).toString().padStart(2, '0')}`;
 }
+=======
+};
+>>>>>>> f652c8f (Initial Commit - 2)

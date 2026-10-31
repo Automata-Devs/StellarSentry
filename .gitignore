@@ -33,8 +33,15 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Testing
+<<<<<<< HEAD
 coverage/
 .nyc_output/
+=======
+tests/
+coverage/
+.nyc_output/
+test.mjs
+>>>>>>> f652c8f (Initial Commit - 2)
 
 # Temporary files
 tmp/
@@ -73,4 +80,17 @@ debug.log
 # src/dashboard/public/css/output.css
 
 # Optional: TypeScript generated files
+<<<<<<< HEAD
 # *.d.ts
+=======
+# *.d.ts
+
+# Markdown files
+PROGRESS.md
+ECC_LOG.md
+DEV_README.md
+SETUP.md
+
+# Jars
+*.jar
+>>>>>>> f652c8f (Initial Commit - 2)

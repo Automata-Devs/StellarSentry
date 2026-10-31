@@ -41,6 +41,7 @@ export class StellarSentryClient extends Client {
         Partials.ThreadMember,
         Partials.User,
       ],
+<<<<<<< HEAD
       // Cache settings for memory efficiency
       makeCache: {
         // Don't cache everything - only what we need
@@ -85,6 +86,8 @@ export class StellarSentryClient extends Client {
           lifetime: 3600,
         },
       },
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
       // Rest settings
       rest: {
         timeout: 30000,

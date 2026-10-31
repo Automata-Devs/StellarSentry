@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - StellarSentry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <nav class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/guilds" class="text-xl font-bold text-purple-400">StellarSentry</a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <a href="/overview/<%= guild.id %>" class="text-purple-400 font-semibold"><%= guild.name %></a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <span class="text-gray-300">Moderation</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/guilds" class="text-gray-300 hover:text-white">Dashboard</a>
+                    <a href="/auth/logout" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-white"><%= guild.name %></h1>
+                <p class="text-gray-400">Moderation Settings & Logs</p>
+            </div>
+            <div class="flex space-x-2">
+                <a href="/overview/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Overview</a>
+                <a href="/settings/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Settings</a>
+            </div>
+        </div>
+
+        <!-- Moderation Settings -->
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-6">Moderation Settings</h2>
+            <form action="/moderation/<%= guild.id %>" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                <div>
+                    <label for="logChannel" class="block text-sm font-medium text-gray-300 mb-2">Log Channel</label>
+                    <input type="text" id="logChannel" name="logChannel" value="<%= moderation?.logChannel || '' %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                           placeholder="Channel ID for moderation logs">
+                    <p class="text-sm text-gray-500 mt-1">Channel where moderation actions are logged</p>
+                </div>
+
+                <div>
+                    <label for="modRole" class="block text-sm font-medium text-gray-300 mb-2">Moderator Role</label>
+                    <input type="text" id="modRole" name="modRole" value="<%= moderation?.modRole || '' %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                           placeholder="Role ID for moderator permissions">
+                    <p class="text-sm text-gray-500 mt-1">Role that can use moderation commands</p>
+                </div>
+
+                <div>
+                    <label for="muteRole" class="block text-sm font-medium text-gray-300 mb-2">Mute Role</label>
+                    <input type="text" id="muteRole" name="muteRole" value="<%= moderation?.muteRole || '' %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                           placeholder="Role ID for muted members">
+                    <p class="text-sm text-gray-500 mt-1">Role assigned when a member is muted</p>
+                </div>
+
+                <div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="dmOnAction" name="dmOnAction"
+                               class="h-4 w-4 text-purple-600 border-gray-600 rounded focus:ring-purple-500 bg-gray-700"
+                               <%= moderation?.dmOnAction ? 'checked' : '' %>>
+                        <label for="dmOnAction" class="ml-3 text-sm text-gray-300">DM on Action</label>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-1">Send DM to user when moderation action is taken</p>
+                </div>
+
+                <div class="md:col-span-2 flex justify-end">
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">Save Moderation Settings</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Moderation Logs -->
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold text-white">Recent Moderation Logs</h2>
+                <div class="flex space-x-2">
+                    <button id="prevPage" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>Previous</button>
+                    <span id="pageInfo" class="text-gray-300 px-4">Page 1</span>
+                    <button id="nextPage" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Next</button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-left text-gray-400 border-b border-gray-700">
+                            <th class="pb-3 px-2">Action</th>
+                            <th class="pb-3 px-2">Moderator</th>
+                            <th class="pb-3 px-2">Target</th>
+                            <th class="pb-3 px-2">Reason</th>
+                            <th class="pb-3 px-2">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logsTable" class="divide-y divide-gray-700">
+                        <% if (logs && logs.length > 0) { %>
+                            <% logs.forEach(log => { %>
+                                <tr class="hover:bg-gray-700">
+                                    <td class="py-3 px-2"><span class="px-2 py-1 bg-purple-900 text-purple-300 text-xs rounded"><%= log.eventType %></span></td>
+                                    <td class="py-3 px-2"><%= log.moderator?.username || log.moderator?.tag || 'Unknown' %></td>
+                                    <td class="py-3 px-2"><%= log.target?.username || log.target?.tag || 'Unknown' %></td>
+                                    <td class="py-3 px-2 text-gray-300 max-w-xs truncate"><%= log.reason || 'No reason provided' %></td>
+                                    <td class="py-3 px-2 text-sm text-gray-400"><%= new Date(log.createdAt).toLocaleString() %></td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="5" class="py-8 text-center text-gray-500">No moderation logs found</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 border-t border-gray-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500">
+            <p>StellarSentry - Discord Bot with Dashboard</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentPage = 1;
+        const guildId = '<%= guild.id %>';
+
+        async function loadLogs(page = 1) {
+            try {
+                const response = await fetch(`/moderation/${guildId}/logs?page=${page}`);
+                const data = await response.json();
+
+                const tbody = document.getElementById('logsTable');
+                tbody.innerHTML = '';
+
+                if (data.logs && data.logs.length > 0) {
+                    data.logs.forEach(log => {
+                        const tr = document.createElement('tr');
+                        tr.className = 'hover:bg-gray-700';
+                        tr.innerHTML = `
+                            <td class="py-3 px-2"><span class="px-2 py-1 bg-purple-900 text-purple-300 text-xs rounded">${log.eventType}</span></td>
+                            <td class="py-3 px-2">${log.moderator?.username || log.moderator?.tag || 'Unknown'}</td>
+                            <td class="py-3 px-2">${log.target?.username || log.target?.tag || 'Unknown'}</td>
+                            <td class="py-3 px-2 text-gray-300 max-w-xs truncate">${log.reason || 'No reason provided'}</td>
+                            <td class="py-3 px-2 text-sm text-gray-400">${new Date(log.createdAt).toLocaleString()}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = '<td colspan="5" class="py-8 text-center text-gray-500">No moderation logs found</td>';
+                    tbody.appendChild(tr);
+                }
+
+                document.getElementById('pageInfo').textContent = `Page ${data.pagination.page} of ${data.pagination.pages}`;
+                document.getElementById('prevPage').disabled = data.pagination.page <= 1;
+                document.getElementById('nextPage').disabled = data.pagination.page >= data.pagination.pages;
+                currentPage = data.pagination.page;
+            } catch (err) {
+                console.error('Failed to load logs:', err);
+            }
+        }
+
+        document.getElementById('prevPage').addEventListener('click', () => loadLogs(currentPage - 1));
+        document.getElementById('nextPage').addEventListener('click', () => loadLogs(currentPage + 1));
+
+        loadLogs();
+    </script>
+</body>
+</html>

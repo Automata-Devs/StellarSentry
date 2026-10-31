@@ -4,7 +4,12 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { COLORS, EMOJIS } from '../../config/constants.js';
 import { env } from '../../config/env.js';
+<<<<<<< HEAD
 import { version } from '../../../../package.json';
+=======
+import pkg from '../../../../package.json' with { type: "json" };
+const { version } = pkg;
+>>>>>>> f652c8f (Initial Commit - 2)
 
 export default {
   data: new SlashCommandBuilder()

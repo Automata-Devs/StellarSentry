@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - StellarSentry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <nav class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/guilds" class="text-xl font-bold text-purple-400">StellarSentry</a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <a href="/overview/<%= guild.id %>" class="text-purple-400 font-semibold"><%= guild.name %></a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <span class="text-gray-300">Leveling</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/guilds" class="text-gray-300 hover:text-white">Dashboard</a>
+                    <a href="/auth/logout" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-white"><%= guild.name %></h1>
+                <p class="text-gray-400">Leveling System Settings</p>
+            </div>
+            <div class="flex space-x-2">
+                <a href="/overview/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Overview</a>
+                <a href="/settings/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Settings</a>
+            </div>
+        </div>
+
+        <!-- Leveling Settings -->
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-6">Leveling Configuration</h2>
+            <form action="/leveling/<%= guild.id %>" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                <div class="flex items-center">
+                    <input type="checkbox" id="levelingEnabled" name="enabled"
+                           class="h-4 w-4 text-purple-600 border-gray-600 rounded focus:ring-purple-500 bg-gray-700"
+                           <%= leveling?.enabled ? 'checked' : '' %>>
+                    <label for="levelingEnabled" class="ml-3 text-sm text-gray-300">Enable Leveling System</label>
+                </div>
+
+                <div>
+                    <label for="xpPerMessage" class="block text-sm font-medium text-gray-300 mb-2">XP Per Message</label>
+                    <input type="number" id="xpPerMessage" name="xpPerMessage" min="1" max="100" value="<%= leveling?.xpPerMessage || 15 %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                    <p class="text-sm text-gray-500 mt-1">XP gained per message (1-100)</p>
+                </div>
+
+                <div>
+                    <label for="xpCooldown" class="block text-sm font-medium text-gray-300 mb-2">XP Cooldown (seconds)</label>
+                    <input type="number" id="xpCooldown" name="xpCooldown" min="0" max="3600" value="<%= leveling?.xpCooldown || 60 %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                    <p class="text-sm text-gray-500 mt-1">Cooldown between XP gains per user</p>
+                </div>
+
+                <div>
+                    <label for="multiplier" class="block text-sm font-medium text-gray-300 mb-2">XP Multiplier</label>
+                    <input type="number" id="multiplier" name="multiplier" min="0.1" max="10" step="0.1" value="<%= leveling?.multiplier || 1 %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                    <p class="text-sm text-gray-500 mt-1">Global XP multiplier (0.1-10)</p>
+                </div>
+
+                <div>
+                    <label for="levelUpChannel" class="block text-sm font-medium text-gray-300 mb-2">Level Up Channel</label>
+                    <select id="levelUpChannel" name="levelUpChannel"
+                            class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                        <option value="">Same channel as message</option>
+                        <% channels?.forEach(channel => { %>
+                            <option value="<%= channel.id %>" <%= leveling?.levelUpChannel === channel.id ? 'selected' : '' %>>
+                                #<%= channel.name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                    <p class="text-sm text-gray-500 mt-1">Channel for level up announcements (empty = same channel)</p>
+                </div>
+
+                <div>
+                    <label for="levelUpMessage" class="block text-sm font-medium text-gray-300 mb-2">Level Up Message</label>
+                    <input type="text" id="levelUpMessage" name="levelUpMessage" value="<%= leveling?.levelUpMessage || 'Congratulations {user}, you reached level {level}!' %>" maxlength="500"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                           placeholder="Congratulations {user}, you reached level {level}!">
+                    <p class="text-sm text-gray-500 mt-1">Use {user}, {level}, {server} placeholders</p>
+                </div>
+
+                <div class="md:col-span-2 flex justify-end">
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">Save Leveling Settings</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Role Rewards -->
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold text-white">Role Rewards</h2>
+                <button id="addRewardBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Add Role Reward</button>
+            </div>
+
+            <div id="roleRewards" class="space-y-4">
+                <% if (leveling?.roleRewards && leveling.roleRewards.length > 0) { %>
+                    <% leveling.roleRewards.forEach((reward, index) => { %>
+                        <div class="bg-gray-700 rounded-lg p-4 border border-gray-600 flex items-center justify-between" data-level="<%= reward.level %>">
+                            <div class="flex items-center space-x-4">
+                                <span class="bg-purple-600 text-white px-3 py-1 rounded-lg font-bold text-lg"><%= reward.level %></span>
+                                <div>
+                                    <p class="font-medium text-white">Level <%= reward.level %></p>
+                                    <p class="text-sm text-gray-400"><%= roles.find(r => r.id === reward.role)?.name || 'Unknown Role' %> (<%= reward.role %>)</p>
+                                </div>
+                            </div>
+                            <button class="delete-reward text-red-400 hover:text-red-300 text-sm" data-level="<%= reward.level %>">Remove</button>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p class="text-gray-400 text-center py-8">No role rewards configured</p>
+                <% } %>
+            </div>
+
+            <!-- Add Reward Modal -->
+            <div id="rewardModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 w-full max-w-md mx-4">
+                    <h3 class="text-xl font-semibold text-white mb-4">Add Role Reward</h3>
+                    <form id="rewardForm" class="space-y-4">
+                        <div>
+                            <label for="rewardLevel" class="block text-sm font-medium text-gray-300 mb-2">Level</label>
+                            <input type="number" id="rewardLevel" name="level" min="1" max="1000" required
+                                   class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                        </div>
+                        <div>
+                            <label for="rewardRole" class="block text-sm font-medium text-gray-300 mb-2">Role</label>
+                            <select id="rewardRole" name="role" required
+                                    class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                                <option value="">Select a role...</option>
+                                <% roles?.forEach(role => { %>
+                                    <option value="<%= role.id %>">@<%= role.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="flex justify-end space-x-2 pt-4">
+                            <button type="button" id="cancelReward" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Cancel</button>
+                            <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ignored Channels/Roles Info -->
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h2 class="text-xl font-semibold text-white mb-4">Ignored Channels & Roles</h2>
+            <p class="text-gray-400 mb-4">Configure ignored channels and roles in the bot config (requires server restart or bot config edit).</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-medium text-gray-300 mb-2">Ignored Channels</h3>
+                    <p class="text-sm text-gray-500">XP will not be gained in these channels.</p>
+                    <ul class="mt-2 space-y-1">
+                        <% if (leveling?.ignoredChannels && leveling.ignoredChannels.length > 0) { %>
+                            <% leveling.ignoredChannels.forEach(channelId => { %>
+                                <li class="flex items-center space-x-2 bg-gray-700 px-3 py-2 rounded-lg">
+                                    <span class="text-purple-400">#</span>
+                                    <span><%= channels.find(c => c.id === channelId)?.name || channelId %></span>
+                                </li>
+                            <% }) %>
+                        <% } else { %>
+                            <li class="text-gray-500">None configured</li>
+                        <% } %>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-300 mb-2">Ignored Roles</h3>
+                    <p class="text-sm text-gray-500">Members with these roles will not gain XP.</p>
+                    <ul class="mt-2 space-y-1">
+                        <% if (leveling?.ignoredRoles && leveling.ignoredRoles.length > 0) { %>
+                            <% leveling.ignoredRoles.forEach(roleId => { %>
+                                <li class="flex items-center space-x-2 bg-gray-700 px-3 py-2 rounded-lg">
+                                    <span class="text-purple-400">@</span>
+                                    <span><%= roles.find(r => r.id === roleId)?.name || roleId %></span>
+                                </li>
+                            <% }) %>
+                        <% } else { %>
+                            <li class="text-gray-500">None configured</li>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 border-t border-gray-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500">
+            <p>StellarSentry - Discord Bot with Dashboard</p>
+        </div>
+    </footer>
+
+    <script>
+        const guildId = '<%= guild.id %>';
+        const csrfToken = '<%= csrfToken %>';
+
+        document.getElementById('addRewardBtn').addEventListener('click', () => {
+            document.getElementById('rewardModal').classList.remove('hidden');
+            document.getElementById('rewardModal').classList.add('flex');
+        });
+
+        document.getElementById('cancelReward').addEventListener('click', () => {
+            document.getElementById('rewardModal').classList.add('hidden');
+            document.getElementById('rewardModal').classList.remove('flex');
+            document.getElementById('rewardForm').reset();
+        });
+
+        document.getElementById('rewardForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const level = formData.get('level');
+            const role = formData.get('role');
+
+            try {
+                const response = await fetch(`/leveling/${guildId}/role-rewards`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
+                    body: JSON.stringify({ level: parseInt(level), role })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Failed to add role reward: ' + (data.error || 'Unknown error'));
+                }
+            } catch (err) {
+                alert('Error adding role reward: ' + err.message);
+            }
+        });
+
+        document.querySelectorAll('.delete-reward').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                if (!confirm('Are you sure you want to remove this role reward?')) return;
+                const level = btn.dataset.level;
+                try {
+                    const response = await fetch(`/leveling/${guildId}/role-rewards/${level}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-Token': csrfToken
+                        }
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        btn.closest('[data-level]').remove();
+                    } else {
+                        alert('Failed to remove role reward: ' + (data.error || 'Unknown error'));
+                    }
+                } catch (err) {
+                    alert('Error removing role reward: ' + err.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

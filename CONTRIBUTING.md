@@ -66,7 +66,11 @@ Submitting a pull request does not guarantee that it will be merged.
 
 Contributors retain ownership of their original contributions unless otherwise agreed in writing.
 
+<<<<<<< HEAD
 By submitting a contribution, you agree to the contribution terms described in the repository's [`LICENSE.md`](LICENSE.md), including granting the copyright holder permission to use, modify, incorporate, distribute, and sublicense that contribution as part of this project and related projects.
+=======
+By submitting a contribution, you agree to the contribution terms described in the repository's [`LICENSE`](LICENSE), including granting the copyright holder permission to use, modify, incorporate, distribute, and sublicense that contribution as part of this project and related projects.
+>>>>>>> f652c8f (Initial Commit - 2)
 
 You must have the right to submit any code or other material you contribute. Contributions must not knowingly infringe third-party rights or violate applicable licenses.
 

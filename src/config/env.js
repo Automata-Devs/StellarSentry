@@ -36,10 +36,17 @@ const envSchema = z.object({
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
 });
 
+<<<<<<< HEAD
 let env;
 
 export function loadEnv() {
   if (env) return env;
+=======
+let envCache;
+
+export function loadEnv() {
+  if (envCache) return envCache;
+>>>>>>> f652c8f (Initial Commit - 2)
 
   const result = envSchema.safeParse(process.env);
 
@@ -51,6 +58,7 @@ export function loadEnv() {
     throw new Error(`Environment validation failed:\n${messages.join('\n')}`);
   }
 
+<<<<<<< HEAD
   env = result.data;
   return env;
 }
@@ -58,6 +66,15 @@ export function loadEnv() {
 export function getEnv() {
   if (!env) return loadEnv();
   return env;
+=======
+  envCache = result.data;
+  return envCache;
+}
+
+export function getEnv() {
+  if (!envCache) return loadEnv();
+  return envCache;
+>>>>>>> f652c8f (Initial Commit - 2)
 }
 
 export const env = new Proxy({}, {

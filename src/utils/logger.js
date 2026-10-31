@@ -5,18 +5,30 @@
 import pino from 'pino';
 import { env } from '../config/env.js';
 
+<<<<<<< HEAD
 let logger;
+=======
+let loggerCache;
+>>>>>>> f652c8f (Initial Commit - 2)
 
 /**
  * Create the logger instance
  * @returns {pino.Logger}
  */
 export function createLogger() {
+<<<<<<< HEAD
   if (logger) return logger;
 
   const isDev = env.NODE_ENV === 'development';
 
   logger = pino({
+=======
+  if (loggerCache) return loggerCache;
+
+  const isDev = env.NODE_ENV === 'development';
+
+  loggerCache = pino({
+>>>>>>> f652c8f (Initial Commit - 2)
     level: env.LOG_LEVEL,
     transport: isDev ? {
       target: 'pino-pretty',
@@ -38,7 +50,11 @@ export function createLogger() {
     },
   });
 
+<<<<<<< HEAD
   return logger;
+=======
+  return loggerCache;
+>>>>>>> f652c8f (Initial Commit - 2)
 }
 
 /**
@@ -46,8 +62,13 @@ export function createLogger() {
  * @returns {pino.Logger}
  */
 export function getLogger() {
+<<<<<<< HEAD
   if (!logger) return createLogger();
   return logger;
+=======
+  if (!loggerCache) return createLogger();
+  return loggerCache;
+>>>>>>> f652c8f (Initial Commit - 2)
 }
 
 /**

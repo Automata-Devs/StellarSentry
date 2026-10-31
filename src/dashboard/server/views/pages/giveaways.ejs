@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - StellarSentry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <nav class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/guilds" class="text-xl font-bold text-purple-400">StellarSentry</a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <a href="/overview/<%= guild.id %>" class="text-purple-400 font-semibold"><%= guild.name %></a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <span class="text-gray-300">Giveaways</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/guilds" class="text-gray-300 hover:text-white">Dashboard</a>
+                    <a href="/auth/logout" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-white"><%= guild.name %></h1>
+                <p class="text-gray-400">Giveaway Management</p>
+            </div>
+            <div class="flex space-x-2">
+                <a href="/overview/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Overview</a>
+                <a href="/settings/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Settings</a>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-6">Create Giveaway</h2>
+            <form id="createGiveawayForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                <div>
+                    <label for="prize" class="block text-sm font-medium text-gray-300 mb-2">Prize</label>
+                    <input type="text" id="prize" name="prize" required maxlength="200"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                           placeholder="Nitro Classic - 1 Month">
+                </div>
+
+                <div>
+                    <label for="winners" class="block text-sm font-medium text-gray-300 mb-2">Number of Winners</label>
+                    <input type="number" id="winners" name="winners" min="1" max="100" value="1" required
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                </div>
+
+                <div>
+                    <label for="duration" class="block text-sm font-medium text-gray-300 mb-2">Duration (seconds)</label>
+                    <input type="number" id="duration" name="duration" min="60" max="2592000" value="86400" required
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                           placeholder="86400 (24 hours)">
+                    <p class="text-sm text-gray-500 mt-1">Min: 60s, Max: 30 days</p>
+                </div>
+
+                <div>
+                    <label for="requiredRole" class="block text-sm font-medium text-gray-300 mb-2">Required Role (optional)</label>
+                    <input type="text" id="requiredRole" name="requiredRole"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                           placeholder="Role ID">
+                </div>
+
+                <div>
+                    <label for="requiredLevel" class="block text-sm font-medium text-gray-300 mb-2">Required Level (optional)</label>
+                    <input type="number" id="requiredLevel" name="requiredLevel" min="0" max="1000" value="0"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                </div>
+
+                <div>
+                    <label for="accountAge" class="block text-sm font-medium text-gray-300 mb-2">Account Age (days, optional)</label>
+                    <input type="number" id="accountAge" name="accountAge" min="0" max="3650" value="0"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                </div>
+
+                <div>
+                    <label for="serverAge" class="block text-sm font-medium text-gray-300 mb-2">Server Age (days, optional)</label>
+                    <input type="number" id="serverAge" name="serverAge" min="0" max="3650" value="0"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                </div>
+
+                <div>
+                    <label for="blacklistedRoles" class="block text-sm font-medium text-gray-300 mb-2">Blacklisted Roles (comma-separated)</label>
+                    <input type="text" id="blacklistedRoles" name="blacklistedRoles"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                           placeholder="role1, role2, role3">
+                </div>
+
+                <div class="md:col-span-2 flex justify-end">
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">Create Giveaway</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h2 class="text-xl font-semibold text-white mb-6">Active Giveaways</h2>
+            <div id="giveawaysList" class="space-y-4">
+                <% if (giveaways && giveaways.length > 0) { %>
+                    <% giveaways.forEach(giveaway => { %>
+                        <div class="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-lg font-semibold text-white"><%= giveaway.prize %></h3>
+                                <span class="px-2 py-1 rounded text-xs font-medium
+                                    <%= giveaway.status === 'running' ? 'bg-green-900 text-green-300' : '' %>
+                                    <%= giveaway.status === 'ended' ? 'bg-gray-700 text-gray-400' : '' %>
+                                    <%= giveaway.status === 'cancelled' ? 'bg-red-900 text-red-300' : '' %>
+                                "><%= giveaway.status %></span>
+                            </div>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-400 mb-3">
+                                <div><span class="font-medium text-white"><%= giveaway.winners %></span> Winner(s)</div>
+                                <div>Ends: <span class="text-white"><%= new Date(giveaway.endsAt).toLocaleString() %></span></div>
+                                <div>Host: <span class="text-white"><%= giveaway.host?.username || giveaway.hostId %></span></div>
+                                <div>Entries: <span class="text-white"><%= giveaway.entries?.length || 0 %></span></div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <a href="/giveaways/<%= guild.id %>/<%= giveaway.giveawayId %>" class="text-purple-400 hover:text-purple-300 text-sm">View</a>
+                                <% if (giveaway.status === 'running') { %>
+                                    <button class="end-giveaway bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm" data-id="<%= giveaway.giveawayId %>">End Early</button>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p class="text-gray-400 text-center py-8">No giveaways found</p>
+                <% } %>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 border-t border-gray-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500">
+            <p>StellarSentry - Discord Bot with Dashboard</p>
+        </div>
+    </footer>
+
+    <script>
+        const guildId = '<%= guild.id %>';
+        const csrfToken = '<%= csrfToken %>';
+
+        document.getElementById('createGiveawayForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {};
+            formData.forEach((value, key) => {
+                if (key !== '_csrf') data[key] = value;
+            });
+
+            // Convert numeric fields
+            data.winners = parseInt(data.winners) || 1;
+            data.duration = parseInt(data.duration) || 86400;
+            data.requiredLevel = parseInt(data.requiredLevel) || 0;
+            data.accountAge = parseInt(data.accountAge) || 0;
+            data.serverAge = parseInt(data.serverAge) || 0;
+            data.requiredRole = data.requiredRole || null;
+            data.blacklistedRoles = data.blacklistedRoles ? data.blacklistedRoles.split(',').map(r => r.trim()).filter(r => r) : [];
+
+            try {
+                const response = await fetch(`/giveaways/${guildId}/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('Giveaway created!');
+                    location.reload();
+                } else {
+                    alert('Failed: ' + (result.error || 'Unknown error'));
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        });
+
+        document.querySelectorAll('.end-giveaway').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                if (!confirm('End this giveaway early?')) return;
+                const id = btn.dataset.id;
+                try {
+                    const response = await fetch(`/giveaways/${guildId}/${id}/end`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': csrfToken
+                        }
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Failed: ' + (data.error || 'Unknown error'));
+                    }
+                } catch (err) {
+                    alert('Error: ' + err.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

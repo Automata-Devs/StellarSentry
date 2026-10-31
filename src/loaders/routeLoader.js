@@ -16,7 +16,11 @@ const __dirname = path.dirname(__filename);
  * @param {string} routesDir - Path to routes directory
  * @returns {Promise<number>} Number of routes loaded
  */
+<<<<<<< HEAD
 export async function loadRoutes(app, routesDir = path.join(__dirname, '../../dashboard/routes')) {
+=======
+export async function loadRoutes(app, routesDir = path.join(__dirname, '../../src/dashboard/routes')) {
+>>>>>>> f652c8f (Initial Commit - 2)
   let loaded = 0;
   let failed = 0;
 
@@ -54,6 +58,7 @@ export async function loadRoutes(app, routesDir = path.join(__dirname, '../../da
         const routeModule = await import(pathToFileURL(filePath));
         const router = routeModule.default || routeModule;
 
+<<<<<<< HEAD
         if (router && typeof router === 'function') {
           // Router is a function that registers routes
           router(app);
@@ -61,6 +66,16 @@ export async function loadRoutes(app, routesDir = path.join(__dirname, '../../da
           // Router is an Express Router instance
           const basePath = getBasePath(routeFile);
           app.use(basePath, router);
+=======
+        // Express Router is a function with a stack property - check for that first
+        if (router && router.stack && Array.isArray(router.stack)) {
+          // Router is an Express Router instance
+          const basePath = getBasePath(routeFile);
+          app.use(basePath, router);
+        } else if (router && typeof router === 'function') {
+          // Router is a function that registers routes
+          router(app);
+>>>>>>> f652c8f (Initial Commit - 2)
         }
 
         loaded++;
@@ -81,11 +96,22 @@ export async function loadRoutes(app, routesDir = path.join(__dirname, '../../da
         const routeModule = await import(file);
         const router = routeModule.default || routeModule;
 
+<<<<<<< HEAD
         if (router && typeof router === 'function') {
           router(app);
         } else if (router && router.stack) {
           const basePath = getBasePath(path.relative(apiDir, file));
           app.use(`/api/v1${basePath}`, router);
+=======
+        // Express Router is a function with a stack property - check for that first
+        if (router && router.stack && Array.isArray(router.stack)) {
+          // Router is an Express Router instance
+          const basePath = getBasePath(path.relative(apiDir, file));
+          app.use(`/api/v1${basePath}`, router);
+        } else if (router && typeof router === 'function') {
+          // Router is a function that registers routes
+          router(app);
+>>>>>>> f652c8f (Initial Commit - 2)
         }
 
         loaded++;

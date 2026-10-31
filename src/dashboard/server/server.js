@@ -7,6 +7,10 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
+<<<<<<< HEAD
+=======
+import flash from 'connect-flash';
+>>>>>>> f652c8f (Initial Commit - 2)
 import passport from 'passport';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -111,6 +115,11 @@ export function createDashboardServer(botClient) {
 
   app.use(sessionMiddleware);
 
+<<<<<<< HEAD
+=======
+// Flash messages
+app.use(flash());
+>>>>>>> f652c8f (Initial Commit - 2)
   // Passport initialization
   app.use(passport.initialize());
   app.use(passport.session());
@@ -137,6 +146,12 @@ export function createDashboardServer(botClient) {
     next();
   });
 
+<<<<<<< HEAD
+=======
+  // CSRF protection (after session and body parsing)
+  app.use(csrfMiddleware);
+
+>>>>>>> f652c8f (Initial Commit - 2)
   // Global variables for views
   app.use((req, res, next) => {
     res.locals.user = req.user || null;
@@ -147,9 +162,12 @@ export function createDashboardServer(botClient) {
     next();
   });
 
+<<<<<<< HEAD
   // CSRF protection (after session and body parsing)
   app.use(csrfMiddleware);
 
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
   // Routes
   app.use('/auth', authRoutes);
   app.use('/health', healthRoutes);

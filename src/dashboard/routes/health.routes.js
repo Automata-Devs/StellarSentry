@@ -70,4 +70,8 @@ router.get('/ready', async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
+=======
+export const healthRoutes = router;
+>>>>>>> f652c8f (Initial Commit - 2)
 export default router;

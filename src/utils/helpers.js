@@ -27,6 +27,19 @@ export function randomString(length = 32, charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZa
 }
 
 /**
+<<<<<<< HEAD
+=======
+ * Pick a random element from an array
+ * @param {Array} array
+ * @returns {*}
+ */
+export function randomChoice(array) {
+  if (!array || array.length === 0) return null;
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+/**
+>>>>>>> f652c8f (Initial Commit - 2)
  * Generate a UUID v4
  * @returns {string}
  */

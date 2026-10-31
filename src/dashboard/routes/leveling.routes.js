@@ -4,13 +4,21 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
 import { guildService } from '../../services/guild.service.js';
+<<<<<<< HEAD
+=======
+import { guildAccessMiddleware } from '../middleware/guildAccess.js';
+>>>>>>> f652c8f (Initial Commit - 2)
 
 const router = express.Router();
 
 /**
  * GET /leveling/:guildId - Leveling settings
  */
+<<<<<<< HEAD
 router.get('/:guildId', async (req, res) => {
+=======
+router.get('/:guildId', guildAccessMiddleware, async (req, res) => {
+>>>>>>> f652c8f (Initial Commit - 2)
   try {
     const { guildId } = req.params;
     const settings = await guildService.getGuild(guildId);
@@ -46,7 +54,11 @@ router.get('/:guildId', async (req, res) => {
 /**
  * POST /leveling/:guildId - Update leveling settings
  */
+<<<<<<< HEAD
 router.post('/:guildId', [
+=======
+router.post('/:guildId', guildAccessMiddleware, [
+>>>>>>> f652c8f (Initial Commit - 2)
   body('enabled').optional().isBoolean(),
   body('xpPerMessage').optional().isInt({ min: 1, max: 100 }),
   body('xpCooldown').optional().isInt({ min: 0, max: 3600 }),
@@ -81,7 +93,11 @@ router.post('/:guildId', [
 /**
  * POST /leveling/:guildId/role-rewards - Add/Update role reward
  */
+<<<<<<< HEAD
 router.post('/:guildId/role-rewards', [
+=======
+router.post('/:guildId/role-rewards', guildAccessMiddleware, [
+>>>>>>> f652c8f (Initial Commit - 2)
   body('level').isInt({ min: 1, max: 1000 }),
   body('role').isString(),
 ], async (req, res) => {
@@ -101,7 +117,11 @@ router.post('/:guildId/role-rewards', [
 /**
  * DELETE /leveling/:guildId/role-rewards/:level - Remove role reward
  */
+<<<<<<< HEAD
 router.delete('/:guildId/role-rewards/:level', async (req, res) => {
+=======
+router.delete('/:guildId/role-rewards/:level', guildAccessMiddleware, async (req, res) => {
+>>>>>>> f652c8f (Initial Commit - 2)
   try {
     const { guildId, level } = req.params;
     await guildService.removeRoleReward(guildId, parseInt(level));
@@ -112,4 +132,8 @@ router.delete('/:guildId/role-rewards/:level', async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
+=======
+export const levelingRoutes = router;
+>>>>>>> f652c8f (Initial Commit - 2)
 export default router;

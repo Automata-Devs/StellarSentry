@@ -243,7 +243,12 @@ class MultiCache {
   }
 }
 
+<<<<<<< HEAD
 // Export singleton instances
+=======
+// Export classes and singleton instances
+export { TTLCache };
+>>>>>>> f652c8f (Initial Commit - 2)
 export const multiCache = new MultiCache();
 
 // Pre-configured caches for common use cases

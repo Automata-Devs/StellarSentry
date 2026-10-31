@@ -16,7 +16,11 @@ const __dirname = path.dirname(__filename);
  * @param {string} eventsDir - Path to events directory
  * @returns {Promise<number>} Number of events loaded
  */
+<<<<<<< HEAD
 export async function loadEvents(eventsDir = path.join(__dirname, '../../bot/events')) {
+=======
+export async function loadEvents(eventsDir = path.join(__dirname, '../../src/bot/events')) {
+>>>>>>> f652c8f (Initial Commit - 2)
   let loaded = 0;
   let failed = 0;
 
@@ -101,7 +105,11 @@ function pathToFileURL(filePath) {
  * @returns {Promise<boolean>}
  */
 export async function reloadEvent(eventName) {
+<<<<<<< HEAD
   const eventsDir = path.join(__dirname, '../../bot/events');
+=======
+  const eventsDir = path.join(__dirname, '../../src/bot/events');
+>>>>>>> f652c8f (Initial Commit - 2)
   const file = findEventFile(eventsDir, eventName);
 
   if (!file) {

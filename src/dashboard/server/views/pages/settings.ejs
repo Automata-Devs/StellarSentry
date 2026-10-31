@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - StellarSentry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <nav class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/guilds" class="text-xl font-bold text-purple-400">StellarSentry</a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <a href="/overview/<%= guild.id %>" class="text-purple-400 font-semibold"><%= guild.name %></a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <span class="text-gray-300">Settings</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/guilds" class="text-gray-300 hover:text-white">Dashboard</a>
+                    <a href="/auth/logout" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-white"><%= guild.name %></h1>
+                <p class="text-gray-400">Server ID: <%= guild.id %></p>
+            </div>
+            <div class="flex space-x-2">
+                <a href="/overview/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Overview</a>
+                <a href="/commands/<%= guild.id %>" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Commands</a>
+                <a href="/settings/<%= guild.id %>" class="bg-purple-600 text-white px-4 py-2 rounded-lg">Settings</a>
+            </div>
+        </div>
+
+        <!-- General Settings -->
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-6">General Settings</h2>
+            <form action="/settings/<%= guild.id %>" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                <div>
+                    <label for="prefix" class="block text-sm font-medium text-gray-300 mb-2">Command Prefix</label>
+                    <input type="text" id="prefix" name="prefix" value="<%= settings?.prefix || '!' %>" maxlength="5"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                    <p class="text-sm text-gray-500 mt-1">Prefix for text commands (1-5 characters)</p>
+                </div>
+
+                <div>
+                    <label for="language" class="block text-sm font-medium text-gray-300 mb-2">Language</label>
+                    <select id="language" name="language"
+                            class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                        <option value="en" <%= (settings?.language || 'en') === 'en' ? 'selected' : '' %>>English</option>
+                        <option value="es" <%= settings?.language === 'es' ? 'selected' : '' %>>Español</option>
+                        <option value="fr" <%= settings?.language === 'fr' ? 'selected' : '' %>>Français</option>
+                        <option value="de" <%= settings?.language === 'de' ? 'selected' : '' %>>Deutsch</option>
+                    </select>
+                    <p class="text-sm text-gray-500 mt-1">Bot language for responses</p>
+                </div>
+
+                <div class="md:col-span-2 flex justify-end">
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">Save Settings</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Feature Toggles -->
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h2 class="text-xl font-semibold text-white mb-6">Feature Modules</h2>
+            <p class="text-gray-400 mb-6">Enable or disable feature modules for this server</p>
+
+            <% Object.entries(categories).forEach(([categoryKey, category]) => { %>
+                <% const categoryFeatures = features.filter(f => f.category === categoryKey); %>
+                <% if (categoryFeatures.length > 0) { %>
+                    <div class="mb-8">
+                        <h3 class="flex items-center space-x-2 text-lg font-medium text-gray-300 mb-4 pb-2 border-b border-gray-700">
+                            <span class="text-2xl"><%= category.icon %></span>
+                            <span><%= category.name %></span>
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <% categoryFeatures.forEach(feature => { %>
+                                <div class="bg-gray-700 rounded-lg p-4 border border-gray-600 hover:border-purple-500 transition-colors">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex-1">
+                                            <h4 class="font-medium text-white"><%= feature.name %></h4>
+                                            <p class="text-sm text-gray-400 mt-1"><%= feature.description %></p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox"
+                                                   class="sr-only feature-toggle"
+                                                   data-feature="<%= feature.key %>"
+                                                   data-guild-id="<%= guild.id %>"
+                                                   <%= feature.enabled ? 'checked' : '' %>>
+                                            <div class="w-11 h-6 bg-gray-600 rounded-full peer focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-800 peer-checked:bg-purple-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                <% } %>
+            <% }) %>
+        </div>
+
+        <!-- Command Management Link -->
+        <div class="mt-8 bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold text-white">Command Management</h3>
+                    <p class="text-gray-400 mt-1">Enable/disable specific commands or entire categories</p>
+                </div>
+                <a href="/commands/<%= guild.id %>" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">Manage Commands</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 border-t border-gray-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500">
+            <p>StellarSentry - Discord Bot with Dashboard</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.feature-toggle').forEach(toggle => {
+                toggle.addEventListener('change', async (e) => {
+                    const feature = e.target.dataset.feature;
+                    const guildId = e.target.dataset.guildId;
+                    const enabled = e.target.checked;
+
+                    try {
+                        const response = await fetch(`/settings/${guildId}/features/${feature}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-Token': '<%= csrfToken %>'
+                            },
+                            body: JSON.stringify({ enabled })
+                        });
+                        const data = await response.json();
+                        if (!data.success) {
+                            e.target.checked = !enabled;
+                            alert('Failed to toggle feature: ' + (data.error || 'Unknown error'));
+                        }
+                    } catch (err) {
+                        e.target.checked = !enabled;
+                        alert('Error toggling feature: ' + err.message);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

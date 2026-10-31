@@ -9,7 +9,10 @@ const guildSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+<<<<<<< HEAD
     index: true,
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
   },
 
   // Basic settings
@@ -328,7 +331,10 @@ const guildSchema = new mongoose.Schema({
 });
 
 // Indexes
+<<<<<<< HEAD
 guildSchema.index({ guildId: 1 }, { unique: true });
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
 guildSchema.index({ 'features.automod': 1 });
 guildSchema.index({ 'features.welcome': 1 });
 guildSchema.index({ 'features.leveling': 1 });

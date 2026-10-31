@@ -9,15 +9,26 @@ export default {
   data: new SlashCommandBuilder()
     .setName('setxp')
     .setDescription('Set a user\'s XP or level (Admin only)')
+<<<<<<< HEAD
     .addUserOption(option =>
       option.setName('user')
         .setDescription('User to modify')
         .setRequired(true)
     )
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
     .addSubcommand(subcommand =>
       subcommand
         .setName('xp')
         .setDescription('Set user\'s XP amount')
+<<<<<<< HEAD
+=======
+        .addUserOption(option =>
+          option.setName('user')
+            .setDescription('User to modify')
+            .setRequired(true)
+        )
+>>>>>>> f652c8f (Initial Commit - 2)
         .addIntegerOption(option =>
           option.setName('amount')
             .setDescription('XP amount to set')
@@ -29,6 +40,14 @@ export default {
       subcommand
         .setName('level')
         .setDescription('Set user\'s level')
+<<<<<<< HEAD
+=======
+        .addUserOption(option =>
+          option.setName('user')
+            .setDescription('User to modify')
+            .setRequired(true)
+        )
+>>>>>>> f652c8f (Initial Commit - 2)
         .addIntegerOption(option =>
           option.setName('level')
             .setDescription('Level to set')

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - StellarSentry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <nav class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/guilds" class="text-xl font-bold text-purple-400">StellarSentry</a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <a href="/overview/<%= guild.id %>" class="text-purple-400 font-semibold"><%= guild.name %></a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <a href="/tickets/<%= guild.id %>" class="text-gray-400 hover:text-white">Tickets</a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <span class="text-gray-300">Ticket #<%= ticket.ticketId %></span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/guilds" class="text-gray-300 hover:text-white">Dashboard</a>
+                    <a href="/auth/logout" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-white">Ticket #<%= ticket.ticketId %></h1>
+                <p class="text-gray-400"><%= ticket.subject %></p>
+            </div>
+            <div class="flex space-x-2">
+                <a href="/tickets/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Back to Tickets</a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div class="lg:col-span-2 bg-gray-800 rounded-xl p-6 border border-gray-700">
+                <h2 class="text-xl font-semibold text-white mb-4">Ticket Details</h2>
+                <div class="space-y-4 text-sm">
+                    <div class="flex justify-between py-2 border-b border-gray-700">
+                        <span class="text-gray-400">Type</span>
+                        <span class="font-medium"><%= ticket.type %></span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-700">
+                        <span class="text-gray-400">Status</span>
+                        <span class="px-2 py-1 rounded text-xs font-medium
+                            <%= ticket.status === 'open' ? 'bg-green-900 text-green-300' : '' %>
+                            <%= ticket.status === 'claimed' ? 'bg-blue-900 text-blue-300' : '' %>
+                            <%= ticket.status === 'in_progress' ? 'bg-yellow-900 text-yellow-300' : '' %>
+                            <%= ticket.status === 'waiting' ? 'bg-orange-900 text-orange-300' : '' %>
+                            <%= ticket.status === 'closed' ? 'bg-gray-700 text-gray-400' : '' %>
+                        "><%= ticket.status %></span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-700">
+                        <span class="text-gray-400">Priority</span>
+                        <span class="font-medium text-white"><%= ticket.priority %></span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-700">
+                        <span class="text-gray-400">Created By</span>
+                        <span class="font-medium text-white"><%= ticket.user?.username || 'Unknown' %> (<%= ticket.userId %>)</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-700">
+                        <span class="text-gray-400">Created At</span>
+                        <span class="font-medium text-white"><%= new Date(ticket.createdAt).toLocaleString() %></span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-700">
+                        <span class="text-gray-400">Claimed By</span>
+                        <span class="font-medium text-white"><%= ticket.claimedBy ? (ticket.claimedBy.username || 'Unknown') : 'Not claimed' %></span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-700">
+                        <span class="text-gray-400">Assigned To</span>
+                        <span class="font-medium text-white"><%= ticket.assignedTo && ticket.assignedTo.length > 0 ? ticket.assignedTo.map(a => a.username || 'Unknown').join(', ') : 'None' %></span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-700">
+                        <span class="text-gray-400">Messages</span>
+                        <span class="font-medium text-white"><%= ticket.messageCount %></span>
+                    </div>
+                    <% if (ticket.closedAt) { %>
+                        <div class="flex justify-between py-2 border-b border-gray-700">
+                            <span class="text-gray-400">Closed At</span>
+                            <span class="font-medium text-white"><%= new Date(ticket.closedAt).toLocaleString() %></span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-700">
+                            <span class="text-gray-400">Closed By</span>
+                            <span class="font-medium text-white"><%= ticket.closedBy ? (ticket.closedBy.username || 'Unknown') : 'Unknown' %></span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-700">
+                            <span class="text-gray-400">Close Reason</span>
+                            <span class="font-medium text-white"><%= ticket.closeReason || 'No reason provided' %></span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-700">
+                            <span class="text-gray-400">Close Type</span>
+                            <span class="font-medium text-white"><%= ticket.closeType %></span>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <h3 class="text-lg font-semibold text-white mb-4">Actions</h3>
+                    <div class="space-y-2">
+                        <% if (ticket.status !== 'closed' && ticket.status !== 'deleted') { %>
+                            <button id="claimBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg" data-ticket-id="<%= ticket.ticketId %>">
+                                <%= ticket.claimedBy ? 'Unclaim' : 'Claim Ticket' %>
+                            </button>
+                            <button id="closeBtn" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg" data-ticket-id="<%= ticket.ticketId %>">Close Ticket</button>
+                            <button id="addUserBtn" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg" data-ticket-id="<%= ticket.ticketId %>">Add User</button>
+                        <% } else { %>
+                            <button class="w-full bg-gray-700 text-gray-500 py-2 rounded-lg cursor-not-allowed" disabled>Ticket Closed</button>
+                            <button id="reopenBtn" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg" data-ticket-id="<%= ticket.ticketId %>">Reopen Ticket</button>
+                        <% } %>
+                        <% if (ticket.status === 'claimed' && ticket.claimedBy?.id === '<%= req.user.id %>') { %>
+                            <button id="unclaimBtn" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg" data-ticket-id="<%= ticket.ticketId %>">Unclaim</button>
+                        <% } %>
+                        <a href="/tickets/<%= guild.id %>/<%= ticket.ticketId %>/transcript" target="_blank" class="block w-full text-center bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg">View Transcript</a>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <h3 class="text-lg font-semibold text-white mb-4">Participants</h3>
+                    <ul class="space-y-2" id="participantsList">
+                        <% if (ticket.participants && ticket.participants.length > 0) { %>
+                            <% ticket.participants.forEach(p => { %>
+                                <li class="flex items-center justify-between p-2 bg-gray-700 rounded-lg">
+                                    <span><%= p.userId %></span>
+                                    <span class="text-xs text-gray-400"><%= new Date(p.addedAt).toLocaleDateString() %></span>
+                                </li>
+                            <% }) %>
+                        <% } else { %>
+                            <li class="text-gray-500 text-sm">No participants</li>
+                        <% } %>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <h3 class="text-lg font-semibold text-white mb-4">Tags</h3>
+                    <div class="flex flex-wrap gap-2" id="tagsList">
+                        <% if (ticket.tags && ticket.tags.length > 0) { %>
+                            <% ticket.tags.forEach(tag => { %>
+                                <span class="px-2 py-1 bg-purple-900 text-purple-300 text-sm rounded"><%= tag %></span>
+                            <% }) %>
+                        <% } else { %>
+                            <span class="text-gray-500 text-sm">No tags</span>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h2 class="text-xl font-semibold text-white mb-4">Description</h2>
+            <p class="text-gray-300 whitespace-pre-wrap"><%= ticket.description || 'No description provided' %></p>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 border-t border-gray-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500">
+            <p>StellarSentry - Discord Bot with Dashboard</p>
+        </div>
+    </footer>
+
+    <script>
+        const guildId = '<%= guild.id %>';
+        const ticketId = '<%= ticket.ticketId %>';
+        const csrfToken = '<%= csrfToken %>';
+
+        async function handleAction(action, extraData = {}) {
+            try {
+                const response = await fetch(`/tickets/${guildId}/${ticketId}/${action}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
+                    body: JSON.stringify(extraData)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Failed: ' + (data.error || 'Unknown error'));
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        }
+
+        document.getElementById('claimBtn')?.addEventListener('click', () => handleAction('claim'));
+        document.getElementById('unclaimBtn')?.addEventListener('click', () => handleAction('unclaim'));
+        document.getElementById('closeBtn')?.addEventListener('click', () => {
+            const reason = prompt('Close reason:');
+            if (reason) handleAction('close', { reason });
+        });
+        document.getElementById('reopenBtn')?.addEventListener('click', () => handleAction('reopen'));
+        document.getElementById('addUserBtn')?.addEventListener('click', () => {
+            const userId = prompt('User ID to add:');
+            if (userId) handleAction('add', { userId });
+        });
+    </script>
+</body>
+</html>

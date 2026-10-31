@@ -14,11 +14,35 @@ export default {
       subcommand
         .setName('view')
         .setDescription('View current server configuration')
+<<<<<<< HEAD
+=======
+        .addStringOption(option =>
+          option.setName('detail')
+            .setDescription('Configuration section to view (optional)')
+            .setRequired(false)
+            .addChoices(
+              { name: 'Overview', value: 'overview' },
+              { name: 'Features', value: 'features' },
+              { name: 'Moderation', value: 'moderation' },
+              { name: 'Welcome', value: 'welcome' },
+              { name: 'Leveling', value: 'leveling' },
+              { name: 'Economy', value: 'economy' }
+            )
+        )
+>>>>>>> f652c8f (Initial Commit - 2)
     )
     .addSubcommand(subcommand =>
       subcommand
         .setName('features')
         .setDescription('Toggle server features')
+<<<<<<< HEAD
+=======
+        .addStringOption(option =>
+          option.setName('feature')
+            .setDescription('Specific feature to toggle (optional - shows all if omitted)')
+            .setRequired(false)
+        )
+>>>>>>> f652c8f (Initial Commit - 2)
     )
     .addSubcommand(subcommand =>
       subcommand
@@ -29,7 +53,10 @@ export default {
           option.setName('command')
             .setDescription('Command to toggle')
             .setRequired(true)
+<<<<<<< HEAD
             .setAutocomplete(true)
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
         )
         .addBooleanOption(option =>
           option.setName('enabled')
@@ -82,11 +109,26 @@ export default {
         .map(cmd => ({ name: cmd.data.name, value: cmd.data.name }));
       await interaction.respond(commands);
     }
+<<<<<<< HEAD
+=======
+    if (focused.name === 'feature') {
+      const { getFeaturesSorted } = await import('../../config/features.js');
+      const features = getFeaturesSorted()
+        .filter(f => f.name.toLowerCase().includes(focused.value.toLowerCase()))
+        .slice(0, 25)
+        .map(f => ({ name: f.name, value: f.key }));
+      await interaction.respond(features);
+    }
+>>>>>>> f652c8f (Initial Commit - 2)
   },
 };
 
 async function handleView(interaction) {
   const settings = await guildService.getGuild(interaction.guild.id);
+<<<<<<< HEAD
+=======
+  const detail = interaction.options.getString('detail') || 'overview';
+>>>>>>> f652c8f (Initial Commit - 2)
 
   const embed = new EmbedBuilder()
     .setTitle(`${EMOJIS.SETTINGS} ${interaction.guild.name} Configuration`)
@@ -94,6 +136,7 @@ async function handleView(interaction) {
     .setThumbnail(interaction.guild.iconURL({ size: 256 }))
     .setTimestamp();
 
+<<<<<<< HEAD
   // Features
   const features = settings?.features || {};
   const featureList = Object.entries(features).map(([key, enabled]) => {
@@ -122,6 +165,65 @@ async function handleView(interaction) {
   const economy = settings?.economy || {};
   if (economy.enabled) {
     embed.addFields({ name: 'Economy', value: `Daily: ${economy.dailyMin}-${economy.dailyMax} | Work: ${economy.workMin}-${economy.workMax}`, inline: true });
+=======
+  const addFeatureFields = () => {
+    const features = settings?.features || {};
+    const featureList = Object.entries(features).map(([key, enabled]) => {
+      const emoji = enabled ? '✅' : '❌';
+      return `${emoji} ${key}`;
+    }).join(' | ');
+    embed.addFields({ name: 'Features', value: featureList || 'None', inline: false });
+  };
+
+  const addModerationFields = () => {
+    const mod = settings?.moderation || {};
+    if (mod.logChannel) embed.addFields({ name: 'Mod Log', value: `<#${mod.logChannel}>`, inline: true });
+    if (mod.modRole) embed.addFields({ name: 'Mod Role', value: `<@&${mod.modRole}>`, inline: true });
+  };
+
+  const addWelcomeFields = () => {
+    const welcome = settings?.welcome || {};
+    if (welcome.channel) embed.addFields({ name: 'Welcome Channel', value: `<#${welcome.channel}>`, inline: true });
+  };
+
+  const addLevelingFields = () => {
+    const leveling = settings?.leveling || {};
+    if (leveling.enabled) {
+      embed.addFields({ name: 'Leveling', value: `XP: ${leveling.xpPerMessage}/msg | Cooldown: ${leveling.xpCooldown}s`, inline: true });
+    }
+  };
+
+  const addEconomyFields = () => {
+    const economy = settings?.economy || {};
+    if (economy.enabled) {
+      embed.addFields({ name: 'Economy', value: `Daily: ${economy.dailyMin}-${economy.dailyMax} | Work: ${economy.workMin}-${economy.workMax}`, inline: true });
+    }
+  };
+
+  switch (detail) {
+    case 'overview':
+      addFeatureFields();
+      addModerationFields();
+      addWelcomeFields();
+      addLevelingFields();
+      addEconomyFields();
+      break;
+    case 'features':
+      addFeatureFields();
+      break;
+    case 'moderation':
+      addModerationFields();
+      break;
+    case 'welcome':
+      addWelcomeFields();
+      break;
+    case 'leveling':
+      addLevelingFields();
+      break;
+    case 'economy':
+      addEconomyFields();
+      break;
+>>>>>>> f652c8f (Initial Commit - 2)
   }
 
   await interaction.reply({ embeds: [embed], ephemeral: true });
@@ -130,8 +232,36 @@ async function handleView(interaction) {
 async function handleFeatures(interaction) {
   const settings = await guildService.getGuild(interaction.guild.id);
   const features = settings?.features || {};
+<<<<<<< HEAD
 
   const sortedFeatures = getFeaturesSorted();
+=======
+  const specificFeature = interaction.options.getString('feature');
+
+  const sortedFeatures = getFeaturesSorted();
+  const featuresToShow = specificFeature
+    ? sortedFeatures.filter(f => f.key === specificFeature)
+    : sortedFeatures;
+
+  if (specificFeature && featuresToShow.length === 0) {
+    return interaction.reply({
+      content: `${EMOJIS.ERROR} Feature not found.`,
+      ephemeral: true,
+    });
+  }
+
+  // If a specific feature is requested, toggle it directly
+  if (specificFeature) {
+    const feat = featuresToShow[0];
+    const currentState = features[feat.key] === true;
+    await guildService.toggleFeature(interaction.guild.id, feat.key, !currentState);
+
+    return interaction.reply({
+      content: `${currentState ? '❌ Disabled' : '✅ Enabled'} **${feat.name}**`,
+      ephemeral: true,
+    });
+  }
+>>>>>>> f652c8f (Initial Commit - 2)
 
   const embed = new EmbedBuilder()
     .setTitle(`${EMOJIS.SETTINGS} Feature Toggles`)

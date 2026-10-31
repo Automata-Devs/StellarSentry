@@ -20,7 +20,10 @@ export default {
           option.setName('command')
             .setDescription('Specific command to reload (optional)')
             .setRequired(false)
+<<<<<<< HEAD
             .setAutocomplete(true)
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
         )
     )
     .addSubcommand(subcommand =>

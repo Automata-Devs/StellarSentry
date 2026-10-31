@@ -4,7 +4,10 @@
 import { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from 'discord.js';
 import { COLORS, EMOJIS, LIMITS } from '../../config/constants.js';
 import { levelingService } from '../../services/leveling.service.js';
+<<<<<<< HEAD
 import { client } from '../../core/client.js';
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
 
 export default {
   data: new SlashCommandBuilder()
@@ -50,11 +53,23 @@ export default {
       const fieldName = type === 'level' ? 'Level' : type === 'xp' ? 'XP' : 'Total XP';
       const getValue = (m) => type === 'level' ? m.level : type === 'xp' ? m.xp : m.totalXp;
 
+<<<<<<< HEAD
+=======
+      // Fetch all users first
+      const users = await Promise.all(lb.data.map(entry =>
+        client.users.fetch(entry.userId).catch(() => null)
+      ));
+
+>>>>>>> f652c8f (Initial Commit - 2)
       return {
         title: `${EMOJIS.LEVEL} ${interaction.guild.name} Leveling Leaderboard`,
         color: COLORS.LEVELING,
         description: lb.data.map((entry, i) => {
+<<<<<<< HEAD
           const user = await client.users.fetch(entry.userId).catch(() => null);
+=======
+          const user = users[i];
+>>>>>>> f652c8f (Initial Commit - 2)
           const name = user ? user.tag : `Unknown User (${entry.userId})`;
           const medal = pageIndex * perPage + i === 0 ? '🥇' : pageIndex * perPage + i === 1 ? '🥈' : pageIndex * perPage + i === 2 ? '🥉' : `${pageIndex * perPage + i + 1}.`;
           return `${medal} **${name}** - Level ${entry.level} (${getValue(entry).toLocaleString()} ${fieldName})`;

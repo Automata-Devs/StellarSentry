@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - StellarSentry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <nav class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/guilds" class="text-xl font-bold text-purple-400">StellarSentry</a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <a href="/overview/<%= guild.id %>" class="text-purple-400 font-semibold"><%= guild.name %></a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <span class="text-gray-300">Music</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/guilds" class="text-gray-300 hover:text-white">Dashboard</a>
+                    <a href="/auth/logout" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-white"><%= guild.name %></h1>
+                <p class="text-gray-400">Music System</p>
+            </div>
+            <div class="flex space-x-2">
+                <a href="/overview/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Overview</a>
+                <a href="/settings/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Settings</a>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-6">Music Settings</h2>
+            <form id="musicSettingsForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                <div>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="enabled" value="true" <%= music?.enabled ? 'checked' : '' %>
+                               class="h-4 w-4 text-purple-600 border-gray-600 rounded focus:ring-purple-500 bg-gray-700">
+                        <span class="ml-2 text-sm text-gray-300">Enable Music</span>
+                    </label>
+                </div>
+
+                <div>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="djRoleEnabled" value="true" <%= music?.djRoleEnabled ? 'checked' : '' %>
+                               class="h-4 w-4 text-purple-600 border-gray-600 rounded focus:ring-purple-500 bg-gray-700">
+                        <span class="ml-2 text-sm text-gray-300">DJ Role Required</span>
+                    </label>
+                </div>
+
+                <div>
+                    <label for="djRole" class="block text-sm font-medium text-gray-300 mb-2">DJ Role</label>
+                    <input type="text" id="djRole" name="djRole"
+                           value="<%= music?.djRole || '' %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                           placeholder="Role ID">
+                </div>
+
+                <div>
+                    <label for="defaultVolume" class="block text-sm font-medium text-gray-300 mb-2">Default Volume (%)</label>
+                    <input type="number" id="defaultVolume" name="defaultVolume" min="1" max="200" value="<%= music?.defaultVolume || 50 %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                </div>
+
+                <div>
+                    <label for="maxQueueSize" class="block text-sm font-medium text-gray-300 mb-2">Max Queue Size</label>
+                    <input type="number" id="maxQueueSize" name="maxQueueSize" min="10" max="500" value="<%= music?.maxQueueSize || 100 %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                </div>
+
+                <div>
+                    <label for="maxTrackDuration" class="block text-sm font-medium text-gray-300 mb-2">Max Track Duration (seconds)</label>
+                    <input type="number" id="maxTrackDuration" name="maxTrackDuration" min="60" max="3600" value="<%= music?.maxTrackDuration || 3600 %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                </div>
+
+                <div>
+                    <label for="inactiveTimeout" class="block text-sm font-medium text-gray-300 mb-2">Inactive Timeout (seconds)</label>
+                    <input type="number" id="inactiveTimeout" name="inactiveTimeout" min="60" max="3600" value="<%= music?.inactiveTimeout || 300 %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                </div>
+
+                <div>
+                    <label for="lavalinkNode" class="block text-sm font-medium text-gray-300 mb-2">Lavalink Node</label>
+                    <input type="text" id="lavalinkNode" name="lavalinkNode"
+                           value="<%= music?.lavalinkNode || '' %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                           placeholder="Node identifier">
+                </div>
+
+                <div class="md:col-span-2 flex justify-end">
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">Save Settings</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-6">Lavalink Connection Status</h2>
+            <div id="lavalinkStatus" class="space-y-4">
+                <div class="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 rounded-full <%= lavalink?.connected ? 'bg-green-500' : 'bg-red-500' %>"></div>
+                            <span class="font-medium"><%= lavalink?.connected ? 'Connected' : 'Disconnected' %></span>
+                        </div>
+                        <button id="refreshLavalink" class="text-purple-400 hover:text-purple-300 text-sm">Refresh</button>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 text-sm text-gray-400">
+                        <div>Players: <span class="text-white"><%= lavalink?.players || 0 %></span></div>
+                        <div>Playing: <span class="text-white"><%= lavalink?.playing || 0 %></span></div>
+                        <div>Uptime: <span class="text-white"><%= lavalink?.uptime || 'N/A' %></span></div>
+                        <div>Memory: <span class="text-white"><%= lavalink?.memory || 'N/A' %></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h2 class="text-xl font-semibold text-white mb-6">Current Queue</h2>
+            <div id="queueDisplay" class="space-y-2">
+                <% if (queue && queue.length > 0) { %>
+                    <% queue.slice(0, 20).forEach((track, index) => { %>
+                        <div class="flex items-center p-3 bg-gray-700 rounded-lg border border-gray-600">
+                            <span class="text-gray-400 w-8"><%= index + 1 %>.</span>
+                            <div class="w-12 h-12 bg-gray-600 rounded flex items-center justify-center flex-shrink-0">
+                                <% if (track.thumbnail) { %>
+                                    <img src="<%= track.thumbnail %>" alt="" class="w-full h-full object-cover rounded">
+                                <% } else { %>
+                                    <span class="text-gray-400">🎵</span>
+                                <% } %>
+                            </div>
+                            <div class="flex-1 ml-3 min-w-0">
+                                <p class="font-medium text-white truncate"><%= track.title %></p>
+                                <p class="text-sm text-gray-400"><%= track.author %></p>
+                            </div>
+                            <span class="text-gray-400"><%= track.duration %></span>
+                        </div>
+                    <% }) %>
+                    <% if (queue.length > 20) { %>
+                        <p class="text-gray-500 text-center">... and <%= queue.length - 20 %> more tracks</p>
+                    <% } %>
+                <% } else { %>
+                    <p class="text-gray-400 text-center py-8">Queue is empty</p>
+                <% } %>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 border-t border-gray-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500">
+            <p>StellarSentry - Discord Bot with Dashboard</p>
+        </div>
+    </footer>
+
+    <script>
+        const guildId = '<%= guild.id %>';
+        const csrfToken = '<%= csrfToken %>';
+
+        document.getElementById('musicSettingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {};
+            formData.forEach((value, key) => {
+                if (key !== '_csrf') data[key] = value === 'true' || value === 'on' ? true : value;
+            });
+            data.defaultVolume = parseInt(data.defaultVolume) || 50;
+            data.maxQueueSize = parseInt(data.maxQueueSize) || 100;
+            data.maxTrackDuration = parseInt(data.maxTrackDuration) || 3600;
+            data.inactiveTimeout = parseInt(data.inactiveTimeout) || 300;
+
+            try {
+                const response = await fetch(`/music/${guildId}/settings`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('Settings saved!');
+                    location.reload();
+                } else {
+                    alert('Failed: ' + (result.error || 'Unknown error'));
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        });
+
+        document.getElementById('refreshLavalink')?.addEventListener('click', () => location.reload());
+    </script>
+</body>
+</html>

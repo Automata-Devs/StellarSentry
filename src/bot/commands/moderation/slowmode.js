@@ -5,7 +5,11 @@ import { SlashCommandBuilder, PermissionFlagsBits, ChannelType } from 'discord.j
 import { COLORS, EMOJIS, LIMITS } from '../../config/constants.js';
 import { moderationService } from '../../services/moderation.service.js';
 import { guildService } from '../../services/guild.service.js';
+<<<<<<< HEAD
 import { parseTime } from '../../utils/time.js';
+=======
+import { parseTime, formatDuration } from '../../utils/time.js';
+>>>>>>> f652c8f (Initial Commit - 2)
 
 export default {
   data: new SlashCommandBuilder()
@@ -106,6 +110,7 @@ export default {
       });
     }
   },
+<<<<<<< HEAD
 };
 
 function formatDuration(ms) {
@@ -117,3 +122,6 @@ function formatDuration(ms) {
   if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
   return `${seconds}s`;
 }
+=======
+};
+>>>>>>> f652c8f (Initial Commit - 2)

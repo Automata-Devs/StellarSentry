@@ -19,7 +19,10 @@ const reactionRoleSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+<<<<<<< HEAD
     index: true,
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
   },
 
   // Panel info
@@ -104,7 +107,10 @@ const reactionRoleSchema = new mongoose.Schema({
 
 // Indexes
 reactionRoleSchema.index({ guildId: 1, channelId: 1 });
+<<<<<<< HEAD
 reactionRoleSchema.index({ messageId: 1 }, { unique: true });
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
 
 // Methods
 reactionRoleSchema.methods.getRoleConfig = function(roleId) {

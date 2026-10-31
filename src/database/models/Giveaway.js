@@ -19,7 +19,10 @@ const giveawaySchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+<<<<<<< HEAD
     index: true,
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
   },
   hostId: {
     type: String,
@@ -145,7 +148,10 @@ const giveawaySchema = new mongoose.Schema({
 // Indexes
 giveawaySchema.index({ guildId: 1, status: 1, endsAt: 1 });
 giveawaySchema.index({ hostId: 1, createdAt: -1 });
+<<<<<<< HEAD
 giveawaySchema.index({ messageId: 1 }, { unique: true });
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
 
 // TTL for old cancelled giveaways
 giveawaySchema.index({ createdAt: 1 }, { expireAfterSeconds: 90 * 24 * 60 * 60 }); // 90 days

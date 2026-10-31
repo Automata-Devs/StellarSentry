@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - StellarSentry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <nav class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/guilds" class="text-xl font-bold text-purple-400">StellarSentry</a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <a href="/overview/<%= guild.id %>" class="text-purple-400 font-semibold"><%= guild.name %></a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <a href="/suggestions/<%= guild.id %>" class="text-gray-400 hover:text-white">Suggestions</a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <span class="text-gray-300">Suggestion #<%= suggestion.suggestionId %></span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/guilds" class="text-gray-300 hover:text-white">Dashboard</a>
+                    <a href="/auth/logout" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-white">Suggestion #<%= suggestion.suggestionId %></h1>
+                <p class="text-gray-400"><%= suggestion.content %></p>
+            </div>
+            <div class="flex space-x-2">
+                <a href="/suggestions/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Back to Suggestions</a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div class="lg:col-span-2 bg-gray-800 rounded-xl p-6 border border-gray-700">
+                <h2 class="text-xl font-semibold text-white mb-4">Suggestion Details</h2>
+                <div class="space-y-4 text-sm">
+                    <div class="flex justify-between py-2 border-b border-gray-700">
+                        <span class="text-gray-400">Status</span>
+                        <span class="px-2 py-1 rounded text-xs font-medium
+                            <%= suggestion.status === 'pending' ? 'bg-yellow-900 text-yellow-300' : '' %>
+                            <%= suggestion.status === 'approved' ? 'bg-green-900 text-green-300' : '' %>
+                            <%= suggestion.status === 'denied' ? 'bg-red-900 text-red-300' : '' %>
+                            <%= suggestion.status === 'implemented' ? 'bg-blue-900 text-blue-300' : '' %>
+                            <%= suggestion.status === 'under_review' ? 'bg-purple-900 text-purple-300' : '' %>
+                        "><%= suggestion.status %></span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-700">
+                        <span class="text-gray-400">Author</span>
+                        <span class="font-medium text-white"><%= suggestion.author?.username || 'Unknown' %> (<%= suggestion.authorId %>)</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-700">
+                        <span class="text-gray-400">Created At</span>
+                        <span class="font-medium text-white"><%= new Date(suggestion.createdAt).toLocaleString() %></span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-700">
+                        <span class="text-gray-400">Upvotes</span>
+                        <span class="font-medium text-green-400"><%= suggestion.upvotes?.length || 0 %></span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-700">
+                        <span class="text-gray-400">Downvotes</span>
+                        <span class="font-medium text-red-400"><%= suggestion.downvotes?.length || 0 %></span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-700">
+                        <span class="text-gray-400">Net Score</span>
+                        <span class="font-medium text-white"><%= (suggestion.upvotes?.length || 0) - (suggestion.downvotes?.length || 0) %></span>
+                    </div>
+                    <% if (suggestion.reviewedBy) { %>
+                        <div class="flex justify-between py-2 border-b border-gray-700">
+                            <span class="text-gray-400">Reviewed By</span>
+                            <span class="font-medium text-white"><%= suggestion.reviewedBy.username || 'Unknown' %></span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-700">
+                            <span class="text-gray-400">Reviewed At</span>
+                            <span class="font-medium text-white"><%= new Date(suggestion.reviewedAt).toLocaleString() %></span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-700">
+                            <span class="text-gray-400">Review Note</span>
+                            <span class="font-medium text-white"><%= suggestion.reviewNote || 'None' %></span>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <h3 class="text-lg font-semibold text-white mb-4">Actions</h3>
+                    <div class="space-y-2">
+                        <select id="statusSelect" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                            <option value="pending" <%= suggestion.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                            <option value="under_review" <%= suggestion.status === 'under_review' ? 'selected' : '' %>>Under Review</option>
+                            <option value="approved" <%= suggestion.status === 'approved' ? 'selected' : '' %>>Approved</option>
+                            <option value="denied" <%= suggestion.status === 'denied' ? 'selected' : '' %>>Denied</option>
+                            <option value="implemented" <%= suggestion.status === 'implemented' ? 'selected' : '' %>>Implemented</option>
+                        </select>
+                        <button id="updateStatusBtn" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg">Update Status</button>
+                        <input type="text" id="reviewNote" placeholder="Review note (optional)"
+                               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <h3 class="text-lg font-semibold text-white mb-4">Upvoters</h3>
+                    <ul class="space-y-2 max-h-64 overflow-y-auto" id="upvotersList">
+                        <% if (suggestion.upvotes && suggestion.upvotes.length > 0) { %>
+                            <% suggestion.upvotes.forEach(vote => { %>
+                                <li class="flex items-center justify-between p-2 bg-gray-700 rounded-lg">
+                                    <span><%= vote.user?.username || vote.userId %></span>
+                                    <span class="text-xs text-gray-400"><%= new Date(vote.createdAt).toLocaleDateString() %></span>
+                                </li>
+                            <% }) %>
+                        <% } else { %>
+                            <li class="text-gray-500 text-sm">No upvotes</li>
+                        <% } %>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <h3 class="text-lg font-semibold text-white mb-4">Downvoters</h3>
+                    <ul class="space-y-2 max-h-64 overflow-y-auto" id="downvotersList">
+                        <% if (suggestion.downvotes && suggestion.downvotes.length > 0) { %>
+                            <% suggestion.downvotes.forEach(vote => { %>
+                                <li class="flex items-center justify-between p-2 bg-gray-700 rounded-lg">
+                                    <span><%= vote.user?.username || vote.userId %></span>
+                                    <span class="text-xs text-gray-400"><%= new Date(vote.createdAt).toLocaleDateString() %></span>
+                                </li>
+                            <% }) %>
+                        <% } else { %>
+                            <li class="text-gray-500 text-sm">No downvotes</li>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h2 class="text-xl font-semibold text-white mb-4">Full Content</h2>
+            <p class="text-gray-300 whitespace-pre-wrap"><%= suggestion.content %></p>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 border-t border-gray-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500">
+            <p>StellarSentry - Discord Bot with Dashboard</p>
+        </div>
+    </footer>
+
+    <script>
+        const guildId = '<%= guild.id %>';
+        const suggestionId = '<%= suggestion.suggestionId %>';
+        const csrfToken = '<%= csrfToken %>';
+
+        document.getElementById('updateStatusBtn').addEventListener('click', async () => {
+            const status = document.getElementById('statusSelect').value;
+            const reviewNote = document.getElementById('reviewNote').value;
+
+            try {
+                const response = await fetch(`/suggestions/${guildId}/${suggestionId}/status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
+                    body: JSON.stringify({ status, reviewNote })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Failed: ' + (data.error || 'Unknown error'));
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - StellarSentry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <nav class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/guilds" class="text-xl font-bold text-purple-400">StellarSentry</a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <a href="/overview/<%= guild.id %>" class="text-purple-400 font-semibold"><%= guild.name %></a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <span class="text-gray-300">Welcome</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/guilds" class="text-gray-300 hover:text-white">Dashboard</a>
+                    <a href="/auth/logout" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-white"><%= guild.name %></h1>
+                <p class="text-gray-400">Welcome & Leave Settings</p>
+            </div>
+            <div class="flex space-x-2">
+                <a href="/overview/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Overview</a>
+                <a href="/settings/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Settings</a>
+            </div>
+        </div>
+
+        <!-- Welcome Settings -->
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-6">Welcome Settings</h2>
+            <form action="/welcome/<%= guild.id %>" method="POST" class="space-y-6">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                <div class="flex items-center">
+                    <input type="checkbox" id="welcomeEnabled" name="enabled"
+                           class="h-4 w-4 text-purple-600 border-gray-600 rounded focus:ring-purple-500 bg-gray-700"
+                           <%= welcome?.enabled ? 'checked' : '' %>>
+                    <label for="welcomeEnabled" class="ml-3 text-sm text-gray-300">Enable Welcome Messages</label>
+                </div>
+
+                <div>
+                    <label for="welcomeChannel" class="block text-sm font-medium text-gray-300 mb-2">Welcome Channel</label>
+                    <select id="welcomeChannel" name="channel"
+                            class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                        <option value="">Select a channel...</option>
+                        <% channels?.forEach(channel => { %>
+                            <option value="<%= channel.id %>" <%= welcome?.channel === channel.id ? 'selected' : '' %>>
+                                #<%= channel.name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                    <p class="text-sm text-gray-500 mt-1">Channel where welcome messages are sent</p>
+                </div>
+
+                <div>
+                    <label for="welcomeMessage" class="block text-sm font-medium text-gray-300 mb-2">Welcome Message</label>
+                    <textarea id="welcomeMessage" name="message" rows="4"
+                              class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                              placeholder="Welcome {user} to {server}! You are member #{memberCount}."
+                              maxlength="2000"><%= welcome?.message || 'Welcome {user} to {server}! You are member #{memberCount}.' %></textarea>
+                    <p class="text-sm text-gray-500 mt-1">Use {user}, {server}, {memberCount}, {userMention} placeholders</p>
+                </div>
+
+                <div>
+                    <label for="welcomeAutoRoles" class="block text-sm font-medium text-gray-300 mb-2">Auto Roles (on join)</label>
+                    <select id="welcomeAutoRoles" name="autoRoles" multiple
+                            class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                            size="5">
+                        <% roles?.forEach(role => { %>
+                            <option value="<%= role.id %>" <%= (welcome?.autoRoles || []).includes(role.id) ? 'selected' : '' %>>
+                                @<%= role.name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                    <p class="text-sm text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple roles</p>
+                </div>
+
+                <hr class="border-gray-700">
+                <h3 class="text-lg font-medium text-gray-300 mb-4">Embed Settings</h3>
+
+                <div class="flex items-center">
+                    <input type="checkbox" id="embedEnabled" name="embed.enabled"
+                           class="h-4 w-4 text-purple-600 border-gray-600 rounded focus:ring-purple-500 bg-gray-700"
+                           <%= welcome?.embed?.enabled ? 'checked' : '' %>>
+                    <label for="embedEnabled" class="ml-3 text-sm text-gray-300">Use Embed</label>
+                </div>
+
+                <div>
+                    <label for="embedTitle" class="block text-sm font-medium text-gray-300 mb-2">Embed Title</label>
+                    <input type="text" id="embedTitle" name="embed.title" value="<%= welcome?.embed?.title || '' %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                </div>
+
+                <div>
+                    <label for="embedDescription" class="block text-sm font-medium text-gray-300 mb-2">Embed Description</label>
+                    <textarea id="embedDescription" name="embed.description" rows="3"
+                              class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                              placeholder="Welcome message content..."><%= welcome?.embed?.description || '' %></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="embedColor" class="block text-sm font-medium text-gray-300 mb-2">Embed Color</label>
+                        <input type="color" id="embedColor" name="embed.color" value="<%= welcome?.embed?.color || '#5865F2' %>"
+                               class="w-full h-10 bg-gray-700 border border-gray-600 rounded-lg cursor-pointer">
+                    </div>
+                    <div>
+                        <label for="embedThumbnail" class="block text-sm font-medium text-gray-300 mb-2">Thumbnail URL</label>
+                        <input type="text" id="embedThumbnail" name="embed.thumbnail" value="<%= welcome?.embed?.thumbnail || '' %>"
+                               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                               placeholder="https://example.com/image.png">
+                    </div>
+                    <div>
+                        <label for="embedImage" class="block text-sm font-medium text-gray-300 mb-2">Image URL</label>
+                        <input type="text" id="embedImage" name="embed.image" value="<%= welcome?.embed?.image || '' %>"
+                               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                               placeholder="https://example.com/banner.png">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="embedFooter" class="block text-sm font-medium text-gray-300 mb-2">Footer Text</label>
+                    <input type="text" id="embedFooter" name="embed.footer" value="<%= welcome?.embed?.footer || '' %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                           placeholder="StellarSentry • {date}">
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">Save Welcome Settings</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Leave Settings -->
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h2 class="text-xl font-semibold text-white mb-6">Leave Settings</h2>
+            <form action="/welcome/<%= guild.id %>/leave" method="POST" class="space-y-6">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                <div class="flex items-center">
+                    <input type="checkbox" id="leaveEnabled" name="enabled"
+                           class="h-4 w-4 text-purple-600 border-gray-600 rounded focus:ring-purple-500 bg-gray-700"
+                           <%= leave?.enabled ? 'checked' : '' %>>
+                    <label for="leaveEnabled" class="ml-3 text-sm text-gray-300">Enable Leave Messages</label>
+                </div>
+
+                <div>
+                    <label for="leaveChannel" class="block text-sm font-medium text-gray-300 mb-2">Leave Channel</label>
+                    <select id="leaveChannel" name="channel"
+                            class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                        <option value="">Select a channel...</option>
+                        <% channels?.forEach(channel => { %>
+                            <option value="<%= channel.id %>" <%= leave?.channel === channel.id ? 'selected' : '' %>>
+                                #<%= channel.name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                    <p class="text-sm text-gray-500 mt-1">Channel where leave messages are sent</p>
+                </div>
+
+                <div>
+                    <label for="leaveMessage" class="block text-sm font-medium text-gray-300 mb-2">Leave Message</label>
+                    <textarea id="leaveMessage" name="message" rows="3"
+                              class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                              placeholder="{user} has left {server}. We now have {memberCount} members."
+                              maxlength="2000"><%= leave?.message || '{user} has left {server}. We now have {memberCount} members.' %></textarea>
+                    <p class="text-sm text-gray-500 mt-1">Use {user}, {server}, {memberCount} placeholders</p>
+                </div>
+
+                <hr class="border-gray-700">
+                <h3 class="text-lg font-medium text-gray-300 mb-4">Embed Settings</h3>
+
+                <div class="flex items-center">
+                    <input type="checkbox" id="leaveEmbedEnabled" name="embed.enabled"
+                           class="h-4 w-4 text-purple-600 border-gray-600 rounded focus:ring-purple-500 bg-gray-700"
+                           <%= leave?.embed?.enabled ? 'checked' : '' %>>
+                    <label for="leaveEmbedEnabled" class="ml-3 text-sm text-gray-300">Use Embed</label>
+                </div>
+
+                <div>
+                    <label for="leaveEmbedTitle" class="block text-sm font-medium text-gray-300 mb-2">Embed Title</label>
+                    <input type="text" id="leaveEmbedTitle" name="embed.title" value="<%= leave?.embed?.title || '' %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                </div>
+
+                <div>
+                    <label for="leaveEmbedDescription" class="block text-sm font-medium text-gray-300 mb-2">Embed Description</label>
+                    <textarea id="leaveEmbedDescription" name="embed.description" rows="3"
+                              class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                              placeholder="Leave message content..."><%= leave?.embed?.description || '' %></textarea>
+                </div>
+
+                <div>
+                    <label for="leaveEmbedColor" class="block text-sm font-medium text-gray-300 mb-2">Embed Color</label>
+                    <input type="color" id="leaveEmbedColor" name="embed.color" value="<%= leave?.embed?.color || '#ED4245' %>"
+                           class="w-full h-10 bg-gray-700 border border-gray-600 rounded-lg cursor-pointer">
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">Save Leave Settings</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 border-t border-gray-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500">
+            <p>StellarSentry - Discord Bot with Dashboard</p>
+        </div>
+    </footer>
+</body>
+</html>

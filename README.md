@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 # StellarSentry
+=======
+<p align="center">
+  <h1>
+  StellarSentry™
+  </h1>
+</p>
+>>>>>>> f652c8f (Initial Commit - 2)
 
 <p align="center">
   <img src="https://img.shields.io/badge/StellarSentry-Discord%20Bot-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="StellarSentry">
@@ -95,6 +103,7 @@
 - **Live music player, log viewer, statistics**
 - REST API v1 for external integrations
 
+<<<<<<< HEAD
 ---
 
 ## 🚀 Quick Start
@@ -348,6 +357,8 @@ npm run build:css:dev
 
 ---
 
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -384,11 +395,20 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 ## 📞 Support
 
 - **Discord Server**: [Join for support](https://discord.gg/stellarsentry)
+<<<<<<< HEAD
 - **Issues**: [GitHub Issues](https://github.com/<your-username>/stellarsentry/issues)
 - **Documentation**: [Wiki](https://github.com/<your-username>/stellarsentry/wiki)
+=======
+- **Issues**: [GitHub Issues](https://github.com/StellarSentry/stellarsentry/issues)
+- **Documentation**: [Wiki](https://github.com/StellarSentry/stellarsentry/wiki)
+>>>>>>> f652c8f (Initial Commit - 2)
 
 ---
 
 <p align="center">
+<<<<<<< HEAD
   Made with ❤️ by the StellarSentry Team
+=======
+  Made with ❤️ by Automata Devs
+>>>>>>> f652c8f (Initial Commit - 2)
 </p>

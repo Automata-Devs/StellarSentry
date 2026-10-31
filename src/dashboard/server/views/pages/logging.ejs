@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - StellarSentry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <nav class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/guilds" class="text-xl font-bold text-purple-400">StellarSentry</a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <a href="/overview/<%= guild.id %>" class="text-purple-400 font-semibold"><%= guild.name %></a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <span class="text-gray-300">Logging</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/guilds" class="text-gray-300 hover:text-white">Dashboard</a>
+                    <a href="/auth/logout" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-white"><%= guild.name %></h1>
+                <p class="text-gray-400">Logging System</p>
+            </div>
+            <div class="flex space-x-2">
+                <a href="/overview/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Overview</a>
+                <a href="/settings/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Settings</a>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-6">Logging Settings</h2>
+            <form id="loggingSettingsForm" class="space-y-6">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="enabled" value="true" <%= logging?.enabled ? 'checked' : '' %>
+                                   class="h-4 w-4 text-purple-600 border-gray-600 rounded focus:ring-purple-500 bg-gray-700">
+                            <span class="ml-2 text-sm text-gray-300">Enable Logging</span>
+                        </label>
+                    </div>
+
+                    <div>
+                        <label for="modLogChannel" class="block text-sm font-medium text-gray-300 mb-2">Moderation Log Channel</label>
+                        <input type="text" id="modLogChannel" name="modLogChannel"
+                               value="<%= logging?.modLogChannel || '' %>"
+                               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                               placeholder="Channel ID">
+                    </div>
+
+                    <div>
+                        <label for="messageLogChannel" class="block text-sm font-medium text-gray-300 mb-2">Message Log Channel</label>
+                        <input type="text" id="messageLogChannel" name="messageLogChannel"
+                               value="<%= logging?.messageLogChannel || '' %>"
+                               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                               placeholder="Channel ID">
+                    </div>
+
+                    <div>
+                        <label for="voiceLogChannel" class="block text-sm font-medium text-gray-300 mb-2">Voice Log Channel</label>
+                        <input type="text" id="voiceLogChannel" name="voiceLogChannel"
+                               value="<%= logging?.voiceLogChannel || '' %>"
+                               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                               placeholder="Channel ID">
+                    </div>
+
+                    <div>
+                        <label for="memberLogChannel" class="block text-sm font-medium text-gray-300 mb-2">Member Log Channel</label>
+                        <input type="text" id="memberLogChannel" name="memberLogChannel"
+                               value="<%= logging?.memberLogChannel || '' %>"
+                               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                               placeholder="Channel ID">
+                    </div>
+
+                    <div>
+                        <label for="serverLogChannel" class="block text-sm font-medium text-gray-300 mb-2">Server Log Channel</label>
+                        <input type="text" id="serverLogChannel" name="serverLogChannel"
+                               value="<%= logging?.serverLogChannel || '' %>"
+                               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                               placeholder="Channel ID">
+                    </div>
+
+                    <div>
+                        <label for="inviteLogChannel" class="block text-sm font-medium text-gray-300 mb-2">Invite Log Channel</label>
+                        <input type="text" id="inviteLogChannel" name="inviteLogChannel"
+                               value="<%= logging?.inviteLogChannel || '' %>"
+                               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                               placeholder="Channel ID">
+                    </div>
+
+                    <div class="md:col-span-2 flex justify-end">
+                        <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">Save Settings</button>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-700 pt-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">Event Types</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <% const eventTypes = [
+                            'messageDelete', 'messageEdit', 'messageReactionAdd', 'messageReactionRemove',
+                            'channelCreate', 'channelDelete', 'channelUpdate',
+                            'roleCreate', 'roleDelete', 'roleUpdate',
+                            'memberJoin', 'memberLeave', 'memberUpdate', 'memberBan', 'memberUnban',
+                            'voiceJoin', 'voiceLeave', 'voiceMove', 'voiceMute', 'voiceDeafen',
+                            'inviteCreate', 'inviteDelete',
+                            'guildUpdate', 'emojiCreate', 'emojiDelete', 'emojiUpdate',
+                            'stickerCreate', 'stickerDelete', 'stickerUpdate',
+                            'threadCreate', 'threadDelete', 'threadUpdate',
+                            'integrationCreate', 'integrationDelete', 'integrationUpdate'
+                        ]; %>
+                        <% eventTypes.forEach(event => { %>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="events" value="<%= event %>"
+                                       <%= (logging?.events || []).includes(event) ? 'checked' : '' %>
+                                       class="h-4 w-4 text-purple-600 border-gray-600 rounded focus:ring-purple-500 bg-gray-700">
+                                <span class="ml-2 text-sm text-gray-300"><%= event %></span>
+                            </label>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">Save Settings</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h2 class="text-xl font-semibold text-white mb-6">Recent Logs</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-left text-gray-400 border-b border-gray-700">
+                            <th class="pb-3 px-2">Time</th>
+                            <th class="pb-3 px-2">Event</th>
+                            <th class="pb-3 px-2">User</th>
+                            <th class="pb-3 px-2">Channel</th>
+                            <th class="pb-3 px-2">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700">
+                        <% if (logs && logs.length > 0) { %>
+                            <% logs.forEach(log => { %>
+                                <tr class="hover:bg-gray-700">
+                                    <td class="py-3 px-2 text-sm text-gray-400"><%= new Date(log.timestamp).toLocaleString() %></td>
+                                    <td class="py-3 px-2">
+                                        <span class="px-2 py-1 bg-gray-700 text-gray-300 text-xs rounded"><%= log.event %></span>
+                                    </td>
+                                    <td class="py-3 px-2"><%= log.user?.username || log.userId || 'System' %></td>
+                                    <td class="py-3 px-2"><%= log.channel?.name || log.channelId || 'N/A' %></td>
+                                    <td class="py-3 px-2 text-sm text-gray-300 max-w-xs truncate"><%= JSON.stringify(log.details || {}).substring(0, 100) %></td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="5" class="py-8 text-center text-gray-500">No logs available</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 border-t border-gray-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500">
+            <p>StellarSentry - Discord Bot with Dashboard</p>
+        </div>
+    </footer>
+
+    <script>
+        const guildId = '<%= guild.id %>';
+        const csrfToken = '<%= csrfToken %>';
+
+        document.getElementById('loggingSettingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {};
+            const events = [];
+
+            formData.forEach((value, key) => {
+                if (key !== '_csrf') {
+                    if (key === 'events') {
+                        events.push(value);
+                    } else {
+                        data[key] = value === 'true' || value === 'on' ? true : value;
+                    }
+                }
+            });
+            data.events = events;
+
+            try {
+                const response = await fetch(`/logging/${guildId}/settings`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('Settings saved!');
+                    location.reload();
+                } else {
+                    alert('Failed: ' + (result.error || 'Unknown error'));
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        });
+    </script>
+</body>
+</html>

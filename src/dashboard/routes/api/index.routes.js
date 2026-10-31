@@ -1,10 +1,20 @@
 /**
+<<<<<<< HEAD
  * API Routes v1 - REST API for dashboard
  */
 import express from 'express';
 import { guildService } from '../../services/guild.service.js';
 import { memberRepository } from '../../database/repositories/MemberRepository.js';
 import { AuditLog } from '../../database/models/AuditLog.js';
+=======
+ * API Routes v1 - REST API for external integrations
+ */
+import express from 'express';
+import { guildService } from '../../../services/guild.service.js';
+import { memberRepository } from '../../../database/repositories/MemberRepository.js';
+import { AuditLog } from '../../../database/models/AuditLog.js';
+import { musicService } from '../../../services/music.service.js';
+>>>>>>> f652c8f (Initial Commit - 2)
 import { validateMiddleware } from '../middleware/validate.js';
 import { z } from 'zod';
 
@@ -15,6 +25,16 @@ const guildIdSchema = z.object({
   params: z.object({ guildId: z.string().min(1) }),
 });
 
+<<<<<<< HEAD
+=======
+const paginationSchema = z.object({
+  query: z.object({
+    page: z.coerce.number().int().positive().default(1),
+    limit: z.coerce.number().int().positive().max(100).default(25),
+  }),
+});
+
+>>>>>>> f652c8f (Initial Commit - 2)
 // GET /api/v1/bot/status - Bot status
 router.get('/bot/status', (req, res) => {
   const bot = req.bot;
@@ -54,6 +74,7 @@ router.get('/guilds', async (req, res) => {
 
     const manageableGuilds = userGuilds
       .filter(g => {
+<<<<<<< HEAD
         const hasPermission = (g.permissions & 0x20) === 0x20 || g.owner;
         const botInGuild = bot.guilds.cache.has(g.id);
         return hasPermission;
@@ -69,6 +90,28 @@ router.get('/guilds', async (req, res) => {
       }));
 
     res.json({ success: true, data: manageableGuilds });
+=======
+        const hasPermission = (g.permissions & 0x20) === 0x20 || g.owner; // MANAGE_GUILD = 0x20
+        const botInGuild = req.bot.guilds.cache.has(g.id);
+        return hasPermission && botInGuild;
+      })
+      .map(async g => {
+        const settings = await guildService.getGuild(g.id);
+        return {
+          id: g.id,
+          name: g.name,
+          icon: g.icon ? `https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png` : null,
+          owner: g.owner,
+          memberCount: g.approximate_member_count,
+          botInGuild: true,
+          features: settings?.features || {},
+        };
+      });
+
+    const guilds = await Promise.all(manageableGuilds);
+
+    res.json({ success: true, data: guilds });
+>>>>>>> f652c8f (Initial Commit - 2)
   } catch (error) {
     res.status(500).json({ success: false, error: 'Failed to fetch guilds' });
   }
@@ -119,8 +162,12 @@ router.put('/guilds/:guildId/settings', validateMiddleware(guildIdSchema), async
     const { guildId } = req.params;
     const updates = req.body;
 
+<<<<<<< HEAD
     // Validate updates (would use zod schema in production)
     const updated = await guildService.updateSettings(req.params.guildId, updates);
+=======
+    const updated = await guildService.updateSettings(guildId, updates);
+>>>>>>> f652c8f (Initial Commit - 2)
     res.json({ success: true, data: updated });
   } catch (error) {
     res.status(500).json({ success: false, error: 'Failed to update settings' });
@@ -135,7 +182,11 @@ router.get('/guilds/:guildId/members', validateMiddleware(guildIdSchema), async 
     const limit = Math.min(parseInt(req.query.limit) || 25, 100);
     const search = req.query.search;
 
+<<<<<<< HEAD
     const guild = req.guild;
+=======
+    const guild = req.bot.guilds.cache.get(guildId);
+>>>>>>> f652c8f (Initial Commit - 2)
     if (!guild) {
       return res.status(404).json({ success: false, error: 'Guild not found' });
     }
@@ -163,7 +214,10 @@ router.get('/guilds/:guildId/members', validateMiddleware(guildIdSchema), async 
       roles: m.roles.cache.map(r => r.id).filter(r => r !== guildId),
       joinedAt: m.joinedAt,
       premiumSince: m.premiumSince,
+<<<<<<< HEAD
       pending: m.pending,
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
     }));
 
     res.json({
@@ -173,7 +227,11 @@ router.get('/guilds/:guildId/members', validateMiddleware(guildIdSchema), async 
         page,
         limit,
         total,
+<<<<<<< HEAD
         pages: Math.ceil(total / 25),
+=======
+        pages: Math.ceil(total / limit),
+>>>>>>> f652c8f (Initial Commit - 2)
       },
     });
   } catch (error) {
@@ -198,8 +256,11 @@ router.get('/guilds/:guildId/channels', validateMiddleware(guildIdSchema), async
       parentId: c.parentId,
       position: c.position,
       nsfw: c.nsfw,
+<<<<<<< HEAD
       topic: c.topic,
       rateLimitPerUser: c.rateLimitPerUser,
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
     }));
 
     res.json({ success: true, data: channels });
@@ -227,9 +288,15 @@ router.get('/guilds/:guildId/roles', validateMiddleware(guildIdSchema), async (r
         color: r.hexColor,
         hoist: r.hoist,
         position: r.position,
+<<<<<<< HEAD
         permissions: r.permissions.toArray(),
         mentionable: r.mentionable,
         managed: r.managed,
+=======
+        mentionable: r.mentionable,
+        managed: r.managed,
+        permissions: r.permissions.toArray(),
+>>>>>>> f652c8f (Initial Commit - 2)
       }));
 
     res.json({ success: true, data: roles });
@@ -269,11 +336,16 @@ router.get('/guilds/:guildId/members/:userId', async (req, res) => {
         roles: member.roles.cache.map(r => r.id).filter(r => r !== guildId),
         joinedAt: member.joinedAt,
         premiumSince: member.premiumSince,
+<<<<<<< HEAD
         pending: member.pending,
         communicationDisabledUntil: member.communicationDisabledUntilTimestamp,
         leveling: memberData?.leveling || null,
         economy: memberData?.economy || null,
         warnings: memberData?.warnings || [],
+=======
+        leveling: memberData?.leveling || null,
+        economy: memberData?.economy || null,
+>>>>>>> f652c8f (Initial Commit - 2)
       },
     });
   } catch (error) {
@@ -295,12 +367,20 @@ router.get('/guilds/:guildId/audit-logs', validateMiddleware(guildIdSchema), asy
     if (userId) query.userId = userId;
 
     const [logs, total] = await Promise.all([
+<<<<<<< HEAD
       AuditLog.find(query)
+=======
+      (await import('../../database/models/AuditLog.js')).AuditLog.find(query)
+>>>>>>> f652c8f (Initial Commit - 2)
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
         .limit(limit)
         .lean(),
+<<<<<<< HEAD
       AuditLog.countDocuments(query),
+=======
+      (await import('../../database/models/AuditLog.js')).AuditLog.countDocuments(query),
+>>>>>>> f652c8f (Initial Commit - 2)
     ]);
 
     res.json({
@@ -349,4 +429,8 @@ router.get('/bot/stats', (req, res) => {
   });
 });
 
+<<<<<<< HEAD
+=======
+export const apiRoutes = router;
+>>>>>>> f652c8f (Initial Commit - 2)
 export default router;

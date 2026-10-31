@@ -5,6 +5,10 @@
  * For sharding support, use: node src/shard.js (requires SHARDING_ENABLED=true)
  */
 
+<<<<<<< HEAD
+=======
+import 'dotenv/config';
+>>>>>>> f652c8f (Initial Commit - 2)
 import { loadEnv } from './config/env.js';
 import { connectDatabase } from './database/connection.js';
 import { createDashboardServer } from './dashboard/server/server.js';
@@ -25,7 +29,10 @@ import { giveawayService } from './services/giveaway.service.js';
 import { reminderService } from './services/reminder.service.js';
 import { schedulerService } from './services/scheduler.service.js';
 import { guildRepository } from './database/repositories/GuildRepository.js';
+<<<<<<< HEAD
 import { CronCreate } from './utils/cron.js';
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
 
 /**
  * Main startup function
@@ -40,10 +47,13 @@ async function main() {
     await connectDatabase();
     logger.info('Database connected');
 
+<<<<<<< HEAD
     // Initialize services that need database connection
     await guildService.initialize();
     logger.info('Guild service initialized');
 
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
     // Load bot components
     await loadCommands();
     logger.info('Commands loaded');
@@ -138,8 +148,17 @@ function setupPeriodicTasks() {
   // Check temp bans/roles every minute
   setInterval(async () => {
     try {
+<<<<<<< HEAD
       await schedulerService.checkTempBans(client);
       await schedulerService.checkTempRoles(client);
+=======
+      if (typeof schedulerService.checkTempBans === 'function') {
+        await schedulerService.checkTempBans(client);
+      }
+      if (typeof schedulerService.checkTempRoles === 'function') {
+        await schedulerService.checkTempRoles(client);
+      }
+>>>>>>> f652c8f (Initial Commit - 2)
     } catch (error) {
       logger.error({ err: error }, 'Temp ban/role check failed');
     }

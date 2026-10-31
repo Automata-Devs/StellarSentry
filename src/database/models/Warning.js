@@ -63,7 +63,10 @@ const warningSchema = new mongoose.Schema({
   expiresAt: {
     type: Date,
     default: null,
+<<<<<<< HEAD
     index: { expireAfterSeconds: 0 }, // TTL index
+=======
+>>>>>>> f652c8f (Initial Commit - 2)
   },
 
   // Appeal

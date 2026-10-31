@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - StellarSentry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <nav class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/guilds" class="text-xl font-bold text-purple-400">StellarSentry</a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <a href="/overview/<%= guild.id %>" class="text-purple-400 font-semibold"><%= guild.name %></a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <span class="text-gray-300">Starboard</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/guilds" class="text-gray-300 hover:text-white">Dashboard</a>
+                    <a href="/auth/logout" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-white"><%= guild.name %></h1>
+                <p class="text-gray-400">Starboard System</p>
+            </div>
+            <div class="flex space-x-2">
+                <a href="/overview/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Overview</a>
+                <a href="/settings/<%= guild.id %>" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Settings</a>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-6">Starboard Settings</h2>
+            <form id="starboardSettingsForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                <div>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="enabled" value="true" <%= starboard?.enabled ? 'checked' : '' %>
+                               class="h-4 w-4 text-purple-600 border-gray-600 rounded focus:ring-purple-500 bg-gray-700">
+                        <span class="ml-2 text-sm text-gray-300">Enable Starboard</span>
+                    </label>
+                </div>
+
+                <div>
+                    <label for="channel" class="block text-sm font-medium text-gray-300 mb-2">Starboard Channel</label>
+                    <input type="text" id="channel" name="channel"
+                           value="<%= starboard?.channel || '' %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                           placeholder="Channel ID">
+                </div>
+
+                <div>
+                    <label for="threshold" class="block text-sm font-medium text-gray-300 mb-2">Star Threshold</label>
+                    <input type="number" id="threshold" name="threshold" min="1" max="100" value="<%= starboard?.threshold || 5 %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                </div>
+
+                <div>
+                    <label for="emoji" class="block text-sm font-medium text-gray-300 mb-2">Star Emoji</label>
+                    <input type="text" id="emoji" name="emoji"
+                           value="<%= starboard?.emoji || '⭐' %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                           placeholder="⭐">
+                </div>
+
+                <div>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="selfStar" value="true" <%= starboard?.selfStar ? 'checked' : '' %>
+                               class="h-4 w-4 text-purple-600 border-gray-600 rounded focus:ring-purple-500 bg-gray-700">
+                        <span class="ml-2 text-sm text-gray-300">Allow Self-Star</span>
+                    </label>
+                </div>
+
+                <div>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="links" value="true" <%= starboard?.links !== false ? 'checked' : '' %>
+                               class="h-4 w-4 text-purple-600 border-gray-600 rounded focus:ring-purple-500 bg-gray-700">
+                        <span class="ml-2 text-sm text-gray-300">Include Links</span>
+                    </label>
+                </div>
+
+                <div>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="images" value="true" <%= starboard?.images !== false ? 'checked' : '' %>
+                               class="h-4 w-4 text-purple-600 border-gray-600 rounded focus:ring-purple-500 bg-gray-700">
+                        <span class="ml-2 text-sm text-gray-300">Include Images</span>
+                    </label>
+                </div>
+
+                <div>
+                    <label for="ignoredChannels" class="block text-sm font-medium text-gray-300 mb-2">Ignored Channels (comma-separated)</label>
+                    <input type="text" id="ignoredChannels" name="ignoredChannels"
+                           value="<%= (starboard?.ignoredChannels || []).join(', ') %>"
+                           class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                           placeholder="channel1, channel2">
+                </div>
+
+                <div class="md:col-span-2 flex justify-end">
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">Save Settings</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h2 class="text-xl font-semibold text-white mb-6">Recent Starboard Entries</h2>
+            <div class="space-y-4">
+                <% if (starboardEntries && starboardEntries.length > 0) { %>
+                    <% starboardEntries.forEach(entry => { %>
+                        <div class="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-sm">
+                                        <%= entry.author?.username?.charAt(0) || '?' %>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-white"><%= entry.author?.username || 'Unknown' %></p>
+                                        <p class="text-sm text-gray-400"><%= new Date(entry.createdAt).toLocaleString() %></p>
+                                    </div>
+                                </div>
+                                <span class="text-yellow-400 text-xl"><%= entry.stars || 0 %> ⭐</span>
+                            </div>
+                            <p class="text-gray-300 mb-3"><%= entry.content || '[Embed/Attachment]' %></p>
+                            <div class="flex items-center justify-between">
+                                <a href="<%= entry.jumpUrl %>" target="_blank" class="text-purple-400 hover:text-purple-300 text-sm">Jump to Message</a>
+                                <span class="text-sm text-gray-500">#<%= entry.starboardId %></span>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p class="text-gray-400 text-center py-8">No starboard entries yet</p>
+                <% } %>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 border-t border-gray-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500">
+            <p>StellarSentry - Discord Bot with Dashboard</p>
+        </div>
+    </footer>
+
+    <script>
+        const guildId = '<%= guild.id %>';
+        const csrfToken = '<%= csrfToken %>';
+
+        document.getElementById('starboardSettingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {};
+            formData.forEach((value, key) => {
+                if (key !== '_csrf') data[key] = value === 'true' || value === 'on' ? true : value;
+            });
+            data.threshold = parseInt(data.threshold) || 5;
+            data.ignoredChannels = data.ignoredChannels ? data.ignoredChannels.split(',').map(c => c.trim()).filter(c => c) : [];
+
+            try {
+                const response = await fetch(`/starboard/${guildId}/settings`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('Settings saved!');
+                    location.reload();
+                } else {
+                    alert('Failed: ' + (result.error || 'Unknown error'));
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        });
+    </script>
+</body>
+</html>
