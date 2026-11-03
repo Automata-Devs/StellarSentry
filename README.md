@@ -1,4 +1,3 @@
-# StellarSentry
 <p align="center">
   <h1>
   StellarSentry™
