@@ -5,17 +5,13 @@
  * For sharding support, use: node src/shard.js (requires SHARDING_ENABLED=true)
  */
 
-<<<<<<< HEAD
-=======
 import 'dotenv/config';
->>>>>>> f652c8f (Initial Commit - 2)
 import { loadEnv } from './config/env.js';
 import { connectDatabase } from './database/connection.js';
 import { createDashboardServer } from './dashboard/server/server.js';
 import { loadCommands } from './loaders/commandLoader.js';
 import { loadEvents } from './loaders/eventLoader.js';
 import { loadComponents } from './loaders/componentLoader.js';
-import { loadRoutes } from './loaders/routeLoader.js';
 import { client } from './core/client.js';
 import { eventBus, EVENTS } from './core/eventBus.js';
 import { logger } from './utils/logger.js';
@@ -29,10 +25,6 @@ import { giveawayService } from './services/giveaway.service.js';
 import { reminderService } from './services/reminder.service.js';
 import { schedulerService } from './services/scheduler.service.js';
 import { guildRepository } from './database/repositories/GuildRepository.js';
-<<<<<<< HEAD
-import { CronCreate } from './utils/cron.js';
-=======
->>>>>>> f652c8f (Initial Commit - 2)
 
 /**
  * Main startup function
@@ -47,13 +39,6 @@ async function main() {
     await connectDatabase();
     logger.info('Database connected');
 
-<<<<<<< HEAD
-    // Initialize services that need database connection
-    await guildService.initialize();
-    logger.info('Guild service initialized');
-
-=======
->>>>>>> f652c8f (Initial Commit - 2)
     // Load bot components
     await loadCommands();
     logger.info('Commands loaded');
@@ -64,7 +49,23 @@ async function main() {
     await loadComponents();
     logger.info('Components loaded');
 
-    // Initialize music service (connects to Lavalink)
+    // Create and start dashboard server
+    const { app, server, io } = createDashboardServer(client);
+
+    // Start HTTP server
+    const PORT = process.env.PORT || 3000;
+    server.listen(PORT, '0.0.0.0', () => {
+      logger.info({ port: PORT }, 'Dashboard server started');
+    });
+
+    // Setup graceful shutdown
+    setupGracefulShutdown(server);
+
+    // Login to Discord
+    await client.login(process.env.DISCORD_TOKEN);
+    logger.info('Bot logged in successfully');
+
+    // Initialize music service (connects to Lavalink) - after bot is ready
     try {
       await musicService.initialize(client);
       logger.info('Music service initialized');
@@ -93,26 +94,6 @@ async function main() {
     } catch (error) {
       logger.warn({ err: error }, 'Scheduler service initialization failed');
     }
-
-    // Create and start dashboard server
-    const { app, server, io } = createDashboardServer(client);
-
-    // Load dashboard routes
-    await loadRoutes(app);
-    logger.info('Dashboard routes loaded');
-
-    // Start HTTP server
-    const PORT = process.env.PORT || 3000;
-    server.listen(PORT, '0.0.0.0', () => {
-      logger.info({ port: PORT }, 'Dashboard server started');
-    });
-
-    // Setup graceful shutdown
-    setupGracefulShutdown(server);
-
-    // Login to Discord
-    await client.login(process.env.DISCORD_TOKEN);
-    logger.info('Bot logged in successfully');
 
     // Set up periodic tasks
     setupPeriodicTasks();
@@ -148,17 +129,12 @@ function setupPeriodicTasks() {
   // Check temp bans/roles every minute
   setInterval(async () => {
     try {
-<<<<<<< HEAD
-      await schedulerService.checkTempBans(client);
-      await schedulerService.checkTempRoles(client);
-=======
       if (typeof schedulerService.checkTempBans === 'function') {
         await schedulerService.checkTempBans(client);
       }
       if (typeof schedulerService.checkTempRoles === 'function') {
         await schedulerService.checkTempRoles(client);
       }
->>>>>>> f652c8f (Initial Commit - 2)
     } catch (error) {
       logger.error({ err: error }, 'Temp ban/role check failed');
     }

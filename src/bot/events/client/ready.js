@@ -16,12 +16,7 @@ export default {
     // Set presence
     clientInstance.user.setPresence({
       activities: [{
-<<<<<<< HEAD
-        name: 'StellarSentry | /help',
-=======
-        name: '/help | ' + clientInstance.guilds.cache.size + ' servers',
->>>>>>> f652c8f (Initial Commit - 2)
-        type: ActivityType.Watching,
+name: 'StellarSentry | /help',        type: ActivityType.Watching,
       }],
       status: 'online',
     });

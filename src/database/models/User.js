@@ -9,11 +9,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-<<<<<<< HEAD
-    index: true,
-=======
->>>>>>> f652c8f (Initial Commit - 2)
-  },
+index: true,  },
 
   // Global economy
   globalBalance: {
@@ -71,11 +67,7 @@ const userSchema = new mongoose.Schema({
 });
 
 // Indexes
-<<<<<<< HEAD
-userSchema.index({ userId: 1 }, { unique: true });
-=======
->>>>>>> f652c8f (Initial Commit - 2)
-userSchema.index({ 'globalBalance.wallet': -1 });
+userSchema.index({ userId: 1 }, { unique: true });userSchema.index({ 'globalBalance.wallet': -1 });
 userSchema.index({ 'stats.commandsUsed': -1 });
 userSchema.index({ blacklisted: 1 });
 

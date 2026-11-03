@@ -258,12 +258,11 @@ class GuildService {
 }
 
 export const guildService = new GuildService();
-<<<<<<< HEAD
-=======
 
-// Named export for isFeatureEnabled (used by interactionCreate.js)
-export const isFeatureEnabled = (guildId, feature) => guildService.isFeatureEnabled(guildId, feature);
-
+// Export class and standalone function for compatibility
 export { GuildService };
->>>>>>> f652c8f (Initial Commit - 2)
+export function isFeatureEnabled(guildId, feature) {
+  return guildService.isFeatureEnabled(guildId, feature);
+}
+
 export default guildService;

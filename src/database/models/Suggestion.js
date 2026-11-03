@@ -19,11 +19,7 @@ const suggestionSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-<<<<<<< HEAD
-    index: true,
-=======
->>>>>>> f652c8f (Initial Commit - 2)
-  },
+index: true,  },
   authorId: {
     type: String,
     required: true,
@@ -126,11 +122,7 @@ const suggestionSchema = new mongoose.Schema({
 // Compound indexes
 suggestionSchema.index({ guildId: 1, status: 1, createdAt: -1 });
 suggestionSchema.index({ guildId: 1, authorId: 1, createdAt: -1 });
-<<<<<<< HEAD
 suggestionSchema.index({ messageId: 1 }, { unique: true });
-=======
->>>>>>> f652c8f (Initial Commit - 2)
-
 // Virtual for net votes
 suggestionSchema.virtual('netVotes').get(function() {
   return this.votes.upCount - this.votes.downCount;

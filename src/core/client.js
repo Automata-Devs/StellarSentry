@@ -41,53 +41,6 @@ export class StellarSentryClient extends Client {
         Partials.ThreadMember,
         Partials.User,
       ],
-<<<<<<< HEAD
-      // Cache settings for memory efficiency
-      makeCache: {
-        // Don't cache everything - only what we need
-        GuildMember: (member) => member.guild.memberCount < 1000, // Only cache members in small guilds
-        Message: (msg) => msg.guild && msg.guild.id === env.DISCORD_DEV_GUILD_ID, // Only cache in dev guild
-        Reaction: (reaction) => reaction.message.guild && reaction.message.guild.id === env.DISCORD_DEV_GUILD_ID,
-        Presence: () => false, // Don't cache presences
-        VoiceState: (state) => state.guild && state.guild.id === env.DISCORD_DEV_GUILD_ID,
-        ThreadMember: () => false,
-        StageInstance: () => false,
-        GuildScheduledEvent: () => false,
-        AutoModerationRule: () => false,
-      },
-      sweepers: {
-        // Aggressive sweeping to keep memory low
-        messages: {
-          interval: 600, // 10 minutes
-          lifetime: 3600, // 1 hour
-          filter: (msg) => !msg.pinned && msg.guild?.memberCount > 500,
-        },
-        guildMembers: {
-          interval: 300, // 5 minutes
-          lifetime: 1800, // 30 minutes
-          filter: (member) => member.guild.memberCount > 1000,
-        },
-        reactions: {
-          interval: 300,
-          lifetime: 1800,
-          filter: (reaction) => reaction.message.guild?.memberCount > 500,
-        },
-        presences: {
-          interval: 60,
-          lifetime: 300,
-        },
-        voiceStates: {
-          interval: 300,
-          lifetime: 1800,
-          filter: (state) => state.guild?.memberCount > 500,
-        },
-        threads: {
-          interval: 600,
-          lifetime: 3600,
-        },
-      },
-=======
->>>>>>> f652c8f (Initial Commit - 2)
       // Rest settings
       rest: {
         timeout: 30000,

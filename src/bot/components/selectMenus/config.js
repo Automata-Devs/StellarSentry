@@ -42,10 +42,5 @@ export async function handleConfigFeatureToggle(interaction, client) {
  * Register config select menu handler
  */
 export function registerConfigSelectMenu(client) {
-  client.on('interactionCreate', async interaction => {
-    if (!interaction.isStringSelectMenu()) return;
-    if (interaction.customId !== 'config_toggle_feature') return;
-
-    await handleConfigFeatureToggle(interaction, client);
-  });
+  client.registerSelectMenu('config_toggle_feature', handleConfigFeatureToggle);
 }

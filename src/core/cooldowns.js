@@ -4,7 +4,7 @@
  */
 import { Collection } from 'discord.js';
 import { COOLDOWNS } from '../config/constants.js';
-import { multiCache, TTLCache } from '../utils/cache.js';
+import TTLCache, { multiCache } from '../utils/cache.js';
 import { logger } from '../utils/logger.js';
 
 /**
@@ -217,14 +217,6 @@ export class CooldownManager {
 // Export singleton instance
 export const cooldownManager = new CooldownManager();
 
-<<<<<<< HEAD
-=======
-// Simple Map-like cooldown storage for legacy compatibility
-// Used by interactionCreate.js for basic cooldown handling
-const cooldowns = new Map();
-export { cooldowns };
-
->>>>>>> f652c8f (Initial Commit - 2)
 /**
  * Decorator for adding cooldown to command
  * @param {number} seconds

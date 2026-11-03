@@ -5,22 +5,13 @@ import express from 'express';
 import { guildService } from '../../services/guild.service.js';
 import { memberRepository } from '../../database/repositories/MemberRepository.js';
 import { AuditLog } from '../../database/models/AuditLog.js';
-<<<<<<< HEAD
-=======
-import { guildAccessMiddleware } from '../middleware/guildAccess.js';
->>>>>>> f652c8f (Initial Commit - 2)
 
 const router = express.Router();
 
 /**
  * GET /overview/:guildId - Server overview
  */
-<<<<<<< HEAD
-router.get('/:guildId', async (req, res) => {
-=======
-router.get('/:guildId', guildAccessMiddleware, async (req, res) => {
->>>>>>> f652c8f (Initial Commit - 2)
-  try {
+router.get('/:guildId', async (req, res) => {  try {
     const { guildId } = req.params;
     const guild = req.guild;
     const settings = await guildService.getGuild(guildId);
@@ -84,8 +75,4 @@ router.get('/:guildId', guildAccessMiddleware, async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-=======
-export const overviewRoutes = router;
->>>>>>> f652c8f (Initial Commit - 2)
 export default router;

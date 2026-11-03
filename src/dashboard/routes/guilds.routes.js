@@ -62,10 +62,6 @@ router.get('/', async (req, res) => {
       user: req.user,
       guilds,
       unaddedGuilds,
-<<<<<<< HEAD
-=======
-      error: null,
->>>>>>> f652c8f (Initial Commit - 2)
     });
   } catch (error) {
     console.error('Guilds error:', error);
@@ -86,8 +82,4 @@ router.get('/:guildId', (req, res) => {
   res.redirect(`/overview/${req.params.guildId}`);
 });
 
-<<<<<<< HEAD
-=======
-export const guildsRoutes = router;
->>>>>>> f652c8f (Initial Commit - 2)
 export default router;

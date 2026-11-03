@@ -19,11 +19,7 @@ const ticketSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-<<<<<<< HEAD
-    index: true,
-=======
->>>>>>> f652c8f (Initial Commit - 2)
-  },
+index: true,  },
 
   // Ticket info
   ticketId: {

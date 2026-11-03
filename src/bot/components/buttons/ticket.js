@@ -265,23 +265,8 @@ export async function handleTicketClaim(interaction, client) {
  * Register all ticket button handlers
  */
 export function registerTicketButtons(client) {
-  client.on('interactionCreate', async interaction => {
-    if (!interaction.isButton()) return;
-
-    if (interaction.customId === 'ticket_create_panel') {
-      await handleTicketCreate(interaction, client);
-    } else if (interaction.customId.startsWith('ticket_close_')) {
-      await handleTicketClose(interaction, client);
-    } else if (interaction.customId.startsWith('ticket_claim_')) {
-      await handleTicketClaim(interaction, client);
-    }
-  });
-
-  client.on('interactionCreate', async interaction => {
-    if (!interaction.isModalSubmit()) return;
-
-    if (interaction.customId === 'ticket_create_modal') {
-      await handleTicketCreateModal(interaction, client);
-    }
-  });
+  client.registerButton('ticket_create_panel', handleTicketCreate);
+  client.registerButton('ticket_close_', handleTicketClose);
+  client.registerButton('ticket_claim_', handleTicketClaim);
+  client.registerModal('ticket_create_modal', handleTicketCreateModal);
 }

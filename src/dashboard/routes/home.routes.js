@@ -64,8 +64,4 @@ router.get('/invite', (req, res) => {
   res.redirect(inviteUrl);
 });
 
-<<<<<<< HEAD
-=======
-export const homeRoutes = router;
->>>>>>> f652c8f (Initial Commit - 2)
 export default router;

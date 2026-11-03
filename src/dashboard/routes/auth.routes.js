@@ -52,66 +52,24 @@ router.get('/callback',
   async (req, res) => {
     try {
       const user = req.user;
-<<<<<<< HEAD
+
       // Fetch user's guilds
       const response = await fetch('https://discord.com/api/users/@me/guilds', {
         headers: { Authorization: `Bearer ${user.accessToken}` },
       });
       const guilds = await response.json();
-=======
-      logger.debug({ userId: user?.id }, 'Auth callback - user authenticated');
-
-      if (!user?.accessToken) {
-        logger.error('Auth callback - no access token on user');
-        return res.redirect('/auth/login');
-      }
-
-      // Fetch user's guilds
-      logger.debug('Auth callback - fetching guilds from Discord API');
-      const response = await fetch('https://discord.com/api/users/@me/guilds', {
-        headers: { Authorization: `Bearer ${user.accessToken}` },
-      });
-
-      if (!response.ok) {
-        logger.error({ status: response.status, statusText: response.statusText }, 'Discord API guilds fetch failed');
-        return res.redirect('/auth/login');
-      }
-
-      const guilds = await response.json();
-      logger.debug({ guildCount: guilds?.length }, 'Auth callback - guilds fetched');
-
->>>>>>> f652c8f (Initial Commit - 2)
       user.guilds = guilds;
 
       // Update session
       req.session.user = user;
 
-<<<<<<< HEAD
-=======
-      // Save session explicitly
-      await new Promise((resolve, reject) => {
-        req.session.save((err) => {
-          if (err) reject(err);
-          else resolve();
-        });
-      });
-      logger.debug('Auth callback - session saved');
-
->>>>>>> f652c8f (Initial Commit - 2)
       // Redirect to return URL or dashboard
       const returnTo = req.session.returnTo || '/guilds';
       delete req.session.returnTo;
 
-<<<<<<< HEAD
       res.redirect(returnTo);
     } catch (error) {
       logger.error({ err: error }, 'Auth callback error');
-=======
-      logger.debug({ returnTo }, 'Auth callback - redirecting');
-      res.redirect(returnTo);
-    } catch (error) {
-      logger.error({ err: error, stack: error?.stack }, 'Auth callback error');
->>>>>>> f652c8f (Initial Commit - 2)
       res.redirect('/auth/login');
     }
   }
@@ -129,12 +87,7 @@ router.get('/logout', (req, res) => {
       res.redirect('/');
     });
   });
-<<<<<<< HEAD
-};
-=======
 });
->>>>>>> f652c8f (Initial Commit - 2)
-
 /**
  * GET /auth/status - Check auth status (for AJAX)
  */
@@ -150,8 +103,4 @@ router.get('/status', (req, res) => {
   });
 });
 
-<<<<<<< HEAD
-=======
-export const authRoutes = router;
->>>>>>> f652c8f (Initial Commit - 2)
 export default router;

@@ -7,10 +7,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
-<<<<<<< HEAD
-=======
 import flash from 'connect-flash';
->>>>>>> f652c8f (Initial Commit - 2)
 import passport from 'passport';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -28,25 +25,25 @@ import { validateMiddleware } from '../middleware/validate.js';
 import { errorHandlerMiddleware } from '../middleware/errorHandler.js';
 
 // Import routes
-import { authRoutes } from '../routes/auth.routes.js';
-import { healthRoutes } from '../routes/health.routes.js';
-import { homeRoutes } from '../routes/home.routes.js';
-import { guildsRoutes } from '../routes/guilds.routes.js';
-import { overviewRoutes } from '../routes/overview.routes.js';
-import { settingsRoutes } from '../routes/settings.routes.js';
-import { moderationRoutes } from '../routes/moderation.routes.js';
-import { welcomeRoutes } from '../routes/welcome.routes.js';
-import { levelingRoutes } from '../routes/leveling.routes.js';
-import { economyRoutes } from '../routes/economy.routes.js';
-import { ticketsRoutes } from '../routes/tickets.routes.js';
-import { giveawaysRoutes } from '../routes/giveaways.routes.js';
-import { suggestionsRoutes } from '../routes/suggestions.routes.js';
-import { starboardRoutes } from '../routes/starboard.routes.js';
-import { musicRoutes } from '../routes/music.routes.js';
-import { reactionRolesRoutes } from '../routes/reactionRoles.routes.js';
-import { commandsRoutes } from '../routes/commands.routes.js';
-import { loggingRoutes } from '../routes/logging.routes.js';
-import { apiRoutes } from '../routes/api/index.routes.js';
+import authRoutes from '../routes/auth.routes.js';
+import healthRoutes from '../routes/health.routes.js';
+import homeRoutes from '../routes/home.routes.js';
+import guildsRoutes from '../routes/guilds.routes.js';
+import overviewRoutes from '../routes/overview.routes.js';
+import settingsRoutes from '../routes/settings.routes.js';
+import moderationRoutes from '../routes/moderation.routes.js';
+import welcomeRoutes from '../routes/welcome.routes.js';
+import levelingRoutes from '../routes/leveling.routes.js';
+import economyRoutes from '../routes/economy.routes.js';
+import ticketsRoutes from '../routes/tickets.routes.js';
+import giveawaysRoutes from '../routes/giveaways.routes.js';
+import suggestionsRoutes from '../routes/suggestions.routes.js';
+import starboardRoutes from '../routes/starboard.routes.js';
+import musicRoutes from '../routes/music.routes.js';
+import reactionRolesRoutes from '../routes/reactionRoles.routes.js';
+import commandsRoutes from '../routes/commands.routes.js';
+import loggingRoutes from '../routes/logging.routes.js';
+import apiRoutes from '../routes/api/index.routes.js';
 
 // Import sockets
 import { setupSockets } from '../sockets/index.js';
@@ -114,12 +111,9 @@ export function createDashboardServer(botClient) {
   });
 
   app.use(sessionMiddleware);
-
-<<<<<<< HEAD
-=======
 // Flash messages
 app.use(flash());
->>>>>>> f652c8f (Initial Commit - 2)
+
   // Passport initialization
   app.use(passport.initialize());
   app.use(passport.session());
@@ -146,12 +140,9 @@ app.use(flash());
     next();
   });
 
-<<<<<<< HEAD
-=======
   // CSRF protection (after session and body parsing)
   app.use(csrfMiddleware);
 
->>>>>>> f652c8f (Initial Commit - 2)
   // Global variables for views
   app.use((req, res, next) => {
     res.locals.user = req.user || null;
@@ -162,12 +153,6 @@ app.use(flash());
     next();
   });
 
-<<<<<<< HEAD
-  // CSRF protection (after session and body parsing)
-  app.use(csrfMiddleware);
-
-=======
->>>>>>> f652c8f (Initial Commit - 2)
   // Routes
   app.use('/auth', authRoutes);
   app.use('/health', healthRoutes);

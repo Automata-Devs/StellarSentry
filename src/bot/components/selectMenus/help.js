@@ -42,12 +42,7 @@ export async function handleHelpSelect(interaction) {
  * Register help select menu handler
  */
 export function registerHelpSelectMenu(client) {
-  client.on('interactionCreate', async interaction => {
-    if (!interaction.isStringSelectMenu()) return;
-    if (interaction.customId !== 'help_category_select') return;
-
-    await handleHelpSelect(interaction);
-  });
+  client.registerSelectMenu('help_category_select', handleHelpSelect);
 }
 
 function getCategoryEmoji(category) {

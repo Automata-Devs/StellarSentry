@@ -1,14 +1,8 @@
 /**
  * Error Handler Middleware - Centralized error handling for Express
  */
-<<<<<<< HEAD
-import { logger } from '../../../utils/logger.js';
-import { env } from '../../../config/env.js';
-=======
 import { logger } from '../../utils/logger.js';
 import { env } from '../../config/env.js';
->>>>>>> f652c8f (Initial Commit - 2)
-
 /**
  * Global error handler
  */

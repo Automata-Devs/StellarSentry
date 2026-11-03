@@ -1,11 +1,7 @@
 /**
  * Music Button Handlers
  */
-<<<<<<< HEAD
-import { ButtonBuilder, ButtonStyle, EmbedBuilder, ActionRowBuilder, ButtonBuilder } from 'discord.js';
-=======
 import { ButtonBuilder, ButtonStyle, EmbedBuilder, ActionRowBuilder } from 'discord.js';
->>>>>>> f652c8f (Initial Commit - 2)
 import { COLORS, EMOJIS } from '../../../config/constants.js';
 import { musicService } from '../../../services/music.service.js';
 
@@ -178,28 +174,10 @@ export async function handleMusicVolume(interaction, client) {
  * Register music button handlers
  */
 export function registerMusicButtons(client) {
-  client.on('interactionCreate', async interaction => {
-    if (!interaction.isButton()) return;
-
-    switch (interaction.customId) {
-      case 'music_pause':
-        await handleMusicPause(interaction, client);
-        break;
-      case 'music_skip':
-        await handleMusicSkip(interaction, client);
-        break;
-      case 'music_stop':
-        await handleMusicStop(interaction, client);
-        break;
-      case 'music_queue':
-        await handleMusicQueue(interaction, client);
-        break;
-      case 'music_volume':
-        await handleMusicVolume(interaction, client);
-        break;
-      case 'music_loop':
-        await handleMusicLoop(interaction, client);
-        break;
-    }
-  });
+  client.registerButton('music_pause', handleMusicPause);
+  client.registerButton('music_skip', handleMusicSkip);
+  client.registerButton('music_stop', handleMusicStop);
+  client.registerButton('music_queue', handleMusicQueue);
+  client.registerButton('music_volume', handleMusicVolume);
+  client.registerButton('music_loop', handleMusicLoop);
 }

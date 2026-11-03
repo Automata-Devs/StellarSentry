@@ -5,22 +5,13 @@ import express from 'express';
 import { body, validationResult } from 'express-validator';
 import { guildService } from '../../services/guild.service.js';
 import { AuditLog } from '../../database/models/AuditLog.js';
-<<<<<<< HEAD
-=======
-import { guildAccessMiddleware } from '../middleware/guildAccess.js';
->>>>>>> f652c8f (Initial Commit - 2)
 
 const router = express.Router();
 
 /**
  * GET /moderation/:guildId - Moderation settings and logs
  */
-<<<<<<< HEAD
-router.get('/:guildId', async (req, res) => {
-=======
-router.get('/:guildId', guildAccessMiddleware, async (req, res) => {
->>>>>>> f652c8f (Initial Commit - 2)
-  try {
+router.get('/:guildId', async (req, res) => {  try {
     const { guildId } = req.params;
     const settings = await guildService.getGuild(guildId);
     const moderation = settings?.moderation || {};
@@ -51,12 +42,7 @@ router.get('/:guildId', guildAccessMiddleware, async (req, res) => {
 /**
  * POST /moderation/:guildId - Update moderation settings
  */
-<<<<<<< HEAD
-router.post('/:guildId', [
-=======
-router.post('/:guildId', guildAccessMiddleware, [
->>>>>>> f652c8f (Initial Commit - 2)
-  body('logChannel').optional().isString(),
+router.post('/:guildId', [  body('logChannel').optional().isString(),
   body('modRole').optional().isString(),
   body('muteRole').optional().isString(),
   body('dmOnAction').optional().isBoolean(),
@@ -89,12 +75,7 @@ router.post('/:guildId', guildAccessMiddleware, [
 /**
  * GET /moderation/:guildId/logs - View moderation logs with pagination
  */
-<<<<<<< HEAD
-router.get('/:guildId/logs', async (req, res) => {
-=======
-router.get('/:guildId/logs', guildAccessMiddleware, async (req, res) => {
->>>>>>> f652c8f (Initial Commit - 2)
-  try {
+router.get('/:guildId/logs', async (req, res) => {  try {
     const { guildId } = req.params;
     const page = parseInt(req.query.page) || 1;
     const limit = 25;
@@ -124,8 +105,4 @@ router.get('/:guildId/logs', guildAccessMiddleware, async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-=======
-export const moderationRoutes = router;
->>>>>>> f652c8f (Initial Commit - 2)
 export default router;

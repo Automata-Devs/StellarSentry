@@ -85,21 +85,11 @@ export const LIMITS = {
   MODAL_TEXT_MAX: 4000,
 
   // Bot limits
-<<<<<<< HEAD
-  PURGE_MAX: 100,
-=======
-  PURGE_MAX: 250,
->>>>>>> f652c8f (Initial Commit - 2)
-  SLOWMODE_MAX: 21600,        // 6 hours
+PURGE_MAX: 100,  SLOWMODE_MAX: 21600,        // 6 hours
   TIMEOUT_MAX: 2419200,       // 28 days
   REMINDER_MAX_DURATION: 7776000, // 90 days
   GIVEAWAY_MAX_DURATION: 7776000, // 90 days
-<<<<<<< HEAD
-  GIVEAWAY_MAX_WINNERS: 20,
-=======
-  GIVEAWAY_MAX_WINNERS: 25,
->>>>>>> f652c8f (Initial Commit - 2)
-  STARBOARD_THRESHOLD_MIN: 1,
+GIVEAWAY_MAX_WINNERS: 20,  STARBOARD_THRESHOLD_MIN: 1,
   STARBOARD_THRESHOLD_MAX: 100,
   LEVEL_XP_BASE: 100,
   LEVEL_XP_MULTIPLIER: 1.5,
@@ -147,10 +137,6 @@ export const TIME = {
   DAY: 24 * 60 * 60 * 1000,
   WEEK: 7 * 24 * 60 * 60 * 1000,
   MONTH: 30 * 24 * 60 * 60 * 1000,
-<<<<<<< HEAD
-=======
-  YEAR: 365 * 30 * 24 * 60 * 60 * 1000,
->>>>>>> f652c8f (Initial Commit - 2)
 };
 
 /** Feature flag defaults */

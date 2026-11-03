@@ -7,7 +7,7 @@ import { client } from '../../../core/client.js';
 import { logger } from '../../../utils/logger.js';
 import { eventBus, EVENTS } from '../../../core/eventBus.js';
 import { isFeatureEnabled } from '../../../services/guild.service.js';
-import { cooldowns } from '../../../core/cooldowns.js';
+import { cooldownManager } from '../../../core/cooldowns.js';
 import { UserError, PermissionError } from '../../../utils/errors.js';
 
 export default {
@@ -101,12 +101,11 @@ async function handleCommand(interaction) {
   }
 
   // Check cooldown
-  const cooldownKey = `${interaction.guildId || 'dm'}-${interaction.user.id}-${command.data.name}`;
-  const cooldown = cooldowns.get(cooldownKey);
-  if (cooldown && Date.now() < cooldown) {
-    const remaining = Math.ceil((cooldown - Date.now()) / 1000);
+  const cooldownResult = cooldownManager.check(interaction, command);
+  if (cooldownResult.onCooldown) {
+    const remaining = cooldownManager.formatRemaining(cooldownResult.remaining);
     return interaction.reply({
-      content: `Please wait ${remaining}s before using this command again.`,
+      content: `Please wait ${remaining} before using this command again.`,
       ephemeral: true,
     });
   }
@@ -123,7 +122,7 @@ async function handleCommand(interaction) {
 
     // Set cooldown
     if (command.cooldown) {
-      cooldowns.set(cooldownKey, Date.now() + command.cooldown * 1000);
+      cooldownManager.set(interaction, command);
     }
 
     logger.debug({
@@ -176,7 +175,19 @@ async function handleComponent(interaction) {
 
   try {
     if (type === 'button') {
-      const buttonHandler = client.buttons.get(interaction.customId);
+      // Try exact match first
+      let buttonHandler = client.buttons.get(interaction.customId);
+
+      // If no exact match, try prefix matching for dynamic buttons
+      if (!buttonHandler) {
+        for (const [prefix, handler] of client.buttons) {
+          if (interaction.customId.startsWith(prefix) && prefix.endsWith('_')) {
+            buttonHandler = handler;
+            break;
+          }
+        }
+      }
+
       if (buttonHandler) {
         await buttonHandler(interaction, client);
       } else {

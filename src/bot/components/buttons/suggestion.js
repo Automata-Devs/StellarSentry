@@ -1,11 +1,7 @@
 /**
  * Suggestion Button Handlers
  */
-<<<<<<< HEAD
-import { ButtonBuilder, ButtonStyle, EmbedBuilder, ActionRowBuilder, ButtonBuilder } from 'discord.js';
-=======
 import { ButtonBuilder, ButtonStyle, EmbedBuilder, ActionRowBuilder } from 'discord.js';
->>>>>>> f652c8f (Initial Commit - 2)
 import { COLORS, EMOJIS } from '../../../config/constants.js';
 import { Suggestion } from '../../../database/models/Suggestion.js';
 import { guildService } from '../../../services/guild.service.js';
@@ -109,15 +105,10 @@ export async function handleSuggestionDownvote(interaction, client) {
 
 /**
  * Register suggestion button handlers
+ * Uses a prefix handler for dynamic customIds
  */
 export function registerSuggestionButtons(client) {
-  client.on('interactionCreate', async interaction => {
-    if (!interaction.isButton()) return;
-
-    if (interaction.customId.startsWith('suggestion_upvote_')) {
-      await handleSuggestionUpvote(interaction, client);
-    } else if (interaction.customId.startsWith('suggestion_downvote_')) {
-      await handleSuggestionDownvote(interaction, client);
-    }
-  });
+  // Register a prefix handler for dynamic suggestion buttons
+  client.registerButton('suggestion_upvote_', handleSuggestionUpvote);
+  client.registerButton('suggestion_downvote_', handleSuggestionDownvote);
 }

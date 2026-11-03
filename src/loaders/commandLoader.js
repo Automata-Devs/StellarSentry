@@ -16,12 +16,7 @@ const __dirname = path.dirname(__filename);
  * @param {string} commandsDir - Path to commands directory
  * @returns {Promise<number>} Number of commands loaded
  */
-<<<<<<< HEAD
-export async function loadCommands(commandsDir = path.join(__dirname, '../../bot/commands')) {
-=======
-export async function loadCommands(commandsDir = path.join(__dirname, '../../src/bot/commands')) {
->>>>>>> f652c8f (Initial Commit - 2)
-  let loaded = 0;
+export async function loadCommands(commandsDir = path.join(__dirname, '../bot/commands')) {  let loaded = 0;
   let failed = 0;
 
   if (!fs.existsSync(commandsDir)) {
@@ -103,12 +98,7 @@ function pathToFileURL(filePath) {
  */
 export async function reloadCommand(commandName) {
   // Find command file
-<<<<<<< HEAD
-  const commandsDir = path.join(__dirname, '../../bot/commands');
-=======
-  const commandsDir = path.join(__dirname, '../../src/bot/commands');
->>>>>>> f652c8f (Initial Commit - 2)
-  const file = findCommandFile(commandsDir, commandName);
+const commandsDir = path.join(__dirname, '../../bot/commands');  const file = findCommandFile(commandsDir, commandName);
 
   if (!file) {
     logger.warn({ commandName }, 'Command file not found for reload');

@@ -3,11 +3,7 @@
  * Handles player management, queue, and controls
  */
 import { Client } from 'discord.js';
-<<<<<<< HEAD
-import { LavalinkClient, Player, Track, Queue } from 'lavalink-client';
-=======
 import { LavalinkManager, Player, Queue } from 'lavalink-client';
->>>>>>> f652c8f (Initial Commit - 2)
 import { env } from '../config/env.js';
 import { logger } from '../utils/logger.js';
 import { eventBus, EVENTS } from '../core/eventBus.js';
@@ -16,10 +12,6 @@ class MusicService {
   constructor() {
     this.lavalink = null;
     this.players = new Map(); // guildId -> Player
-<<<<<<< HEAD
-=======
-    this.initialized = false;
->>>>>>> f652c8f (Initial Commit - 2)
   }
 
   /**
@@ -28,53 +20,26 @@ class MusicService {
    */
   async initialize(discordClient) {
     try {
-<<<<<<< HEAD
-      this.lavalink = new LavalinkClient(discordClient, {
+      this.lavalink = new LavalinkManager({
         nodes: [{
           host: env.LAVALINK_HOST,
           port: env.LAVALINK_PORT,
-          password: env.LAVALINK_PASSWORD,
+          authorization: env.LAVALINK_PASSWORD,
           secure: env.LAVALINK_SECURE,
           id: 'stellarsentry-main',
           retryAmount: 5,
           retryInterval: 5000,
         }],
-        send: (payload) => {
-          const guild = discordClient.guilds.cache.get(payload.d.guild_id);
-=======
-      const clientId = discordClient.user?.id;
-      if (!clientId) {
-        throw new Error('Discord client user ID not available');
-      }
-
-      this.lavalink = new LavalinkManager({
-        client: {
-          id: clientId,
-          username: discordClient.user?.username ?? 'StellarSentry',
-        },
-        nodes: [{
-          host: env.LAVALINK_HOST,
-          port: env.LAVALINK_PORT,
-          authorization: env.LAVALINK_PASSWORD,
-          secure: false, // Force false to avoid port 443 requirement
-          id: 'stellarsentry-main',
-          // Only retry a few times with long intervals to avoid log spam when Lavalink isn't running
-          retryAmount: 3,
-          retryInterval: 60000, // 1 minute between retries
-          // Don't auto-reconnect if not configured properly
-          reconnectTries: 3,
-        }],
         sendToShard: (guildId, payload) => {
           const guild = discordClient.guilds.cache.get(guildId);
->>>>>>> f652c8f (Initial Commit - 2)
           if (guild) guild.shard.send(payload);
+        },
+        client: {
+          id: discordClient.user.id,
+          username: discordClient.user.username,
         },
       });
 
-<<<<<<< HEAD
-=======
-      // Handle node events - prevent uncaught exceptions
->>>>>>> f652c8f (Initial Commit - 2)
       this.lavalink.on('nodeConnect', (node) => {
         logger.info({ node: node.id }, 'Lavalink node connected');
       });
@@ -84,29 +49,8 @@ class MusicService {
       });
 
       this.lavalink.on('nodeError', (node, error) => {
-<<<<<<< HEAD
         logger.error({ node: node.id, err: error }, 'Lavalink node error');
       });
-
-=======
-        // Don't throw - just log to prevent uncaught exceptions
-        logger.error({ node: node.id, err: error }, 'Lavalink node error (non-fatal)');
-      });
-
-      // Also handle errors on the node manager to prevent uncaught exceptions
-      if (this.lavalink.nodeManager) {
-        let lastErrorLog = 0;
-        this.lavalink.nodeManager.on('error', (error) => {
-          const now = Date.now();
-          // Only log once per minute to avoid spam when Lavalink isn't running
-          if (now - lastErrorLog > 60000) {
-            logger.error({ err: error }, 'Lavalink node manager error (non-fatal)');
-            lastErrorLog = now;
-          }
-        });
-      }
-
->>>>>>> f652c8f (Initial Commit - 2)
       this.lavalink.on('trackStart', (player, track) => {
         this.handleTrackStart(player, track);
       });
@@ -131,32 +75,11 @@ class MusicService {
         this.handlePlayerDisconnect(player);
       });
 
-<<<<<<< HEAD
-      await this.lavalink.connect();
+await this.lavalink.connect();
       logger.info('Lavalink client initialized');
     } catch (error) {
       logger.error({ err: error }, 'Failed to initialize Lavalink');
-      throw error;
-=======
-      // Initialize Lavalink - don't throw on connection failure, just log
-      try {
-        await this.lavalink.init({
-          id: clientId,
-          username: discordClient.user?.username ?? 'StellarSentry',
-        });
-        this.initialized = true;
-        logger.info('Lavalink client initialized');
-      } catch (initError) {
-        // Connection failed but Lavalink client is still usable (will retry)
-        logger.warn({ err: initError }, 'Lavalink initialization failed (will retry in background)');
-        this.initialized = true; // Mark as initialized so commands don't error
-      }
-    } catch (error) {
-      logger.error({ err: error }, 'Failed to initialize Lavalink');
-      // Don't rethrow - allow bot to continue without music
-      this.initialized = true;
->>>>>>> f652c8f (Initial Commit - 2)
-    }
+      throw error;    }
   }
 
   /**
@@ -184,12 +107,7 @@ class MusicService {
    * Search for tracks
    * @param {string} query
    * @param {string} source
-<<<<<<< HEAD
-   * @returns {Promise<Track[]>}
-=======
-   * @returns {Promise<Array>}
->>>>>>> f652c8f (Initial Commit - 2)
-   */
+* @returns {Promise<Track[]>}   */
   async search(query, source = 'ytsearch') {
     if (!this.lavalink) throw new Error('Lavalink not initialized');
 
@@ -219,12 +137,7 @@ class MusicService {
   /**
    * Add track to queue
    * @param {string} guildId
-<<<<<<< HEAD
-   * @param {Track} track
-=======
-   * @param {Object} track
->>>>>>> f652c8f (Initial Commit - 2)
-   * @returns {Promise<Queue>}
+* @param {Track} track   * @returns {Promise<Queue>}
    */
   async addToQueue(guildId, track) {
     const player = this.lavalink.players.get(guildId);
@@ -347,12 +260,7 @@ class MusicService {
   /**
    * Get current track
    * @param {string} guildId
-<<<<<<< HEAD
-   * @returns {Track|null}
-=======
-   * @returns {Object|null}
->>>>>>> f652c8f (Initial Commit - 2)
-   */
+* @returns {Track|null}   */
   getCurrentTrack(guildId) {
     const player = this.lavalink.players.get(guildId);
     return player?.current || null;
@@ -490,35 +398,10 @@ class MusicService {
    */
   async shutdown() {
     if (this.lavalink) {
-<<<<<<< HEAD
-      for (const player of this.lavalink.players.values()) {
+for (const player of this.lavalink.players.values()) {
         await player.destroy();
       }
-      await this.lavalink.destroy();
-=======
-      // Destroy all players
-      for (const player of this.lavalink.players.values()) {
-        try {
-          await player.destroy();
-        } catch (error) {
-          logger.error({ err: error }, 'Error destroying player');
-        }
-      }
-      this.players.clear();
-
-      // Disconnect all nodes
-      if (this.lavalink.nodeManager) {
-        for (const node of this.lavalink.nodeManager.nodes.values()) {
-          try {
-            await node.disconnect();
-          } catch (error) {
-            logger.error({ err: error }, 'Error disconnecting node');
-          }
-        }
-      }
-
->>>>>>> f652c8f (Initial Commit - 2)
-      logger.info('Lavalink connection closed');
+      await this.lavalink.destroy();      logger.info('Lavalink connection closed');
     }
   }
 }

@@ -111,11 +111,5 @@ export async function handleGiveawayEnter(interaction, client) {
  * Register giveaway button handlers
  */
 export function registerGiveawayButtons(client) {
-  client.on('interactionCreate', async interaction => {
-    if (!interaction.isButton()) return;
-
-    if (interaction.customId === 'giveaway_enter') {
-      await handleGiveawayEnter(interaction, client);
-    }
-  });
+  client.registerButton('giveaway_enter', handleGiveawayEnter);
 }

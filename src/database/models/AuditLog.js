@@ -130,11 +130,7 @@ const auditLogSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-<<<<<<< HEAD
-    index: true,
-=======
->>>>>>> f652c8f (Initial Commit - 2)
-  },
+index: true,  },
 }, {
   timestamps: false, // We use createdAt manually
   collection: 'audit_logs',
